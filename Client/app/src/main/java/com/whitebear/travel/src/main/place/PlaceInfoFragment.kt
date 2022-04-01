@@ -1,4 +1,4 @@
-package com.whitebear.travel.src.main.location
+package com.whitebear.travel.src.main.place
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -7,10 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import com.whitebear.travel.R
 import com.whitebear.travel.config.BaseFragment
-import com.whitebear.travel.databinding.FragmentLocationBinding
+import com.whitebear.travel.databinding.FragmentPlaceInfoBinding
 
-class LocationFragment : BaseFragment<FragmentLocationBinding>(FragmentLocationBinding::bind,R.layout.fragment_location) {
-
+class PlaceInfoFragment : BaseFragment<FragmentPlaceInfoBinding>(FragmentPlaceInfoBinding::bind,R.layout.fragment_place_info) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -20,11 +19,11 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(FragmentLocationB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }
-    companion object {
 
+    companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            LocationFragment().apply {
+        fun newInstance() =
+            PlaceInfoFragment().apply {
                 arguments = Bundle().apply {
                 }
             }
