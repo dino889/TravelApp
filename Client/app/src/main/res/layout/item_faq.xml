@@ -31,10 +31,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:text="[회원 정보]"
+                android:text="@{faq.category}"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
-            <!--            android:text="@{faq.category}"-->
+<!--                android:text="[회원 정보]"-->
 
 
             <TextView
@@ -43,9 +43,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
                 android:paddingStart="5dp"
-                android:text="아이디를 찾고 싶어요."
+                android:text="@{faq.title}"
                 android:textColor="@color/black" />
-            <!--            android:text="@{faq.title}"-->
+<!--                android:text="아이디를 찾고 싶어요."-->
 
         </LinearLayout>
 
@@ -68,13 +68,13 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@drawable/edittext_background"
-            android:text="아이디를 찾으려면 뭐시기뭐시기를 하세여"
+            android:text="@{faq.content}"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/fagItem_view"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/faqItem_ll" />
-<!--            android:text="@{faq.content}"-->
+<!--            android:text="아이디를 찾으려면 뭐시기뭐시기를 하세여"-->
 
 
         <View
