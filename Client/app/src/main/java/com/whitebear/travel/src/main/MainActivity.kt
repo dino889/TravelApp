@@ -2,6 +2,7 @@ package com.whitebear.travel.src.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.whitebear.travel.R
@@ -14,7 +15,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         initNavigation()
     }
-    fun initNavigation(){
+
+    private fun initNavigation(){
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.activity_main_navHost) as NavHostFragment
 
         // 네비게이션 컨트롤러
@@ -22,5 +24,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         // 바인딩
         NavigationUI.setupWithNavController(binding.activityMainBottomNav, navController)
+    }
+
+
+    /**
+     * bottom Nav hide & show
+     * hide - true
+     * show - false
+     */
+    fun hideBottomNav(state: Boolean) {
+        if(state) {
+            binding.activityMainBottomNav.visibility = View.GONE
+        } else {
+            binding.activityMainBottomNav.visibility = View.VISIBLE
+        }
     }
 }
