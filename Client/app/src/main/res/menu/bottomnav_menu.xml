@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:title="홈"
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/home">
+    </item>
+    <item
+        android:title="장소"
+        android:id="@+id/placeFragment"
+        android:icon="@drawable/place">
+    </item>
+    <item
+        android:title="내위치"
+        android:id="@+id/locationFragment"
+        android:icon="@drawable/location">
+    </item>
+    <item
+        android:title="경로"
+        android:id="@+id/routeFragment"
+        android:icon="@drawable/route">
+    </item>
+    <item
+        android:title="MY"
+        android:id="@+id/myFragment"
+        android:icon="@drawable/my">
+    </item>
+
+</menu>
