@@ -22,7 +22,10 @@
         <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/fragment_place_detail.xml" value="0.47327502429543244" />
         <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/fragment_place_info.xml" value="0.38943248532289626" />
         <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/fragment_place_review.xml" value="0.264" />
+        <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/fragment_route.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/item_place.xml" value="0.1" />
         <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/item_place_review.xml" value="0.4" />
+        <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/item_route.xml" value="0.4" />
       </map>
     </option>
   </component>
