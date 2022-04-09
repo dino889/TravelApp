@@ -1,11 +1,11 @@
 package com.whitebear.travel.config
 
-import AddCookiesInterceptor
 import android.app.Application
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.ssafy.groute.config.intercepter.ReceivedCookiesInterceptor
-import com.ssafy.groute.config.intercepter.XAccessTokenInterceptor
+import com.whitebear.travel.config.intercepter.AddCookiesInterceptor
+import com.whitebear.travel.config.intercepter.ReceivedCookiesInterceptor
+import com.whitebear.travel.config.intercepter.XAccessTokenInterceptor
 import com.whitebear.travel.util.SharedPreferencesUtil
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -13,10 +13,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.util.concurrent.TimeUnit
 
-private const val TAG = "ApplicationClass_Groute"
+private const val TAG = "ApplicationClass"
 class ApplicationClass : Application() {
     companion object{
-        const val SERVER_URL = "http://'IP Address':8888/"   // local 서버 실행 시
+        const val SERVER_URL = "http://115.85.180.240:7878/"   // local 서버 실행 시
         //AWS servoer
 
         const val IMGS_URL = "${SERVER_URL}imgs/"
@@ -34,8 +34,8 @@ class ApplicationClass : Application() {
         sharedPreferencesUtil = SharedPreferencesUtil(applicationContext)
 
         val okHttpClient = OkHttpClient.Builder()
-            .addInterceptor(AddCookiesInterceptor())
-            .addInterceptor(ReceivedCookiesInterceptor())
+//            .addInterceptor(AddCookiesInterceptor())
+//            .addInterceptor(ReceivedCookiesInterceptor())
             .addNetworkInterceptor(XAccessTokenInterceptor()) // JWT 자동 헤더 전송
             .connectTimeout(30, TimeUnit.SECONDS).build()
 

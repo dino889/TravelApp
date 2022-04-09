@@ -5,11 +5,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.view.View
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.whitebear.travel.R
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentHomeBinding
 import com.whitebear.travel.src.main.MainActivity
+import kotlinx.coroutines.runBlocking
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind,R.layout.fragment_home) {
     //Banner
@@ -17,6 +20,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
     private var myHandler = MyHandler()
     private var intervalTime = 1500.toLong()
     private var list = mutableListOf(R.drawable.banner, R.drawable.banner1)
+
+
+    //adapter
+    private lateinit var areaAdapter:AreaAdapter
 
     private lateinit var mainActivity:MainActivity
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,10 +38,26 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.viewModel = mainViewModel
+        runBlocking {
+            mainViewModel.getAreas()
+        }
         setListener()
     }
     fun setListener(){
         initBanner()
+        initAdapter()
+    }
+    private fun initAdapter(){
+        mainViewModel.areas.observe(viewLifecycleOwner, {
+            areaAdapter = AreaAdapter()
+            areaAdapter.list = it
+            binding.fragmentHomeAreaRv.apply {
+                layoutManager = GridLayoutManager(context,5)
+                adapter = areaAdapter
+                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+            }
+        })
     }
     private fun initBanner(){
         var banners = binding.fragmentHomeBanner

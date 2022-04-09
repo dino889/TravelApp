@@ -8,20 +8,21 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.viewbinding.ViewBinding
+import com.whitebear.travel.src.network.viewmodel.MainViewModel
 import com.whitebear.travel.util.LoadingDialog
 import io.reactivex.disposables.CompositeDisposable
 //
-abstract class BaseFragment <B : ViewBinding>(
+abstract class BaseFragment<B : ViewBinding>(
     private val bind: (View) -> B,
     @LayoutRes layoutResId: Int
 ) : Fragment(layoutResId) {
     private var _binding: B? = null
-    lateinit var mLoadingDialog: LoadingDialog
-    //    val viewModel: MainViewModel by activityViewModels()
-//    lateinit var con:ViewGroup
     protected val binding get() = _binding!!
-    private val compositeDisposable = CompositeDisposable()
+
+    protected val mainViewModel: MainViewModel by activityViewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,16 +40,4 @@ abstract class BaseFragment <B : ViewBinding>(
     fun showCustomToast(message: String) {
         Toast.makeText(activity, message, Toast.LENGTH_SHORT).show()
     }
-
-    fun showLoadingDialog(context: Context) {
-        mLoadingDialog = LoadingDialog(context)
-        mLoadingDialog.show()
-    }
-
-    fun dismissLoadingDialog() {
-        if (mLoadingDialog.isShowing) {
-            mLoadingDialog.dismiss()
-        }
-    }
-
 }
