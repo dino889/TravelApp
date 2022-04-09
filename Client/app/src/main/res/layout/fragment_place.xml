@@ -56,11 +56,11 @@
                 android:id="@+id/fragment_place_tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:isScrollContainer="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_place_appBar"
-                app:tabGravity="start"/>
+                app:tabGravity="start"
+                app:tabMode="scrollable" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/fragment_place_mLayout"

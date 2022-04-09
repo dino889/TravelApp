@@ -24,7 +24,7 @@ class PlaceReviewFragment : BaseFragment<FragmentPlaceReviewBinding>(FragmentPla
     companion object {
 
         @JvmStatic
-        fun newInstance() =
+        fun newInstance(key:String,value:Int) =
             PlaceReviewFragment().apply {
                 arguments = Bundle().apply {
 
