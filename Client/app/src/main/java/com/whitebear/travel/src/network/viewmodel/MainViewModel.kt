@@ -51,10 +51,17 @@ class MainViewModel :ViewModel(){
      * placeViewModel
      * */
     private val _places = MutableLiveData<MutableList<Place>>()
+    private val _place = MutableLiveData<Place>()
     val places : LiveData<MutableList<Place>>
         get() = _places
+    val place : LiveData<Place>
+        get() = _place
+
     private fun setPlace(places:MutableList<Place>) = viewModelScope.launch { 
         _places.value = places
+    }
+    private fun setPlaceOne(place:Place) = viewModelScope.launch {
+        _place.value = place
     }
     suspend fun getPlaces(areaName:String){
         val response = PlaceService().getPlaceByArea(areaName)
@@ -65,6 +72,20 @@ class MainViewModel :ViewModel(){
                     var type = object : TypeToken<MutableList<Place>>() {}.type
                     var placeList = CommonUtils.parseDto<MutableList<Place>>(res.data,type)
                     setPlace(placeList)
+                }
+            }
+        }
+    }
+    suspend fun getPlace(id:Int){
+        val response = PlaceService().getPlaceById(id)
+        viewModelScope.launch {
+            if(response.code()==200 || response.code() == 500){
+                val res = response.body()
+                if(res!=null){
+                    var type = object : TypeToken<Place>() {}.type
+                    var place = CommonUtils.parseDto<Place>(res.data, type)
+                    Log.d(TAG, "getPlace: ${res.data}")
+                    setPlaceOne(place)
                 }
             }
         }

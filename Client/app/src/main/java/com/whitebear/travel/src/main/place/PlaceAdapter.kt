@@ -1,6 +1,7 @@
 package com.whitebear.travel.src.main.place
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
@@ -27,12 +28,21 @@ class PlaceAdapter() : RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder>(){
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
         holder.apply {
             bind(list[position])
+            itemView.setOnClickListener {
+                itemClickListener.onClick(it, position, list[position].id)
+            }
         }
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
-
+    interface ItemClickListener {
+        fun onClick(view: View, position: Int, placeId:Int)
+    }
+    private lateinit var itemClickListener : ItemClickListener
+    fun setOnItemClickListener(itemClickListener: ItemClickListener){
+        this.itemClickListener = itemClickListener
+    }
 
 }

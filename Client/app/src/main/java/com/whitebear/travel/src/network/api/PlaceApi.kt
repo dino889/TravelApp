@@ -11,7 +11,7 @@ interface PlaceApi {
     @GET("/places")
     suspend fun getPlaceByArea(@Query("areaName") areaName : String) : Response<Message>
 
-    @GET("/places")
+    @GET("/places/{id}")
     suspend fun getPlaceById(@Path ("id")id:Int) : Response<Message>
 
     @POST("places/review")

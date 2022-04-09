@@ -33,7 +33,18 @@
         android:id="@+id/placeFragment"
         android:name="com.whitebear.travel.src.main.place.PlaceFragment"
         android:label="fragment_place"
-        tools:layout="@layout/fragment_place" />
+        tools:layout="@layout/fragment_place" >
+        <action
+            android:id="@+id/action_placeFragment_to_placeDetailFragment"
+            app:destination="@id/placeDetailFragment" >
+            <argument
+                android:name="placeId"
+                android:defaultValue="0"
+                app:argType="integer"/>
+        </action>
+
+
+    </fragment>
     <fragment
         android:id="@+id/routeFragment"
         android:name="com.whitebear.travel.src.main.route.RouteFragment"
@@ -63,4 +74,9 @@
         android:label="fragment_faq"
         tools:layout="@layout/fragment_f_a_q" />
 
+    <fragment
+        android:id="@+id/placeDetailFragment"
+        android:name="com.whitebear.travel.src.main.place.PlaceDetailFragment"
+        android:label="fragment_place_detail"
+        tools:layout="@layout/fragment_place_detail" />
 </navigation>

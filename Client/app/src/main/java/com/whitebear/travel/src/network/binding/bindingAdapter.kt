@@ -42,14 +42,21 @@ fun bindImagePlace(imgView:ImageView, imgUrl: String?){
 @SuppressLint("SetTextI18n")
 @BindingAdapter("textViewContent")
 fun bindTextViewContent(textView: TextView, content:String){
-    if(content.length > 20){
-        textView.text = content.substring(0,20)+"..."
+    if(content.length > 35){
+        textView.text = content.substring(0,35)+"..."
     }else{
-        textView.text = content +"..."
+        textView.text = content
     }
 
 }
-
+@BindingAdapter("textViewTitle")
+fun bindTextViewTitle(textView: TextView, title:String){
+    if(title.length>10){
+        textView.text = title.substring(0,9)+".."
+    }else{
+        textView.text = title
+    }
+}
 @BindingAdapter("placeListData")
 fun bindPlaceRecyclerView(recyclerView: RecyclerView, data:List<Place>?){
     var adapter = recyclerView.adapter as PlaceAdapter

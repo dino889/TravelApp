@@ -88,7 +88,9 @@
                         android:id="@+id/fragment_home_areaRv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:areaListData="@{viewModel.areas}"/>
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        app:areaListData="@{viewModel.areas}" />
 
                     <androidx.viewpager2.widget.ViewPager2
                         android:id="@+id/fragment_home_banner"
