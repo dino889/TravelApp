@@ -9,9 +9,9 @@ import retrofit2.http.*
 interface PlaceApi {
 
     @GET("/places")
-    suspend fun getPlaceByArea(@Path("areaName") areaName : String) : Response<Message>
+    suspend fun getPlaceByArea(@Query("areaName") areaName : String) : Response<Message>
 
-    @GET("/places/")
+    @GET("/places")
     suspend fun getPlaceById(@Path ("id")id:Int) : Response<Message>
 
     @POST("places/review")

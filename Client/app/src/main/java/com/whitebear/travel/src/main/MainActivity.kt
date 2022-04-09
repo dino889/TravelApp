@@ -2,17 +2,24 @@ package com.whitebear.travel.src.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.whitebear.travel.R
 import com.whitebear.travel.config.BaseActivity
 import com.whitebear.travel.databinding.ActivityMainBinding
+import com.whitebear.travel.src.network.viewmodel.MainViewModel
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate){
+    lateinit var mainViewModel : MainViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initNavigation()
+        setInstance()
+    }
+    private fun setInstance(){
+        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
     }
     fun initNavigation(){
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.activity_main_navHost) as NavHostFragment
