@@ -25,10 +25,8 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
 
         this.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
-        var userId = -1
-        if(ApplicationClass.sharedPreferencesUtil.getAutoLogin() != null) {
-            userId = ApplicationClass.sharedPreferencesUtil.getAutoLogin()
-        }
+        val userId = ApplicationClass.sharedPreferencesUtil.getAutoLogin()
+
         //로그인 상태 확인. id가 있다면 로그인 된 상태 -> 가장 첫 화면은 홈 화면의 Fragment로 지정
         if (userId != null || userId != -1){
             var isPossible = 0
@@ -50,9 +48,7 @@ class LoginActivity : BaseActivity<ActivityLoginBinding>(ActivityLoginBinding::i
         }
 
 
-//        logger.logPurchase(BigDecimal.valueOf(4.32), Currency.getInstance("USD"));
-
-//         kakao 플랫폼 키 해시 등록
+//        kakao 플랫폼 키 해시 등록
         val keyHash = Utility.getKeyHash(this)
         Log.d("kakaoKeyHash", "onCreate: $keyHash")
     }
