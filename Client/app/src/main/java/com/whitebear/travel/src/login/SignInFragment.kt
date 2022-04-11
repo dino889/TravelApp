@@ -6,6 +6,10 @@ import android.util.Log
 import android.view.View
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
+import com.kakao.sdk.common.model.ClientError
+import com.kakao.sdk.common.model.ClientErrorCause
+import com.kakao.sdk.user.UserApiClient
+import com.kakao.sdk.user.rx
 import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseFragment
@@ -13,6 +17,11 @@ import com.whitebear.travel.databinding.FragmentSignInBinding
 import com.whitebear.travel.src.dto.User
 import com.whitebear.travel.src.network.service.UserService
 import com.whitebear.travel.util.CommonUtils
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.rxkotlin.addTo
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
 import java.lang.reflect.Type
 
@@ -41,9 +50,6 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
 
         initListener()
 
-//        googleLoginBtnClickEvent()
-//        kakaoLoginBtnClickEvent()
-//        facebookLoginBtnClickEvent()
     }
 
     private fun initListener() {
@@ -62,6 +68,12 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         binding.signInFragmentLoginBtn.setOnClickListener {
             login(binding.signInFragmentEmailEt.text.toString(), binding.signInFragmentPwEt.text.toString())
         }
+
+        // kakao Login
+        kakaoLoginBtnClickEvent()
+
+//        googleLoginBtnClickEvent()
+//        facebookLoginBtnClickEvent()
     }
 
     private fun login(email: String, password: String){
@@ -69,9 +81,8 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
 
         runBlocking {
             result = mainViewModel.login(email, loginActivity.sha256(password))
-            Log.d(TAG, "login: ${loginActivity.sha256(password)}")
         }
-        Log.d(TAG, "login: $email, $password, ${loginActivity.sha256("test")}")
+
         if(result["data"] != null && result["message"] == "login success") {
             val loginUser = result["data"]
 
@@ -108,10 +119,12 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
             existEmailRes = mainViewModel.existsChkUserEmail(user.email)
         }
 
-        if(existEmailRes["isSuccess"] == false) {   // 중복되는 이메일 없음.
-//            snsLoginJoin(user)
+        val msg = existEmailRes["message"] as String
+
+        if(existEmailRes["isSuccess"] == true && msg.contains("there is no email")) {   // 중복되는 이메일 없음.
+            snsLoginJoin(user)
             return true
-        } else if(existEmailRes["isSuccess"] == true) { // 이미 존재하는 이메일
+        } else if(existEmailRes["isSuccess"] == true && msg.contains("exist email") ) { // 이미 존재하는 이메일
             login(user.email, user.password)
             return false
         } else {
@@ -119,6 +132,97 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
             Log.d(TAG, "existEmailChk: ${existEmailRes["message"]}")
             return false
         }
+    }
+
+    /**
+     * 새로운 회원이라면 회원가입 진행
+     */
+    private fun snsLoginJoin(user: User) {
+        var result : HashMap<String, Any>
+        val realPw = user.password
+
+        val encPw = loginActivity.sha256(user.password)
+        user.password = encPw
+
+        runBlocking {
+            result = mainViewModel.join(user)
+        }
+
+        if(result["isSuccess"] == true) {  // 이미 존재하는 이메일
+            showCustomToast("이미 존재하는 이메일입니다. 다시 인증해 주세요.")
+        } else if(result["isSuccess"] == false) {
+            login(user.email, realPw)
+        } else {
+            showCustomToast("회원가입에 실패했습니다. 다시 시도해 주세요.")
+        }
+    }
+
+
+    // ---------------------------------------------------------------------------------------------
+    /**
+     * sns Login - Kakao
+     */
+    private fun kakaoLoginBtnClickEvent() {
+        val disposables = CompositeDisposable()
+        binding.signInFragmentKakaoBtn.setOnClickListener {
+            // 카카오톡이 설치되어 있으면 카카오톡으로 로그인, 아니면 카카오계정으로 로그인
+            if (UserApiClient.instance.isKakaoTalkLoginAvailable(requireContext())) {
+                UserApiClient.rx.loginWithKakaoTalk(requireContext())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .onErrorResumeNext { error ->
+                        // 사용자가 카카오톡 설치 후 디바이스 권한 요청 화면에서 로그인을 취소한 경우,
+                        // 의도적인 로그인 취소로 보고 카카오계정으로 로그인 시도 없이 로그인 취소로 처리 (예: 뒤로 가기)
+                        if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
+                            Single.error(error)
+                        } else {
+                            // 카카오톡에 연결된 카카오계정이 없는 경우, 카카오계정으로 로그인 시도
+                            UserApiClient.rx.loginWithKakaoAccount(requireContext())
+                        }
+                    }.observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ token ->
+                        Log.i(TAG, "로그인 성공 ${token.accessToken}")
+                        kakaoLogin()
+                    }, { error ->
+                        Log.e(TAG, "로그인 실패", error)
+                    }).addTo(disposables)
+            } else {
+                UserApiClient.rx.loginWithKakaoAccount(requireContext())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ token ->
+                        Log.i(TAG, "로그인 성공 ${token.accessToken}")
+                        kakaoLogin()
+                    }, { error ->
+                        Log.e(TAG, "로그인 실패", error)
+                    }).addTo(disposables)
+            }
+        }
+    }
+
+    private fun kakaoLogin() {
+        val disposables = CompositeDisposable()
+        // 사용자 정보 요청 (기본)
+        UserApiClient.rx.me()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ user ->
+//                Log.i(TAG, "사용자 정보 요청 성공" +
+//                        "\n회원번호: ${user.id}" +  // pw
+//                        "\n이메일: ${user.kakaoAccount?.email}" +  // id, email
+//                        "\n닉네임: ${user.kakaoAccount?.profile?.nickname}" +  // nickname
+//                        "\n프로필사진: ${user.kakaoAccount?.profile?.thumbnailImageUrl}")   // image
+
+                val email = user.kakaoAccount?.email.toString()
+                val uid = user.id.toString()
+                val nickname = user.kakaoAccount?.profile?.nickname.toString()
+//                val image = user.kakaoAccount?.profile?.thumbnailImageUrl.toString()
+
+                val newUser = User(email = email, password = uid, username = nickname, nickname = nickname, "kakao")
+                existEmailChk(newUser)
+
+            }, { error ->
+                Log.e(TAG, "사용자 정보 요청 실패", error)
+            })
+            .addTo(disposables)
     }
 
 

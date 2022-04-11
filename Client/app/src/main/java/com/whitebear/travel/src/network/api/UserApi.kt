@@ -15,8 +15,10 @@ interface UserApi {
     /**
      * 유저 생성 = 회원가입
      * */
+    @FormUrlEncoded
     @POST("users")
-    suspend fun insertUser(@Body urlencoded: User) : Response<HashMap<String, Any>>
+//    suspend fun insertUser(@Body urlencoded: User) : Response<HashMap<String, Any>>
+    suspend fun insertUser(@Field("email") email: String, @Field("password") password: String, @Field("username") username: String, @Field("nickname") nickname: String, @Field("social_type") social_type: String) : Response<HashMap<String, Any>>
 
     /**
      * 유저 수정
@@ -40,6 +42,6 @@ interface UserApi {
     /**
      * 이메일 중복체크
      * */
-    @GET("users/exist/")
-    suspend fun doubleCheckEmail(@Path("email") email:String) : Response<HashMap<String, Any>>
+    @GET("users/exist")
+    suspend fun doubleCheckEmail(@Query("email") email:String) : Response<HashMap<String, Any>>
 }

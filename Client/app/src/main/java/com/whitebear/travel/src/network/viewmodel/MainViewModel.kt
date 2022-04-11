@@ -200,23 +200,24 @@ class MainViewModel :ViewModel(){
         return returnRes
     }
 
-    suspend fun join(user: User) : Boolean {
-        var result = false
+    suspend fun join(user: User) : HashMap<String, Any> {
+        var result : HashMap<String, Any> = hashMapOf()
         val response = UserService().insertUser(user)
 
         viewModelScope.launch {
             val res = response.body()
             if(response.code() == 200 || response.code() == 500) {
                 if(res != null) {
-                    if(res["isSuccess"] == true && res["message"] == "create user successful") {
-                        val type: Type = object : TypeToken<User>() {}.type
-                        val user = CommonUtils.parseDto<User>(res["data"]!!, type)
-                        Log.d(TAG, "join: $user")
-                        result = true
-                    } else {
-                        result = false
-                        Log.d(TAG, "joinError: ${response.message()}")
-                    }
+                    result = res
+//                    if(res["isSuccess"] == true && res["message"] == "create user successful") {
+//                        val type: Type = object : TypeToken<User>() {}.type
+//                        val user = CommonUtils.parseDto<User>(res["data"]!!, type)
+//                        Log.d(TAG, "join: $user")
+//                        result = user
+//                    } else {
+//                        result = null
+//                        Log.d(TAG, "joinError: ${response.message()}")
+//                    }
                 }
             }
         }
@@ -252,8 +253,10 @@ class MainViewModel :ViewModel(){
 
         viewModelScope.launch {
             val res = response.body()
-            if(res != null) {
-                result = res
+            if(response.code() == 200 || response.code() == 500) {
+                if (res != null) {
+                    result = res
+                }
             }
         }
         return result
