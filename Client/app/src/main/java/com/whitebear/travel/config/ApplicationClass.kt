@@ -3,6 +3,8 @@ package com.whitebear.travel.config
 import android.app.Application
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.kakao.sdk.common.KakaoSdk
+import com.whitebear.travel.R
 import com.whitebear.travel.config.intercepter.AddCookiesInterceptor
 import com.whitebear.travel.config.intercepter.ReceivedCookiesInterceptor
 import com.whitebear.travel.config.intercepter.XAccessTokenInterceptor
@@ -52,7 +54,7 @@ class ApplicationClass : Application() {
             .build()
 
         // Kakao SDK 초기화
-//        KakaoSdk.init(this, getString(R.string.kakao_nativeapp_key))
+        KakaoSdk.init(this, getString(R.string.kakao_nativeapp_key))
     }
 
 }

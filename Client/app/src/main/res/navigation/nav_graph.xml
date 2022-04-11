@@ -19,7 +19,16 @@
         android:id="@+id/myFragment"
         android:name="com.whitebear.travel.src.main.my.MyFragment"
         android:label="fragment_my"
-        tools:layout="@layout/fragment_my" />
+        tools:layout="@layout/fragment_my">
+        <action
+            android:id="@+id/action_myFragment_to_settingFragment"
+            app:destination="@+id/settingFragment"/>
+        <action
+            android:id="@+id/action_myFragment_to_editProfileFragment"
+            app:destination="@+id/editProfileFragment"/>
+
+    </fragment>
+
     <fragment
         android:id="@+id/placeFragment"
         android:name="com.whitebear.travel.src.main.place.PlaceFragment"
@@ -41,6 +50,30 @@
         android:name="com.whitebear.travel.src.main.route.RouteFragment"
         android:label="fragment_route"
         tools:layout="@layout/fragment_route" />
+
+    <fragment
+        android:id="@+id/settingFragment"
+        android:name="com.whitebear.travel.src.main.my.SettingFragment"
+        android:label="fragment_setting"
+        tools:layout="@layout/fragment_setting">
+        <action
+            android:id="@+id/action_settingFragment_to_faqFragment"
+            app:destination="@+id/faqFragment"/>
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/editProfileFragment"
+        android:name="com.whitebear.travel.src.main.my.EditProfileFragment"
+        android:label="fragment_editProfile"
+        tools:layout="@layout/fragment_edit_profile" />
+
+    <fragment
+        android:id="@+id/faqFragment"
+        android:name="com.whitebear.travel.src.main.my.FAQFragment"
+        android:label="fragment_faq"
+        tools:layout="@layout/fragment_f_a_q" />
+
     <fragment
         android:id="@+id/placeDetailFragment"
         android:name="com.whitebear.travel.src.main.place.PlaceDetailFragment"

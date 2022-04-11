@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="faq"
+            type="com.whitebear.travel.src.dto.FAQ" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginTop="5dp">
+
+
+        <LinearLayout
+            android:id="@+id/faqItem_ll"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toTopOf="@+id/faqItem_tvContent"
+            app:layout_constraintEnd_toStartOf="@+id/faqItem_ivDetail"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/faqItem_tvBoardName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:text="@{faq.category}"
+                android:textColor="@color/black"
+                android:textStyle="bold" />
+<!--                android:text="[회원 정보]"-->
+
+
+            <TextView
+                android:id="@+id/faqItem_tvPostTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:paddingStart="5dp"
+                android:text="@{faq.title}"
+                android:textColor="@color/black" />
+<!--                android:text="아이디를 찾고 싶어요."-->
+
+        </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/faqItem_ivDetail"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="10dp"
+            android:backgroundTint="@android:color/transparent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_arrow_down"
+            app:layout_constraintBottom_toBottomOf="@+id/faqItem_ll"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/faqItem_ll" />
+
+
+        <TextView
+            android:id="@+id/faqItem_tvContent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/edittext_background"
+            android:text="@{faq.content}"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/fagItem_view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/faqItem_ll" />
+<!--            android:text="아이디를 찾으려면 뭐시기뭐시기를 하세여"-->
+
+
+        <View
+            android:id="@+id/fagItem_view"
+            android:layout_width="0dp"
+            android:layout_height="1px"
+            android:layout_marginTop="10dp"
+            android:background="@color/main"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/faqItem_tvContent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

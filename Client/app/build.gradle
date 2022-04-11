@@ -110,19 +110,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage'
 
     // google login
-//    implementation 'com.google.android.gms:play-services-auth:20.0.1'
-//    implementation 'com.google.firebase:firebase-auth-ktx:21.0.1'
-//    implementation 'com.google.firebase:firebase-auth'
+    implementation 'com.google.android.gms:play-services-auth:20.0.1'
+    implementation 'com.google.firebase:firebase-auth'
 
     // 카카오
-//    implementation "com.kakao.sdk:v2-user-rx:2.4.2"
-//    implementation "com.kakao.sdk:v2-talk:2.4.2"
-//    implementation "com.kakao.sdk:v2-link:2.4.2"
-    //KAKAO SDK
-//    implementation group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION
+    implementation "com.kakao.sdk:v2-user-rx:2.4.2"
 
-    // facebook 로그인
-    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
 
     // TedPermission
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.2.3'

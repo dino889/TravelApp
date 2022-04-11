@@ -8,6 +8,7 @@ import android.location.Location
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.os.Looper
 import android.util.Log
 import androidx.annotation.RequiresApi
@@ -52,7 +53,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private fun setInstance(){
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
     }
-    fun initNavigation(){
+
+    private fun initNavigation(){
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.activity_main_navHost) as NavHostFragment
 
         // 네비게이션 컨트롤러
@@ -60,6 +62,21 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         // 바인딩
         NavigationUI.setupWithNavController(binding.activityMainBottomNav, navController)
+    }
+
+
+
+    /**
+     * bottom Nav hide & show
+     * hide - true
+     * show - false
+     */
+    fun hideBottomNav(state: Boolean) {
+        if(state) {
+            binding.activityMainBottomNav.visibility = View.GONE
+        } else {
+            binding.activityMainBottomNav.visibility = View.VISIBLE
+        }
     }
     /**
      * 위치 권한
