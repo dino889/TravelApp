@@ -14,8 +14,6 @@ import com.whitebear.travel.src.network.service.AreaService
 import com.whitebear.travel.src.network.service.PlaceService
 import com.whitebear.travel.src.network.service.UserService
 import com.whitebear.travel.src.dto.Weather
-import com.whitebear.travel.src.network.service.AreaService
-import com.whitebear.travel.src.network.service.PlaceService
 import com.whitebear.travel.src.network.service.WeatherService
 import com.whitebear.travel.util.CommonUtils
 import kotlinx.coroutines.launch
@@ -142,8 +140,6 @@ class MainViewModel :ViewModel(){
     private val _loginUserInfo = MutableLiveData<User>()
     private val _userInfo = MutableLiveData<User>()
     var userId = 0
-    private var _userLoc : Location? = null
-    private var _userAddr : String? = null
 
     val allUserList :  LiveData<MutableList<User>>
         get() = _allUserList
@@ -154,11 +150,6 @@ class MainViewModel :ViewModel(){
     val userInformation : LiveData<User>
         get() = _userInfo
 
-    val userLoc : Location?
-        get() = _userLoc
-
-    val userAddr : String?
-        get() = _userAddr
 
     private fun setLoginUserInfo(user: User) = viewModelScope.launch {
         _loginUserInfo.value = user
@@ -172,10 +163,6 @@ class MainViewModel :ViewModel(){
         _allUserList.value = userList
     }
 
-    fun setUserLoc(location : Location, addr: String) {
-        _userLoc = location
-        _userAddr = addr
-    }
 
 
 //    suspend fun getAllUserList() {
