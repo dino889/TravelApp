@@ -1,5 +1,6 @@
 package com.whitebear.travel.src.network.viewmodel
 
+import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -9,16 +10,49 @@ import com.facebook.internal.Mutable
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
 import com.whitebear.travel.src.dto.Area
 import com.whitebear.travel.src.dto.Place
+import com.whitebear.travel.src.dto.Weather
 import com.whitebear.travel.src.network.service.AreaService
 import com.whitebear.travel.src.network.service.PlaceService
+import com.whitebear.travel.src.network.service.WeatherService
 import com.whitebear.travel.util.CommonUtils
 import kotlinx.coroutines.launch
 
 private const val TAG = "mainViewModel"
 class MainViewModel :ViewModel(){
     /**
+     * Weather ViewModel
+     * */
+    val userLoc : Location?
+        get() = _userLoc
+    val userAddr : String?
+        get() = _userAddr
+    private var _userLoc : Location? = null
+    private var _userAddr : String? = null
+    fun setUserLoc(location : Location, addr: String) {
+        _userLoc = location
+        _userAddr = addr
+    }
+    private val _weathers = MutableLiveData<Weather>()
+    val weathers : LiveData<Weather>
+        get() = _weathers
+    private fun setWeather(weather: Weather) = viewModelScope.launch {
+        _weathers.value = weather
+    }
+    suspend fun getWeather(dataType : String, numOfRows : Int, pageNo : Int,
+                           baseDate : Int, baseTime : Int, nx : String, ny : String){
+        val response = WeatherService().getWeather(dataType, numOfRows, pageNo, baseDate, baseTime, nx, ny)
+        Log.d(TAG, "getWeather: ${response.code()}")
+        viewModelScope.launch { 
+            if(response.code() == 200){
+                var res = response.body()
+                Log.d(TAG, "getWeather: $res")
+            }
+        }
+    }
+    /**
      * areaViewModel
      * */
+
     private val _areas = MutableLiveData<MutableList<Area>>()
     val areas : LiveData<MutableList<Area>>
         get() = _areas

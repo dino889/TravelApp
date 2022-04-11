@@ -1,10 +1,13 @@
 package com.whitebear.travel.src.main.home
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
+import android.util.Log
 import android.view.View
+import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -13,7 +16,10 @@ import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentHomeBinding
 import com.whitebear.travel.src.main.MainActivity
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
+private const val TAG = "HomeFragment"
 class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind,R.layout.fragment_home) {
     //Banner
     private var currentPosition = 0
@@ -21,6 +27,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
     private var intervalTime = 1500.toLong()
     private var list = mutableListOf(R.drawable.banner, R.drawable.banner1)
 
+    //Weather
 
     //adapter
     private lateinit var areaAdapter:AreaAdapter
@@ -36,6 +43,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
@@ -45,6 +53,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
         setListener()
     }
     fun setListener(){
+
         initBanner()
         initAdapter()
     }
