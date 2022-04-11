@@ -13,6 +13,10 @@ import com.whitebear.travel.src.dto.User
 import com.whitebear.travel.src.network.service.AreaService
 import com.whitebear.travel.src.network.service.PlaceService
 import com.whitebear.travel.src.network.service.UserService
+import com.whitebear.travel.src.dto.Weather
+import com.whitebear.travel.src.network.service.AreaService
+import com.whitebear.travel.src.network.service.PlaceService
+import com.whitebear.travel.src.network.service.WeatherService
 import com.whitebear.travel.util.CommonUtils
 import kotlinx.coroutines.launch
 import java.lang.reflect.Type
@@ -20,8 +24,39 @@ import java.lang.reflect.Type
 private const val TAG = "mainViewModel"
 class MainViewModel :ViewModel(){
     /**
+     * Weather ViewModel
+     * */
+    val userLoc : Location?
+        get() = _userLoc
+    val userAddr : String?
+        get() = _userAddr
+    private var _userLoc : Location? = null
+    private var _userAddr : String? = null
+    fun setUserLoc(location : Location, addr: String) {
+        _userLoc = location
+        _userAddr = addr
+    }
+    private val _weathers = MutableLiveData<Weather>()
+    val weathers : LiveData<Weather>
+        get() = _weathers
+    private fun setWeather(weather: Weather) = viewModelScope.launch {
+        _weathers.value = weather
+    }
+    suspend fun getWeather(dataType : String, numOfRows : Int, pageNo : Int,
+                           baseDate : Int, baseTime : Int, nx : String, ny : String){
+        val response = WeatherService().getWeather(dataType, numOfRows, pageNo, baseDate, baseTime, nx, ny)
+        Log.d(TAG, "getWeather: ${response.code()}")
+        viewModelScope.launch { 
+            if(response.code() == 200){
+                var res = response.body()
+                Log.d(TAG, "getWeather: $res")
+            }
+        }
+    }
+    /**
      * areaViewModel
      * */
+
     private val _areas = MutableLiveData<MutableList<Area>>()
     val areas : LiveData<MutableList<Area>>
         get() = _areas
