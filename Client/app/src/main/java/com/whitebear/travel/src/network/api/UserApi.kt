@@ -9,31 +9,37 @@ interface UserApi {
     /**
      * 유저정보 조회
      * */
-    @GET("/users/15")
-    suspend fun getUsers() : Response<Message>
+    @GET("users/{id}")
+    suspend fun selectUser(@Path("id") id: Int) : Response<HashMap<String, Any>>
+
     /**
-     * 유저정보 입력 = 회원가입
+     * 유저 생성 = 회원가입
      * */
-    @POST("/users")
-    suspend fun insertUser(@Body urlencode: User) : Response<Message>
+    @POST("users")
+    suspend fun insertUser(@Body urlencoded: User) : Response<HashMap<String, Any>>
+
     /**
-     * 유저정보 수정
+     * 유저 수정
      * */
-    @PUT("/users/3")
-    suspend fun updateUser(@Body urlencode :User) : Response<Message>
+    @PUT("users/{id}")
+    suspend fun updateUser(@Path("id") id: Int, @Body urlencoded :User) : Response<HashMap<String, Any>>
+
     /**
      * 로그인
      * */
-    @POST("/users/login")
-    suspend fun login(@Body urlencode: User) : Response<Message>
+    @FormUrlEncoded
+    @POST("users/login")
+    suspend fun login(@Field("email") email : String, @Field("password") password: String) : Response<HashMap<String, Any>>
+
     /**
      * 유저 탈퇴
      * */
-    @DELETE("/users/3")
-    suspend fun deleteUser() : Response<Message>
+    @DELETE("users/{id}")
+    suspend fun deleteUser(@Path("id") id: Int) : Response<HashMap<String, Any>>
+
     /**
      * 이메일 중복체크
      * */
     @GET("users/exist/")
-    suspend fun doubleCheckEmail(@Path ("email") email:String) : Response<Message>
+    suspend fun doubleCheckEmail(@Path("email") email:String) : Response<HashMap<String, Any>>
 }

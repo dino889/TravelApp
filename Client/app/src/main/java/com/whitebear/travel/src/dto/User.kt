@@ -1,15 +1,19 @@
 package com.whitebear.travel.src.dto
 
 data class User(
-    val createdAt: String,
-    val email: String,
     val id: Int,
-    val nickname: String,
+    val email: String,
     val password: String,
+    val nickname: String,
+    val username: String,
     val social_type: String,
-    val updatedAt: String,
-    val username: String
+    val token: String,
+    val createdAt: String,
+    val updatedAt: String
 ){
-    constructor(email: String, password: String) : this("", email, 0, "", password, "", "", "")
+    constructor() : this(0, "", "", "", "", "", "", "", "")
+    constructor(id: Int) : this(id, "", "", "", "", "", "", "", "")
+    constructor(id: Int, token: String) : this(id, "", "", "", "", "", token, "", "")
+    constructor(email: String, password: String) : this(0, email, "", "", password, "", "", "", "")
 
 }
