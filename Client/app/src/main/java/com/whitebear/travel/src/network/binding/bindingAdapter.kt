@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.whitebear.travel.src.dto.Area
 import com.whitebear.travel.src.dto.Place
+import com.whitebear.travel.src.dto.PlaceReview
 import com.whitebear.travel.src.main.home.AreaAdapter
 import com.whitebear.travel.src.main.place.PlaceAdapter
+import com.whitebear.travel.src.main.place.PlaceReviewAdapter
 
 @BindingAdapter("imageUrlArea")
 fun bindImageArea(imgView:ImageView, imgUrl:String?){
@@ -68,4 +70,21 @@ fun bindPlaceRecyclerView(recyclerView: RecyclerView, data:List<Place>?){
     }
     adapter.list = data as MutableList<Place>
     adapter.notifyDataSetChanged()
+}
+@BindingAdapter("placeReviewListData")
+fun bindPlaceReviewRecyclerView(recyclerView: RecyclerView, data:List<PlaceReview>?) {
+    var adapter = recyclerView.adapter as PlaceReviewAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as PlaceReviewAdapter
+    }
+
+    adapter.list = data as MutableList<PlaceReview>
+    adapter.notifyDataSetChanged()
+}
+@BindingAdapter("textViewTotalReview")
+fun bindTextViweReviewTotal(textView: TextView, size:Int){
+    textView.text = "총 ${size}건"
 }

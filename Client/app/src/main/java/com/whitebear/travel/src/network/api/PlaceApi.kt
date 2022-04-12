@@ -8,21 +8,22 @@ import retrofit2.http.*
 
 interface PlaceApi {
 
-    @GET("/places")
+    @GET("places")
     suspend fun getPlaceByArea(@Query("areaName") areaName : String) : Response<Message>
 
-    @GET("/places/{id}")
+    @GET("places/{id}")
     suspend fun getPlaceById(@Path ("id")id:Int) : Response<Message>
 
     @POST("places/review")
     suspend fun insertPlaceReview(@Body placeReview:PlaceReview) : Response<Message>
 
-    @GET("/places/review/")
-    suspend fun getPlaceReview(@Path ("placeId") placeId:Int) : Response<Message>
+    @GET("places/review")
+    suspend fun getPlaceReview(@Query ("placeId") placeId:Int) : Response<Message>
 
-    @DELETE("/places/review/{id}")
+    @DELETE("places/review/{id}")
     suspend fun deletePlaceReview(@Query("id")reviewId:Int) : Response<Message>
 
 //    @POST("/places/like")
 //    suspend fun placeLike(@Body placeLike: Place) : Response<Message>
+
 }

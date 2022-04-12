@@ -138,4 +138,7 @@ dependencies {
 
     //Location
     implementation 'com.google.android.gms:play-services-location:19.0.1'
+
+    //Naver
+//    implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'
 }

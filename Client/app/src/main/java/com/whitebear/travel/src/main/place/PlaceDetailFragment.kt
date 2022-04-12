@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.tabs.TabLayoutMediator
 import com.whitebear.travel.R
 import com.whitebear.travel.config.BaseFragment
@@ -33,6 +34,12 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
     }
     fun setListener(){
         initTabLayout()
+        initButtons()
+    }
+    fun initButtons(){
+        binding.fragmentPlaceDetailAppBarBack.setOnClickListener {
+            this@PlaceDetailFragment.findNavController().popBackStack()
+        }
     }
     fun initTabLayout(){
         val tabList = arrayListOf<String>("INFO","REVIEW")

@@ -7,13 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
-import com.whitebear.travel.src.dto.Area
-import com.whitebear.travel.src.dto.Place
-import com.whitebear.travel.src.dto.User
+import com.whitebear.travel.src.dto.*
 import com.whitebear.travel.src.network.service.AreaService
 import com.whitebear.travel.src.network.service.PlaceService
 import com.whitebear.travel.src.network.service.UserService
-import com.whitebear.travel.src.dto.Weather
 import com.whitebear.travel.src.network.service.WeatherService
 import com.whitebear.travel.util.CommonUtils
 import kotlinx.coroutines.launch
@@ -97,16 +94,21 @@ class MainViewModel :ViewModel(){
      * */
     private val _places = MutableLiveData<MutableList<Place>>()
     private val _place = MutableLiveData<Place>()
+    private val _placeReviews = MutableLiveData<MutableList<PlaceReview>>()
     val places : LiveData<MutableList<Place>>
         get() = _places
     val place : LiveData<Place>
         get() = _place
-
+    val placeReviews : LiveData<MutableList<PlaceReview>>
+        get() = _placeReviews
     private fun setPlace(places:MutableList<Place>) = viewModelScope.launch { 
         _places.value = places
     }
     private fun setPlaceOne(place:Place) = viewModelScope.launch {
         _place.value = place
+    }
+    private fun setPlaceReview(placeReviews: MutableList<PlaceReview>) = viewModelScope.launch {
+        _placeReviews.value = placeReviews
     }
     suspend fun getPlaces(areaName:String){
         val response = PlaceService().getPlaceByArea(areaName)
@@ -135,7 +137,34 @@ class MainViewModel :ViewModel(){
             }
         }
     }
+    suspend fun getPlaceReview(placeId:Int){
+        val response = PlaceService().getPlaceReview(placeId)
+        Log.d(TAG, "getPlaceReview: ${response.code()}")
+        viewModelScope.launch {
+            if(response.code()==200 || response.code() == 500){
+                Log.d(TAG, "getPlaceReview: ${response.code()}")
+                val res = response.body()
+                Log.d(TAG, "getPlaceReview: $res")
+                if(res!=null){
+                    Log.d(TAG, "getPlaceReview: $res")
+                    var type = object : TypeToken<MutableList<PlaceReview>>() {}.type
+                    var placeReview = CommonUtils.parseDto<MutableList<PlaceReview>>(res.data, type)
+                    setPlaceReview(placeReview)
+                }
+            }else if(response.code() == 201){
+                val res = response.body()
+                if(res!=null){
+                    var type = object : TypeToken<MutableList<PlaceReview>>() {}.type
+                    var placeReview = CommonUtils.parseDto<MutableList<PlaceReview>>(res.data, type)
+                    setPlaceReview(placeReview)
+                }else{
+                    var nullsList = mutableListOf<PlaceReview>()
+                    setPlaceReview(nullsList)
+                }
 
+            }
+        }
+    }
 
 
 
