@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "163972402913",
+    "project_id": "travelapp-c4727",
+    "storage_bucket": "travelapp-c4727.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:163972402913:android:82ff5341d24a043a6871a0",
+        "android_client_info": {
+          "package_name": "com.whitebear.travel"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "163972402913-akcep7ucua0fr73uvchll2rqvuvmj67q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.whitebear.travel",
+            "certificate_hash": "9d601cbb2c88ec77e8a98a620c499b2bfcfeccf4"
+          }
+        },
+        {
+          "client_id": "163972402913-q0hqjgta0s6v9v716ndt4fqbq63ea5v6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.whitebear.travel",
+            "certificate_hash": "952f7d6e75792df13e120bbc270521a9714978dc"
+          }
+        },
+        {
+          "client_id": "163972402913-29ic43lc8ejab9qtvq4s2idkot8mo5mt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApWDRBy3Du_jM-Gu9JPCDofvFlal0R8HE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "163972402913-29ic43lc8ejab9qtvq4s2idkot8mo5mt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
