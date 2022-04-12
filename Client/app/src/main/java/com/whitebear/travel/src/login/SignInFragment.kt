@@ -1,10 +1,19 @@
 package com.whitebear.travel.src.login
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
@@ -30,10 +39,10 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
 
     private lateinit var loginActivity: LoginActivity
 
-//    // google 로그인
-//    private lateinit var mAuth: FirebaseAuth
-//    var mGoogleSignInClient: GoogleSignInClient? = null
-//
+    // google 로그인
+    private lateinit var mAuth: FirebaseAuth
+    var mGoogleSignInClient: GoogleSignInClient? = null
+
 //    // naver 로그인
 //    lateinit var mOAuthLoginInstance : OAuthLogin
 //
@@ -72,7 +81,8 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         // kakao Login
         kakaoLoginBtnClickEvent()
 
-//        googleLoginBtnClickEvent()
+        // google Login
+        googleLoginBtnClickEvent()
 //        facebookLoginBtnClickEvent()
     }
 
@@ -157,6 +167,79 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         }
     }
 
+    /**
+     * sns Login - Google 로그인
+     */
+
+    // firebase auth 인증 초기화
+    private fun initAuth() {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.google_login_key))
+            .requestEmail()
+            .build()
+
+        mGoogleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
+
+        mAuth = FirebaseAuth.getInstance()
+
+    }
+
+    private fun googleLoginBtnClickEvent() {
+        binding.signInFragmentGoogleBtn.setOnClickListener {
+            initAuth()
+            signIn()
+        }
+    }
+
+    // 구글 로그인 창을 띄우는 작업
+    private fun signIn() {
+        val signInIntent = mGoogleSignInClient!!.signInIntent
+        requestActivity.launch(signInIntent)
+    }
+
+    // 구글 인증 결과 획득 후 동작 처리
+    private val requestActivity: ActivityResultLauncher<Intent> = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) {
+        if (it.resultCode == Activity.RESULT_OK) {
+            val data = it.data
+
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            try {
+                // Google Sign In was successful, authenticate with Firebase
+                val account = task.getResult(ApiException::class.java)!!
+                Log.d(TAG, "firebaseAuthWithGoogle:" + account.id)
+                firebaseAuthWithGoogle(account.idToken!!)
+
+            } catch (e: ApiException) {
+                // Google Sign In failed, update UI appropriately
+                Log.w(TAG, "Google sign in failed", e)
+            }
+        }
+    }
+
+    // 구글 인증 결과 성공 여부에 따른 처리
+    private fun firebaseAuthWithGoogle(idToken: String?) {
+        val credential = GoogleAuthProvider.getCredential(idToken, null)
+        mAuth.signInWithCredential(credential)
+            .addOnCompleteListener(requireActivity()) { task ->
+                if (task.isSuccessful) {
+                    val user = mAuth.currentUser
+                    if(user != null) {
+                        // email nickname pw photo
+                        val email = user.email.toString()
+                        val nickname = user.displayName.toString()
+                        val uid = user.uid
+                        val newUser = User(email = email, password = uid, username = nickname, nickname = nickname, "google")
+
+                        Log.d(TAG, "firebaseAuthWithGoogle: $newUser")
+                        existEmailChk(newUser)
+                    }
+                } else {
+                    Log.w(TAG, "signInWithCredential:failure", task.exception)
+                }
+            }
+    }
 
     // ---------------------------------------------------------------------------------------------
     /**
