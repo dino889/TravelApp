@@ -42,13 +42,22 @@ class MainViewModel :ViewModel(){
     }
     suspend fun getWeather(dataType : String, numOfRows : Int, pageNo : Int,
                            baseDate : Int, baseTime : Int, nx : String, ny : String){
+
         val response = WeatherService().getWeather(dataType, numOfRows, pageNo, baseDate, baseTime, nx, ny)
         Log.d(TAG, "getWeather: ${response.code()}")
         viewModelScope.launch { 
             if(response.code() == 200){
                 var res = response.body()
-                Log.d(TAG, "getWeather: $res")
+                Log.d(TAG, "getWeather: ${res}")
+                var type = object:TypeToken<Weather>() {}.type
+                var weatherList =
+                    response.body()?.let { CommonUtils.parseDto<Weather>(it,type) }
+                Log.d(TAG, "getWeather: $weatherList")
+                if (weatherList != null) {
+                    setWeather(weatherList)
+                }
             }
+            
         }
     }
     /**

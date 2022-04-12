@@ -11,9 +11,11 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.bumptech.glide.Glide
 import com.whitebear.travel.R
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentHomeBinding
+import com.whitebear.travel.src.dto.Weather
 import com.whitebear.travel.src.main.MainActivity
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
@@ -28,6 +30,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
     private var list = mutableListOf(R.drawable.banner, R.drawable.banner1)
 
     //Weather
+    lateinit var weather:Weather.Item
 
     //adapter
     private lateinit var areaAdapter:AreaAdapter
@@ -53,9 +56,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
         setListener()
     }
     fun setListener(){
-
         initBanner()
         initAdapter()
+        initWeather()
     }
     private fun initAdapter(){
         mainViewModel.areas.observe(viewLifecycleOwner, {
@@ -67,6 +70,44 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
         })
+        
+
+    }
+    private fun initWeather(){
+        mainViewModel.weathers.observe(viewLifecycleOwner, {
+            var curWeather = it.response.body.items.item
+            Log.d(TAG, "initWeather: $curWeather")
+            var str = ""
+            var temperature = ""
+            for(item in 0.. curWeather.size-1){
+//                var str = ""
+                if(curWeather[item].category.equals("SKY")){
+                    str += "현재 날씨는"
+                    if(curWeather[item].fcstValue.equals("1")){
+                        Glide.with(this)
+                            .load(R.drawable.weather1)
+                            .into(binding.fragmentHomeWeatherSKY)
+                    }else if(curWeather[item].fcstValue.equals("2")){
+                        Glide.with(this)
+                            .load(R.drawable.weather2)
+                            .into(binding.fragmentHomeWeatherSKY)
+                    }else if(curWeather[item].fcstValue.equals("3")){
+                        Glide.with(this)
+                            .load(R.drawable.weather3)
+                            .into(binding.fragmentHomeWeatherSKY)
+                    }else if(curWeather[item].fcstValue.equals("4")){
+                        Glide.with(this)
+                            .load(R.drawable.weather4)
+                            .into(binding.fragmentHomeWeatherSKY)
+                    }
+                }
+//                var temperature = ""
+                if(curWeather[item].category.equals("T3H") || curWeather[item].category.equals("T1H") || curWeather[item].category.equals("TMP")){
+                    binding.fragmentHomeWeatherTMP.setText(curWeather[item].fcstValue + "℃")
+                }
+            }
+        })
+
     }
     private fun initBanner(){
         var banners = binding.fragmentHomeBanner

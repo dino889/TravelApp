@@ -24,7 +24,7 @@ data class Weather(
     )
 
     data class Item(
-        val baseData: Int,
+        val baseDate: Int,
         val baseTime: Int,
         val category: String,
         val fcstDate : Int,

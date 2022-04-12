@@ -40,7 +40,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private val LOCATION = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
     private val LOCATION_CODE = 100
     private var today = ""
-
+    private var hour = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -140,6 +140,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             && ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return
         }
+        Log.d(TAG, "startLocationUpdates: 2?")
         // 기기의 위치에 관한 정기 업데이트를 요청하는 메서드 실행
         // 지정한 루퍼 스레드(Looper.myLooper())에서 콜백(mLocationCallback)으로 위치 업데이트를 요청
         mFusedLocationProviderClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper()!!)
@@ -166,7 +167,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         getToday()
         Log.d(TAG, "onLocationChanged: $today")
         runBlocking {
-            mainViewModel.getWeather("JSON",10,1,today.toInt(),1100,"${location.latitude}","${location.longitude}")
+            mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${location.latitude.toInt()}","${location.longitude.toInt()}")
 
         }
     }
@@ -182,7 +183,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     fun getToday(){
         var current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val hourFormatt = DateTimeFormatter.ofPattern("HH")
         val formatted = current.format(formatter)
+        val formatted2 = current.format(hourFormatt)
         today = formatted
+
     }
 }
