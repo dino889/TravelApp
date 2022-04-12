@@ -10,7 +10,8 @@ data class Place(
     val lat: Double,
     val long: Double,
     val name: String,
-    val rating: Int,
+    val heartCount: Int,
+    val rating:Float,
     val summary: String,
     val type: Any,
     val updatedAt: String

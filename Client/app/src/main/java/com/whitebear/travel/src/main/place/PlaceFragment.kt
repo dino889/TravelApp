@@ -80,7 +80,11 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
         }
         binding.fragmentPlaceTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
+
                 runBlocking {
+//                    if(tab?.text.toString().equals("제주도")){
+//                        mainViewModel.getPlaces("제주")
+//                    }
                     mainViewModel.getPlaces(tab?.text.toString())
                 }
             }
