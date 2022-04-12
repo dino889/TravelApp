@@ -197,9 +197,9 @@ class MainViewModel :ViewModel(){
                 if(res != null) {
                     if(res["isSuccess"] == true) {
                         if(res["data"] != null) {
-//                            val type: Type = object : TypeToken<User>() {}.type
-//                            val user = CommonUtils.parseDto<User>(res["data"]!!, type)
-                            val user = res["data"] as User
+                            val type: Type = object : TypeToken<User>() {}.type
+                            val user = CommonUtils.parseDto<User>(res["data"]!!, type)
+//                            val user = res["data"]
                             if(loginChk == true) {  // login user
                                 setLoginUserInfo(user)
                             } else {
