@@ -10,6 +10,9 @@ import com.whitebear.travel.R
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentPlaceInfoBinding
 import kotlinx.coroutines.runBlocking
+import net.daum.mf.map.api.MapPOIItem
+import net.daum.mf.map.api.MapPoint
+import net.daum.mf.map.api.MapView
 
 private const val TAG = "PlaceInfoFragment"
 class PlaceInfoFragment : BaseFragment<FragmentPlaceInfoBinding>(FragmentPlaceInfoBinding::bind,R.layout.fragment_place_info) {
@@ -29,6 +32,29 @@ class PlaceInfoFragment : BaseFragment<FragmentPlaceInfoBinding>(FragmentPlaceIn
         runBlocking {
             mainViewModel.getPlace(placeId)
         }
+        setListener()
+    }
+    fun setListener(){
+        initKakaoMap()
+    }
+    fun initKakaoMap(){
+        var mapView = MapView(requireContext())
+        if(mapView.parent != null){
+            (mapView.parent as ViewGroup).removeView(mapView)
+        }
+
+        var mapViewContainer = binding.fragmentPlaceInfoPlaceMapView as ViewGroup
+        mapViewContainer.addView(mapView)
+        var curLoc = mainViewModel.place.value!!
+        Log.d(TAG, "initKakaoMap: ${curLoc.lat} // ${curLoc.long}")
+        var mapPoint = MapPoint.mapPointWithGeoCoord(curLoc.lat, curLoc.long)
+        mapView.setMapCenterPoint(mapPoint, true)
+        mapView.setZoomLevel(4,true)
+        var marker = MapPOIItem()
+        marker.itemName = curLoc.name
+        marker.mapPoint = mapPoint
+        marker.markerType = MapPOIItem.MarkerType.RedPin
+        mapView.addPOIItem(marker)
     }
 
     companion object {

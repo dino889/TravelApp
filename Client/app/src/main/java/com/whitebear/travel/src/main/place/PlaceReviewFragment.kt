@@ -71,13 +71,6 @@ class PlaceReviewFragment : BaseFragment<FragmentPlaceReviewBinding>(FragmentPla
                 adapter = reviewAdapter
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
-            reviewAdapter.setItemClickListener(object: PlaceReviewAdapter.ItemClickListener{
-                override fun onClick(view: View, position: Int, id: Int) {
-                    showReviewWriteDialog(2)
-                }
-
-            })
-
         })
     }
     fun initData(){

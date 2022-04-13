@@ -40,6 +40,16 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
         binding.fragmentPlaceDetailAppBarBack.setOnClickListener {
             this@PlaceDetailFragment.findNavController().popBackStack()
         }
+        binding.fragmentPlaceDetailAddBucket.setOnClickListener {
+            if(mainViewModel.liveNavBucketList.value!!.size < 4){
+                var place = mainViewModel.place.value!!
+                mainViewModel.insertPlaceShopList(place)
+                showCustomToast("추가되었습니다.")
+                binding.fragmentPlaceDetailLottie.playAnimation()
+            }else{
+                showCustomToast("더이상 추가하실 수 없습니다.")
+            }
+        }
     }
     fun initTabLayout(){
         val tabList = arrayListOf<String>("INFO","REVIEW")

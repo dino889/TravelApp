@@ -79,4 +79,9 @@
         android:name="com.whitebear.travel.src.main.place.PlaceDetailFragment"
         android:label="fragment_place_detail"
         tools:layout="@layout/fragment_place_detail" />
+    <fragment
+        android:id="@+id/navigatorFragment"
+        android:name="com.whitebear.travel.src.main.home.NavigatorFragment"
+        android:label="fragment_navigator"
+        tools:layout="@layout/fragment_navigator" />
 </navigation>

@@ -42,10 +42,6 @@ class PlaceReviewAdapter(context: Context) : RecyclerView.Adapter<PlaceReviewAda
                 popup.show()
                 popup.setOnMenuItemClickListener {
                     when(it.itemId){
-                        R.id.menu_edit -> {
-                            itemClickListener.onClick(itemView,bindingAdapterPosition,list[bindingAdapterPosition].id)
-                            return@setOnMenuItemClickListener true
-                        }
                         R.id.menu_delete ->{
                             return@setOnMenuItemClickListener true
                         }else->{

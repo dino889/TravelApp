@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
         android:theme="@style/Theme.TravelApplication">
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="e91617dd0930365598a61747d57403d0" />
 
         <activity
             android:name=".src.login.LoginActivity"

@@ -321,4 +321,16 @@ class MainViewModel :ViewModel(){
         }
         return result
     }
+
+    /**
+     * Bucket ViewModel
+     * */
+    private val placeShopResponse = mutableListOf<Place>()
+    val liveNavBucketList = MutableLiveData<MutableList<Place>>().apply {
+        value = placeShopResponse
+    }
+    fun insertPlaceShopList(place:Place){
+        placeShopResponse.add(place)
+        liveNavBucketList.value = placeShopResponse
+    }
 }

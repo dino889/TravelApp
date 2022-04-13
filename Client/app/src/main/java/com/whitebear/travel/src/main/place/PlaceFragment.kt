@@ -37,7 +37,7 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
         runBlocking {
-            mainViewModel.getPlaces("경상남도")
+            mainViewModel.getPlaces("대구")
         }
         setListener()
     }
@@ -78,6 +78,7 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
         for(item in 0..areas.size-1){
             binding.fragmentPlaceTabLayout.addTab(binding.fragmentPlaceTabLayout.newTab().setText(areas[item].name))
         }
+
         binding.fragmentPlaceTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
 

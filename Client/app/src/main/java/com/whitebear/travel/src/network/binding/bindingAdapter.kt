@@ -10,6 +10,7 @@ import com.whitebear.travel.src.dto.Area
 import com.whitebear.travel.src.dto.Place
 import com.whitebear.travel.src.dto.PlaceReview
 import com.whitebear.travel.src.main.home.AreaAdapter
+import com.whitebear.travel.src.main.home.NavPlaceAdapter
 import com.whitebear.travel.src.main.place.PlaceAdapter
 import com.whitebear.travel.src.main.place.PlaceReviewAdapter
 
@@ -87,4 +88,17 @@ fun bindPlaceReviewRecyclerView(recyclerView: RecyclerView, data:List<PlaceRevie
 @BindingAdapter("textViewTotalReview")
 fun bindTextViweReviewTotal(textView: TextView, size:Int){
     textView.text = "총 ${size}건"
+}
+
+@BindingAdapter("placeNavListData")
+fun bindPlaceNavRecyclerView(recyclerView: RecyclerView, data:List<Place>?) {
+    var adapter = recyclerView.adapter as NavPlaceAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as NavPlaceAdapter
+    }
+    adapter.list = data as MutableList<Place>
+    adapter.notifyDataSetChanged()
 }

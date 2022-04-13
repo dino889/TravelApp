@@ -8,6 +8,7 @@ import android.os.Message
 import android.util.Log
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
@@ -56,9 +57,15 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
         setListener()
     }
     fun setListener(){
+        initButton()
         initBanner()
         initAdapter()
         initWeather()
+    }
+    fun initButton(){
+        binding.fragmentHomeNavBtn.setOnClickListener {
+            this@HomeFragment.findNavController().navigate(R.id.navigatorFragment)
+        }
     }
     private fun initAdapter(){
         mainViewModel.areas.observe(viewLifecycleOwner, {

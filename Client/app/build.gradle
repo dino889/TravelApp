@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "com.whitebear.travel"
-        minSdkVersion 24
+        minSdkVersion 23
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
@@ -43,6 +43,7 @@ android {
 dependencies {
     // 외브라이브러리
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation files('libs/libDaumMapAndroid.jar')
 
     implementation 'androidx.appcompat:appcompat:1.3.0'
     implementation 'com.google.android.material:material:1.3.0'
@@ -116,7 +117,8 @@ dependencies {
 
     // 카카오
     implementation "com.kakao.sdk:v2-user-rx:2.4.2"
-
+    implementation "com.kakao.sdk:v2-navi:2.8.5"
+    compile group: 'com.kakao.sdk',name:'kakaonavi',version: '1.6.2'
 
     // TedPermission
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.2.3'
