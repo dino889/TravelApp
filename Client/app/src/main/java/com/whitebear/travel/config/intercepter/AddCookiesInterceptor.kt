@@ -11,7 +11,7 @@ private const val TAG = "AddCookiesInter"
 class AddCookiesInterceptor : Interceptor{
 
     @Throws(IOException::class)
-    override fun intercept(chain: Interceptor.Chain): Response? {
+    override fun intercept(chain: Interceptor.Chain): Response {
         val builder: Request.Builder = chain.request().newBuilder()
 
         // cookie 가져오기

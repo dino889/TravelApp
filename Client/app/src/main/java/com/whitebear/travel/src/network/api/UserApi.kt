@@ -1,5 +1,7 @@
 package com.whitebear.travel.src.network.api
 
+import com.navercorp.nid.profile.NidProfileCallback
+import com.navercorp.nid.profile.data.NidProfileResponse
 import com.whitebear.travel.src.dto.Message
 import com.whitebear.travel.src.dto.User
 import retrofit2.Response
@@ -44,4 +46,11 @@ interface UserApi {
      * */
     @GET("users/exist")
     suspend fun doubleCheckEmail(@Query("email") email:String) : Response<HashMap<String, Any>>
+
+
+//    /**
+//     * naverLogin Profile get
+//     */
+//    @GET
+//    fun callProfileApi(callback: NidProfileCallback<NidProfileResponse>)
 }
