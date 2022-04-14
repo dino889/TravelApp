@@ -47,10 +47,10 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
         }else{
             binding.fragmentPlaceDetailHeart.progress = 0f
         }
-
         initTabLayout()
         initButtons()
     }
+
     fun initButtons(){
         binding.fragmentPlaceDetailAppBarBack.setOnClickListener {
             this@PlaceDetailFragment.findNavController().popBackStack()

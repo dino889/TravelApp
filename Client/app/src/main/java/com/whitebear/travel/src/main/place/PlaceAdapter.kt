@@ -13,7 +13,7 @@ import com.whitebear.travel.R
 import com.whitebear.travel.databinding.ItemPlaceBinding
 import com.whitebear.travel.src.dto.Place
 
-class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder>(){
+class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder>() ,Filterable{
     var list = mutableListOf<Place>()
     var likeList = mutableListOf<Place>()
     var filteredList = list
@@ -39,15 +39,13 @@ class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder>(){
 
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
         holder.apply {
-            bind(list[position])
+            bind(filteredList[position])
             var heart = itemView.findViewById<LottieAnimationView>(R.id.frragment_place_placeLike)
-            var heartFlag = false
-            heartFlag = heart.progress > 0.3f
             itemView.setOnClickListener {
                 if( heart.progress > 0.3f){
-                    itemClickListener.onClick(it, position, list[position].id, true)
+                    itemClickListener.onClick(it, position, filteredList[position].id, true)
                 }else{
-                    itemClickListener.onClick(it, position, list[position].id, false)
+                    itemClickListener.onClick(it, position, filteredList[position].id, false)
 
                 }
 
@@ -56,7 +54,7 @@ class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder>(){
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        return filteredList.size
     }
     interface ItemClickListener {
         fun onClick(view: View, position: Int, placeId:Int, heartFlag : Boolean)
@@ -64,6 +62,38 @@ class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder>(){
     private lateinit var itemClickListener : ItemClickListener
     fun setOnItemClickListener(itemClickListener: ItemClickListener){
         this.itemClickListener = itemClickListener
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter(){
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val charString = constraint.toString()
+                filteredList = if(charString.isEmpty()){
+                    list
+                }else{
+                    val filteringList = ArrayList<Place>()
+                    for( item in list ){
+
+                        if(item.address.contains(charString)) filteringList.add(item)
+                        if(item.description.contains(charString)) filteringList.add(item)
+                        if(item.name.contains(charString)) filteringList.add(item)
+                        if(item.summary.contains(charString)) filteringList.add(item)
+
+                        Log.d("TAG", "performFiltering: $filteringList")
+                    }
+                    filteringList
+                }
+                val filterResults = FilterResults()
+                filterResults.values = filteredList
+                return filterResults
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                filteredList = results?.values as MutableList<Place>
+                notifyDataSetChanged()
+            }
+
+        }
     }
 
 }

@@ -6,8 +6,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Message
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -18,12 +22,14 @@ import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentHomeBinding
 import com.whitebear.travel.src.dto.Weather
 import com.whitebear.travel.src.main.MainActivity
+import com.whitebear.travel.src.network.viewmodel.MainViewModel
 import kotlinx.coroutines.runBlocking
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 private const val TAG = "HomeFragment"
-class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind,R.layout.fragment_home) {
+class HomeFragment: Fragment(){
+//class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind,R.layout.fragment_home) {
     //Banner
     private var currentPosition = 0
     private var myHandler = MyHandler()
@@ -37,12 +43,24 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
     private lateinit var areaAdapter:AreaAdapter
 
     private lateinit var mainActivity:MainActivity
+    private lateinit var binding : FragmentHomeBinding
+    val mainViewModel : MainViewModel by activityViewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
         }
     }
 
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+//        return super.onCreateView(inflater, container, savedInstanceState)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
@@ -53,6 +71,9 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
         binding.viewModel = mainViewModel
         runBlocking {
             mainViewModel.getAreas()
+            if(mainViewModel.userLoc!=null){
+                mainViewModel.getWeather("JSON",10,1,mainViewModel.today!!,1400,"${mainViewModel.userLoc!!.latitude.toInt()}","${mainViewModel.userLoc!!.longitude.toInt()}")
+            }
         }
         setListener()
     }

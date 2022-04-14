@@ -146,12 +146,11 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
         markerArr[0].mapPointGeoCoord.latitude
         try {
             if (KakaoNaviService.isKakaoNaviInstalled(requireContext())) {
-                Log.d(TAG, "goNavi: ${markerArr[0].mapPointGeoCoord.latitude} || ${markerArr[0].mapPointGeoCoord.longitude}")
                 val kakao: com.kakao.kakaonavi.Location =
-                    Destination.newBuilder("destination", markerArr[0].mapPointGeoCoord.latitude,markerArr[0].mapPointGeoCoord.longitude).build()
+                    Destination.newBuilder("destination", markerArr[0].mapPointGeoCoord.longitude,markerArr[0].mapPointGeoCoord.latitude).build()
                 val stops = LinkedList<Location>()
                 for(i in 1..markerArr.size-1){
-                    val stop = com.kakao.kakaonavi.Location.newBuilder("출발",markerArr[i].mapPointGeoCoord.latitude,markerArr[i].mapPointGeoCoord.longitude).build()
+                    val stop = com.kakao.kakaonavi.Location.newBuilder("출발",markerArr[i].mapPointGeoCoord.longitude,markerArr[i].mapPointGeoCoord.latitude).build()
                     stops.add(stop)
                 }
                 if(flag == 1){

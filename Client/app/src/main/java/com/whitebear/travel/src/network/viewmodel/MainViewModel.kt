@@ -20,6 +20,8 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.reflect.Type
+import java.util.*
+import kotlin.collections.HashMap
 
 private const val TAG = "mainViewModel"
 class MainViewModel :ViewModel(){
@@ -30,11 +32,17 @@ class MainViewModel :ViewModel(){
         get() = _userLoc
     val userAddr : String?
         get() = _userAddr
+    val today : Int?
+        get() = _today
     private var _userLoc : Location? = null
     private var _userAddr : String? = null
+    private var _today : Int? = null
     fun setUserLoc(location : Location, addr: String) {
         _userLoc = location
         _userAddr = addr
+    }
+    fun setToday(today: Int){
+        _today = today
     }
     private val _weathers = MutableLiveData<Weather>()
     val weathers : LiveData<Weather>

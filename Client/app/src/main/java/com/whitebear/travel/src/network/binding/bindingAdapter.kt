@@ -6,9 +6,11 @@ import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.whitebear.travel.R
 import com.whitebear.travel.src.dto.Area
 import com.whitebear.travel.src.dto.Place
 import com.whitebear.travel.src.dto.PlaceReview
+import com.whitebear.travel.src.dto.Weather
 import com.whitebear.travel.src.main.home.AreaAdapter
 import com.whitebear.travel.src.main.home.NavPlaceAdapter
 import com.whitebear.travel.src.main.place.PlaceAdapter
@@ -102,3 +104,40 @@ fun bindPlaceNavRecyclerView(recyclerView: RecyclerView, data:List<Place>?) {
     adapter.list = data as MutableList<Place>
     adapter.notifyDataSetChanged()
 }
+//@BindingAdapter("weatherImageUrl")
+//fun bindWeatherImageUrl(imgView:ImageView, weathers : Weather.Items){
+//    var weather = weathers.item
+//    for(i in 0..weather.size-1){
+//        if(weather[i].category.equals("SKY")){
+//            if(weather[i].fcstValue.equals("1")){
+//                Glide.with(imgView.context)
+//                    .load(R.drawable.weather1)
+//                    .into(imgView)
+//            }else if(weather[i].fcstValue.equals("2")){
+//                Glide.with(imgView.context)
+//                    .load(R.drawable.weather2)
+//                    .into(imgView)
+//            }else if(weather[i].fcstValue.equals("3")){
+//                Glide.with(imgView.context)
+//                    .load(R.drawable.weather3)
+//                    .into(imgView)
+//            }else if(weather[i].fcstValue.equals("4")){
+//                Glide.with(imgView.context)
+//                    .load(R.drawable.weather4)
+//                    .into(imgView)
+//            }
+//        }
+//    }
+//
+//}
+//
+//@BindingAdapter("weatherTmpText")
+//fun bindTextViewWeatherTemp(textView: TextView, weathers:Weather.Items){
+//    var weather = weathers.item
+//    for(i in 0..weather.size-1){
+//        if(weather[i].category.equals("T3H") || weather[i].category.equals("T1H") || weather[i].category.equals("TMP")){
+//            textView.text = weather[i].fcstValue + "℃"
+//        }
+//    }
+//
+//}

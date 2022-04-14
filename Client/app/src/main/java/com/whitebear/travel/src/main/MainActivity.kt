@@ -22,7 +22,7 @@ import com.whitebear.travel.R
 import com.whitebear.travel.config.BaseActivity
 import com.whitebear.travel.databinding.ActivityMainBinding
 import com.whitebear.travel.src.network.viewmodel.MainViewModel
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
@@ -144,28 +144,27 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         // 기기의 위치에 관한 정기 업데이트를 요청하는 메서드 실행
         // 지정한 루퍼 스레드(Looper.myLooper())에서 콜백(mLocationCallback)으로 위치 업데이트를 요청
         mFusedLocationProviderClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper()!!)
+
     }
     // 시스템으로 부터 위치 정보를 콜백으로 받음
+
     private val mLocationCallback = object : LocationCallback() {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onLocationResult(locationResult: LocationResult) {
-            // 시스템에서 받은 location 정보를 onLocationChanged()에 전달
             locationResult.lastLocation
             onLocationChanged(locationResult.lastLocation)
             Log.d(TAG, "onLocationResult: ")
+            // 시스템에서 받은 location 정보를 onLocationChanged()에 전달
         }
     }
     // 시스템으로 부터 받은 위치정보를 화면에 갱신해주는 메소드
     @RequiresApi(Build.VERSION_CODES.O)
     fun onLocationChanged(location: Location) {
-        Log.d(TAG, "onLocationChanged: ")
         mLastLocation = location
-        Log.d(TAG, "onLocationChanged: lat = ${mLastLocation.latitude} / lng = ${mLastLocation.longitude}")
 
         mainViewModel.setUserLoc(location, getAddress(location))
         Log.d(TAG, "onLocationChanged: ${location.latitude}")
         getToday()
-        Log.d(TAG, "onLocationChanged: $today")
         runBlocking {
             mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${location.latitude.toInt()}","${location.longitude.toInt()}")
         }
@@ -186,6 +185,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         val formatted = current.format(formatter)
         val formatted2 = current.format(hourFormatt)
         today = formatted
-
+        mainViewModel.setToday(today.toInt())
     }
 }
