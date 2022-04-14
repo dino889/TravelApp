@@ -2,6 +2,7 @@ package com.whitebear.travel.src.main.place
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -12,12 +13,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
 import com.whitebear.travel.R
+import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentPlaceBinding
 import com.whitebear.travel.src.main.MainActivity
 import kotlinx.coroutines.runBlocking
 
-
+private const val TAG = "PlaceFragment"
 class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::bind, R.layout.fragment_place) {
     private lateinit var mainActivity : MainActivity
     private lateinit var placeAdapter: PlaceAdapter
@@ -38,6 +40,7 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
         binding.viewModel = mainViewModel
         runBlocking {
             mainViewModel.getPlaces("대구")
+            mainViewModel.getPlaceLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
         }
         setListener()
     }
@@ -51,8 +54,12 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
 
     }
     fun initAdapter(){
+        placeAdapter = PlaceAdapter()
+        mainViewModel.placeLikes.observe(viewLifecycleOwner, {
+            Log.d(TAG, "initAdapter: $it")
+            placeAdapter.likeList = it
+        })
         mainViewModel.places.observe(viewLifecycleOwner, {
-            placeAdapter = PlaceAdapter()
             placeAdapter.list = it
             binding.fragmentPlaceRv.apply {
                 layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
@@ -60,9 +67,12 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
             placeAdapter.setOnItemClickListener(object: PlaceAdapter.ItemClickListener {
-                override fun onClick(view: View, position: Int, placeId: Int) {
-                    var placeId = bundleOf("placeId" to placeId)
-                    this@PlaceFragment.findNavController().navigate(R.id.placeDetailFragment, placeId)
+                override fun onClick(view: View, position: Int, placeId: Int, heartFlag : Boolean) {
+                    Log.d(TAG, "onClick: $heartFlag")
+                    var place = bundleOf("placeId" to placeId, "heartFlag" to heartFlag)
+
+                    this@PlaceFragment.findNavController().navigate(R.id.placeDetailFragment, place)
+//                    this@PlaceFragment.findNavController().navigate(R.id.placeDetailFragment, heartFlag)
                 }
 
             })

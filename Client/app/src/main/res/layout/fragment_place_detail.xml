@@ -86,7 +86,7 @@
                     app:layout_constraintTop_toTopOf="@+id/imageView4" />
 
                 <com.airbnb.lottie.LottieAnimationView
-                    android:id="@+id/lottieAnimationView"
+                    android:id="@+id/fragment_placeDetail_heart"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginStart="16dp"
@@ -104,9 +104,9 @@
                     android:layout_marginStart="8dp"
                     android:text="@{String.valueOf(viewModel.place.heartCount)}"
                     android:textColor="@color/black"
-                    app:layout_constraintBottom_toBottomOf="@+id/lottieAnimationView"
-                    app:layout_constraintStart_toEndOf="@+id/lottieAnimationView"
-                    app:layout_constraintTop_toTopOf="@+id/lottieAnimationView" />
+                    app:layout_constraintBottom_toBottomOf="@+id/fragment_placeDetail_heart"
+                    app:layout_constraintStart_toEndOf="@+id/fragment_placeDetail_heart"
+                    app:layout_constraintTop_toTopOf="@+id/fragment_placeDetail_heart" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/fragment_placeDetail_addBucket"

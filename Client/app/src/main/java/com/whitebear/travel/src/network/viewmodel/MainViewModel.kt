@@ -7,6 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
+import com.google.gson.JsonArray
+import com.google.gson.JsonObject
+import com.google.gson.JsonParser
 import com.whitebear.travel.src.dto.*
 import com.whitebear.travel.src.network.service.AreaService
 import com.whitebear.travel.src.network.service.PlaceService
@@ -14,6 +17,8 @@ import com.whitebear.travel.src.network.service.UserService
 import com.whitebear.travel.src.network.service.WeatherService
 import com.whitebear.travel.util.CommonUtils
 import kotlinx.coroutines.launch
+import org.json.JSONArray
+import org.json.JSONObject
 import java.lang.reflect.Type
 
 private const val TAG = "mainViewModel"
@@ -95,12 +100,17 @@ class MainViewModel :ViewModel(){
     private val _places = MutableLiveData<MutableList<Place>>()
     private val _place = MutableLiveData<Place>()
     private val _placeReviews = MutableLiveData<MutableList<PlaceReview>>()
+    private val _placeLikes = MutableLiveData<MutableList<Place>>()
+
     val places : LiveData<MutableList<Place>>
         get() = _places
     val place : LiveData<Place>
         get() = _place
     val placeReviews : LiveData<MutableList<PlaceReview>>
         get() = _placeReviews
+    val placeLikes : LiveData<MutableList<Place>>
+        get() = _placeLikes
+
     private fun setPlace(places:MutableList<Place>) = viewModelScope.launch { 
         _places.value = places
     }
@@ -109,6 +119,9 @@ class MainViewModel :ViewModel(){
     }
     private fun setPlaceReview(placeReviews: MutableList<PlaceReview>) = viewModelScope.launch {
         _placeReviews.value = placeReviews
+    }
+    private fun setPlaceLikes(places:MutableList<Place>) = viewModelScope.launch {
+        _placeLikes.value = places
     }
     suspend fun getPlaces(areaName:String){
         val response = PlaceService().getPlaceByArea(areaName)
@@ -154,6 +167,7 @@ class MainViewModel :ViewModel(){
             }else if(response.code() == 201){
                 val res = response.body()
                 if(res!=null){
+                    Log.d(TAG, "getPlaceReview: ${res.data}")
                     var type = object : TypeToken<MutableList<PlaceReview>>() {}.type
                     var placeReview = CommonUtils.parseDto<MutableList<PlaceReview>>(res.data, type)
                     setPlaceReview(placeReview)
@@ -165,7 +179,27 @@ class MainViewModel :ViewModel(){
             }
         }
     }
+    suspend fun getPlaceLikes(userId: Int){
+        val response = PlaceService().getLikePlaceByUser(userId)
+        viewModelScope.launch {
+            if(response.code() == 200 || response.code() == 500 || response.code() == 201){
+                val res = response.body()
 
+                if(res!=null){
+                    if(res.isSuccess){
+                        var places = mutableListOf<Place>()
+
+                        for(i in 0..res.data.size-1){
+                            var type = object : TypeToken<Place>() {}.type
+                            var place:Place = CommonUtils.parseDto(res.data[i].get("place")!!, type)
+                            places.add(place)
+                        }
+                        setPlaceLikes(places)
+                    }
+                }
+            }
+        }
+    }
 
 
     // ---------------------------------------------------------------------------------------------

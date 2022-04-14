@@ -1,8 +1,6 @@
 package com.whitebear.travel.src.network.api
 
-import com.whitebear.travel.src.dto.Message
-import com.whitebear.travel.src.dto.Place
-import com.whitebear.travel.src.dto.PlaceReview
+import com.whitebear.travel.src.dto.*
 import retrofit2.Response
 import retrofit2.http.*
 
@@ -23,7 +21,10 @@ interface PlaceApi {
     @DELETE("places/review/{id}")
     suspend fun deletePlaceReview(@Path("id")reviewId:Int) : Response<Message>
 
-//    @POST("/places/like")
-//    suspend fun placeLike(@Body placeLike: Place) : Response<Message>
+    @POST("/places/like")
+    suspend fun placeLike(@Body placeLike: PlaceLike) : Response<Message>
+
+    @GET("places/userlike/{id}")
+    suspend fun getLikePlacebyUser(@Path("id")userId:Int) : Response<Message2>
 
 }
