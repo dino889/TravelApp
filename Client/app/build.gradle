@@ -120,6 +120,16 @@ dependencies {
     implementation "com.kakao.sdk:v2-navi:2.8.5"
     compile group: 'com.kakao.sdk',name:'kakaonavi',version: '1.6.2'
 
+    // naver Login
+//    implementation 'com.naver.nid:naveridlogin-android-sdk:4.2.6'
+    implementation 'com.navercorp.nid:oauth:5.1.0' // jdk 11
+//    implementation(files("libs/oauth-5.1.0.aar"))
+
+
+    // naver Login
+    //    implementation 'com.navercorp.nid:oauth-jdk8:5.1.0'
+//    implementation project(path: ':oauth-5.1.0')
+
     // TedPermission
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.2.3'
 

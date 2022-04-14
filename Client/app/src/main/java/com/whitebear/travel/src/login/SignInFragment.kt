@@ -19,10 +19,17 @@ import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.rx
+import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.oauth.NidOAuthBehavior
+import com.navercorp.nid.oauth.NidOAuthLogin
+import com.navercorp.nid.oauth.OAuthLoginCallback
+import com.navercorp.nid.profile.NidProfileCallback
+import com.navercorp.nid.profile.data.NidProfileResponse
 import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentSignInBinding
+import com.whitebear.travel.src.dto.NidProfile
 import com.whitebear.travel.src.dto.User
 import com.whitebear.travel.src.network.service.UserService
 import com.whitebear.travel.util.CommonUtils
@@ -32,6 +39,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
+import retrofit2.Response
 import java.lang.reflect.Type
 
 class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding::bind, R.layout.fragment_sign_in) {
@@ -43,11 +51,6 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
     private lateinit var mAuth: FirebaseAuth
     var mGoogleSignInClient: GoogleSignInClient? = null
 
-//    // naver 로그인
-//    lateinit var mOAuthLoginInstance : OAuthLogin
-//
-//    // kakao 로그인
-////    private var disposables = CompositeDisposable()
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -83,7 +86,16 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
 
         // google Login
         googleLoginBtnClickEvent()
-//        facebookLoginBtnClickEvent()
+
+        // naver login SDK 초기화
+        NaverIdLoginSDK.apply {
+            showDevelopersLog(true)
+            initialize(requireContext(), getString(R.string.naver_client_id), getString(R.string.naver_client_secret), getString(R.string.naver_client_name))
+            isShowMarketLink = true
+            isShowBottomTab = true
+        }
+
+        naverLoginBtnClickEvent()
     }
 
     private fun login(email: String, password: String){
@@ -148,22 +160,31 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
      * 새로운 회원이라면 회원가입 진행
      */
     private fun snsLoginJoin(user: User) {
-        var result : HashMap<String, Any>
         val realPw = user.password
 
         val encPw = loginActivity.sha256(user.password)
         user.password = encPw
 
-        runBlocking {
-            result = mainViewModel.join(user)
-        }
+        var response : Response<HashMap<String, Any>>
 
-        if(result["isSuccess"] == true) {  // 이미 존재하는 이메일
-            showCustomToast("이미 존재하는 이메일입니다. 다시 인증해 주세요.")
-        } else if(result["isSuccess"] == false) {
-            login(user.email, realPw)
-        } else {
-            showCustomToast("회원가입에 실패했습니다. 다시 시도해 주세요.")
+        runBlocking {
+            response = UserService().insertUser(user)
+//            mainViewModel.join(User(email = email, password = loginActivity.sha256(password), nickname = nickname, username = username, social_type = socialType))
+        }
+        if(response.code() == 200 || response.code() == 500 || response.code() == 201) {
+            val res = response.body()
+            if (res != null) {
+                Log.d(TAG, "join: $res")
+                if(res["isSuccess"] == true && res["message"] == "create user successful") {
+                    login(user.email, realPw)
+                } else if(res["isSuccess"] == false) {
+                    showCustomToast("회원가입에 실패했습니다. 다시 시도해 주세요.")
+                }
+//                else {
+//                    Log.d(TAG, "join: $res")
+//                    showCustomToast("회원가입에 실패했습니다. 다시 시도해 주세요.")
+//                }
+            }
         }
     }
 
@@ -307,6 +328,111 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
             })
             .addTo(disposables)
     }
+
+
+
+
+    /**
+     * #S06P12D109-14
+     * sns Login - Naver
+     */
+
+    private fun naverLoginBtnClickEvent() {
+        binding.signInFragmentNaverBtn.setOnClickListener {
+//            NaverIdLoginSDK.authenticate(requireContext(), oAuthLoginCallback)
+            NaverIdLoginSDK.behavior = NidOAuthBehavior.DEFAULT
+            NaverIdLoginSDK.authenticate(requireContext(), object : OAuthLoginCallback {
+                override fun onSuccess() {
+                    // 성공하면 사용자 프로필 불러오는 api 호출
+                    NidOAuthLogin().callProfileApi(object : NidProfileCallback<NidProfileResponse> {
+                        override fun onSuccess(profileResponse: NidProfileResponse) {
+
+                            val type: Type = object : TypeToken<NidProfile>() {}.type
+                            val user = CommonUtils.parseDto<NidProfile>(profileResponse.profile!!, type)
+
+                            val email = user.email
+                            val uid = user.id
+                            val nickname = user.nickname
+                            val username = user.name
+
+                            val newUser = User(email = email, password = uid, username = username, nickname = nickname, "naver")
+                            existEmailChk(newUser)
+                        }
+
+                        override fun onFailure(httpStatus: Int, message: String) {
+                            val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                            val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                            showCustomToast("errorCode:$errorCode, errorDesc:$errorDescription")
+                        }
+
+                        override fun onError(errorCode: Int, message: String) {
+                            onFailure(errorCode, message)
+                        }
+                    })
+                }
+
+                override fun onFailure(httpStatus: Int, message: String) {
+                    val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                    val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                    showCustomToast("errorCode:$errorCode, errorDesc:$errorDescription")
+                }
+
+                override fun onError(errorCode: Int, message: String) {
+                    onFailure(errorCode, message)
+                }
+            })
+        }
+    }
+
+
+    // ---------------------------------------------------------------------------------------------
+//    val mOAuthLoginHandler: OAuthLoginHandler = object : OAuthLoginHandler() {
+//        override fun run(success: Boolean) {
+//            if (success) {
+//                val accessToken: String = mOAuthLoginInstance.getAccessToken(requireContext())
+//                Log.d(TAG, "run: $accessToken")
+//                RequestApiTask(requireContext(), mOAuthLoginInstance).execute()
+//            } else {
+//                val errorCode: String = mOAuthLoginInstance.getLastErrorCode(requireContext()).code
+//                val errorDesc = mOAuthLoginInstance.getLastErrorDesc(requireContext())
+//                Log.d(TAG, "run: errorCode:" + errorCode + ", errorDesc:" + errorDesc)
+//            }
+//        }
+//    }
+//
+//
+//    inner class RequestApiTask(private val mContext: Context, private val mOAuthLoginModule: OAuthLogin) :
+//        AsyncTask<Void?, Void?, String>() {
+//        override fun onPreExecute() {}
+//
+//        override fun onPostExecute(content: String) {
+//            try {
+//                val loginResult = JSONObject(content)
+//                if (loginResult.getString("resultcode") == "00") {
+//                    val response = loginResult.getJSONObject("response")
+//                    val id = response.getString("email")
+//                    val pw = response.getString("id")   // 사용자 식별 정보
+//                    val nickname = response.getString("nickname")
+//                    val mobile = response.getString("mobile")
+//                    val gender = response.getString("gender")
+//                    val birthYear = response.getString("birthyear")
+//                    val birthDay = response.getString("birthday")
+//                    var image = response.getString("profile_image")
+//                    image = image.replace("\\", "")
+//                    val newUser = User(id, pw, nickname, mobile, id, "$birthYear-$birthDay", gender, "naver", image)
+//                    UserService().isUsedId(id, isUsedIdCallback(newUser))
+//                }
+//            } catch (e: JSONException) {
+//                e.printStackTrace()
+//            }
+//        }
+//
+//        override fun doInBackground(vararg params: Void?): String {
+//            val url = "https://openapi.naver.com/v1/nid/me"
+//            val at = mOAuthLoginModule.getAccessToken(mContext)
+//            return mOAuthLoginModule.requestApi(mContext, at, url)
+//        }
+//    }
 
 
 }

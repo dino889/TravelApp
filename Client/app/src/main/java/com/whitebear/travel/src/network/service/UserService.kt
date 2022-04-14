@@ -1,5 +1,6 @@
 package com.whitebear.travel.src.network.service
 
+import com.navercorp.nid.profile.NidProfileCallback
 import com.whitebear.travel.src.dto.User
 import com.whitebear.travel.util.RetrofitUtil
 
@@ -17,4 +18,7 @@ class UserService {
 
     suspend fun doubleCheckEmail(email:String) = RetrofitUtil.userService.doubleCheckEmail(email)
 
+//    fun getNaverProfile(callback: NidProfileCallback) {
+//        RetrofitUtil.userService.callProfileApi(callback)
+//    }
 }
