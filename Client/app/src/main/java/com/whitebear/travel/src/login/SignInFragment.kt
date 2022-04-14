@@ -31,6 +31,7 @@ import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentSignInBinding
 import com.whitebear.travel.src.dto.NidProfile
 import com.whitebear.travel.src.dto.User
+import com.whitebear.travel.src.network.service.UserService
 import com.whitebear.travel.util.CommonUtils
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -38,6 +39,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
+import retrofit2.Response
 import java.lang.reflect.Type
 
 class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding::bind, R.layout.fragment_sign_in) {
@@ -158,22 +160,31 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
      * 새로운 회원이라면 회원가입 진행
      */
     private fun snsLoginJoin(user: User) {
-        var result : HashMap<String, Any>
         val realPw = user.password
 
         val encPw = loginActivity.sha256(user.password)
         user.password = encPw
 
-        runBlocking {
-            result = mainViewModel.join(user)
-        }
+        var response : Response<HashMap<String, Any>>
 
-        if(result["isSuccess"] == true) {  // 이미 존재하는 이메일
-            showCustomToast("이미 존재하는 이메일입니다. 다시 인증해 주세요.")
-        } else if(result["isSuccess"] == false) {
-            login(user.email, realPw)
-        } else {
-            showCustomToast("회원가입에 실패했습니다. 다시 시도해 주세요.")
+        runBlocking {
+            response = UserService().insertUser(user)
+//            mainViewModel.join(User(email = email, password = loginActivity.sha256(password), nickname = nickname, username = username, social_type = socialType))
+        }
+        if(response.code() == 200 || response.code() == 500 || response.code() == 201) {
+            val res = response.body()
+            if (res != null) {
+                Log.d(TAG, "join: $res")
+                if(res["isSuccess"] == true && res["message"] == "create user successful") {
+                    login(user.email, realPw)
+                } else if(res["isSuccess"] == false) {
+                    showCustomToast("회원가입에 실패했습니다. 다시 시도해 주세요.")
+                }
+//                else {
+//                    Log.d(TAG, "join: $res")
+//                    showCustomToast("회원가입에 실패했습니다. 다시 시도해 주세요.")
+//                }
+            }
         }
     }
 
