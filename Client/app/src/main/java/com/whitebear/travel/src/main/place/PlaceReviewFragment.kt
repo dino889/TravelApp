@@ -60,7 +60,6 @@ class PlaceReviewFragment : BaseFragment<FragmentPlaceReviewBinding>(FragmentPla
     fun setListener(){
         setButtons()
         initAdapter()
-        initData()
     }
     fun initAdapter(){
         mainViewModel.placeReviews.observe(viewLifecycleOwner, {
@@ -71,42 +70,68 @@ class PlaceReviewFragment : BaseFragment<FragmentPlaceReviewBinding>(FragmentPla
                 adapter = reviewAdapter
                 adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
+            reviewAdapter.setItemClickListener(object: PlaceReviewAdapter.ItemClickListener{
+                override fun onClick(view: View, position: Int, id: Int) {
+                    deleteReview(id)
+                }
+
+            })
         })
     }
-    fun initData(){
-
-    }
-    fun setButtons(){
-        binding.fragmentPlaceReviewWrite.setOnClickListener {
-            showReviewWriteDialog(1)
+    private fun deleteReview(reviewId:Int){
+        var response : Response<Message>
+        runBlocking {
+            response = PlaceService().deletePlaceReview(reviewId)
+        }
+        Log.d(TAG, "deleteReview: ${response.code()}")
+        if(response.code() == 200 || response.code() == 500 || response.code() == 201) {
+            val res = response.body()
+            Log.d(TAG, "deleteReview: $res")
+            if(res != null) {
+                if(res.isSuccess){
+                    runBlocking {
+                        mainViewModel.getPlaceReview(placeId)
+                    }
+                    showCustomToast("삭제되었습니다.")
+                }
+            }
         }
     }
-    fun showReviewWriteDialog(flag:Int){
+
+    fun setButtons(){
+        binding.fragmentPlaceReviewWrite.setOnClickListener {
+            showReviewWriteDialog()
+        }
+    }
+    fun showReviewWriteDialog(){
         var dialog = Dialog(requireContext())
         var dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_review_write,null)
         dialog.setContentView(dialogView)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         dialog.show()
 
-        if(flag== 1){
-            dialogView.findViewById<AppCompatButton>(R.id.fragment_placeReview_writeSuccess).setOnClickListener{
-                var content = dialogView.findViewById<EditText>(R.id.fragment_placeReview_writeContent).text
-                var rating = dialogView.findViewById<RatingBar>(R.id.fragment_placeReview_writeRating).rating
-                Log.d(TAG, "showReviewWriteDialog: $rating $content")
-                var review = PlaceReview(
-                    content = content.toString(),
-                    "",
-                    0,
-                    placeId,
-                    rating.toInt(),
-                    "",
-                    ApplicationClass.sharedPreferencesUtil.getUser().id,
-                    null
-                )
-                Log.d(TAG, "showReviewWriteDialog: $review")
-                insertReview(review)
-                dialog.dismiss()
-            }
+        dialogView.findViewById<AppCompatButton>(R.id.fragment_placeReview_writeSuccess).setOnClickListener {
+            var content =
+                dialogView.findViewById<EditText>(R.id.fragment_placeReview_writeContent).text
+            var rating =
+                dialogView.findViewById<RatingBar>(R.id.fragment_placeReview_writeRating).rating
+            Log.d(TAG, "showReviewWriteDialog: $rating $content")
+            var review = PlaceReview(
+                content = content.toString(),
+                "",
+                0,
+                placeId,
+                rating.toInt(),
+                "",
+                ApplicationClass.sharedPreferencesUtil.getUser().id,
+                null
+            )
+            Log.d(TAG, "showReviewWriteDialog: $review")
+            insertReview(review)
+            dialog.dismiss()
+        }
+        dialogView.findViewById<AppCompatButton>(R.id.fragment_placeReview_writeCancle).setOnClickListener {
+            dialog.dismiss()
         }
 
     }

@@ -21,7 +21,7 @@ interface PlaceApi {
     suspend fun getPlaceReview(@Query ("placeId") placeId:Int) : Response<Message>
 
     @DELETE("places/review/{id}")
-    suspend fun deletePlaceReview(@Query("id")reviewId:Int) : Response<Message>
+    suspend fun deletePlaceReview(@Path("id")reviewId:Int) : Response<Message>
 
 //    @POST("/places/like")
 //    suspend fun placeLike(@Body placeLike: Place) : Response<Message>

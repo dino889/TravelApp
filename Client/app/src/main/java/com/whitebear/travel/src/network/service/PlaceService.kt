@@ -12,4 +12,6 @@ class PlaceService {
     suspend fun insertPlaceReview(placeReview:PlaceReview) : Response<Message> = RetrofitUtil.placeService.insertPlaceReview(placeReview)
 
     suspend fun getPlaceReview(placeId:Int) : Response<Message> = RetrofitUtil.placeService.getPlaceReview(placeId)
+
+    suspend fun deletePlaceReview(reviewId:Int) : Response<Message> = RetrofitUtil.placeService.deletePlaceReview(reviewId)
 }

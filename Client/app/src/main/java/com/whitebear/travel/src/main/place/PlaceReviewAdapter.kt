@@ -1,6 +1,7 @@
 package com.whitebear.travel.src.main.place
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
@@ -14,7 +15,11 @@ import com.gun0912.tedpermission.provider.TedPermissionProvider.context
 import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.databinding.ItemPlaceReviewBinding
+import com.whitebear.travel.src.dto.Message
 import com.whitebear.travel.src.dto.PlaceReview
+import com.whitebear.travel.src.network.service.PlaceService
+import kotlinx.coroutines.runBlocking
+import retrofit2.Response
 
 class PlaceReviewAdapter(context: Context) : RecyclerView.Adapter<PlaceReviewAdapter.ReviewViewHolder>() {
     var list = mutableListOf<PlaceReview>()
@@ -43,6 +48,7 @@ class PlaceReviewAdapter(context: Context) : RecyclerView.Adapter<PlaceReviewAda
                 popup.setOnMenuItemClickListener {
                     when(it.itemId){
                         R.id.menu_delete ->{
+                            itemClickListener.onClick(itemView,bindingAdapterPosition,list[bindingAdapterPosition].id)
                             return@setOnMenuItemClickListener true
                         }else->{
                         return@setOnMenuItemClickListener false

@@ -57,6 +57,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::bind
         setListener()
     }
     fun setListener(){
+        mainActivity.hideBottomNav(false)
         initButton()
         initBanner()
         initAdapter()
