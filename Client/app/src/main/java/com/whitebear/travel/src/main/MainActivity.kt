@@ -19,6 +19,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.google.android.gms.location.*
 import com.whitebear.travel.R
+import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseActivity
 import com.whitebear.travel.databinding.ActivityMainBinding
 import com.whitebear.travel.src.network.viewmodel.MainViewModel
@@ -46,6 +47,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         initNavigation()
         setInstance()
+//        if(mainViewModel.userLoc == null) {
+//            val userLastLoc = ApplicationClass.sharedPreferencesUtil.getUserLoc()
+//            if(userLastLoc != null) {
+//                runBlocking {
+//                    mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${userLastLoc.latitude.toInt()}","${userLastLoc.longitude.toInt()}")
+//                }
+//            }
+//        } else if(mainViewModel.userLoc != null) {
+//            runBlocking {
+//                mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${mainViewModel.userLoc!!.latitude.toInt()}","${mainViewModel.userLoc!!.longitude.toInt()}")
+//            }
+//        }
         if(checkPermissionForLocation(this)) {
             startLocationUpdates()
         }
@@ -166,7 +179,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         Log.d(TAG, "onLocationChanged: ${location.latitude}")
         getToday()
         runBlocking {
-//            mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${location.latitude.toInt()}","${location.longitude.toInt()}")
+            mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${location.latitude.toInt()}","${location.longitude.toInt()}")
         }
     }
     fun getAddress(position: Location) : String {
@@ -178,7 +191,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         return address
     }
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getToday(){
+    fun getToday() : String{
         var current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
         val hourFormatt = DateTimeFormatter.ofPattern("HH")
@@ -186,5 +199,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         val formatted2 = current.format(hourFormatt)
         today = formatted
         mainViewModel.setToday(today.toInt())
+        return today
     }
 }

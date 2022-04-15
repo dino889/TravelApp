@@ -73,12 +73,18 @@ class HomeFragment: Fragment(){
         runBlocking {
             mainViewModel.getUserInfo(ApplicationClass.sharedPreferencesUtil.getUser().id, true)
             mainViewModel.getAreas()
-            if(mainViewModel.userLoc!=null){
-                mainViewModel.getWeather("JSON",10,1,mainViewModel.today!!,1400,"${mainViewModel.userLoc!!.latitude.toInt()}","${mainViewModel.userLoc!!.longitude.toInt()}")
-            }
         }
+
+        mainViewModel.userLoc.observe(viewLifecycleOwner, {
+            if(it != null) {
+                runBlocking {
+                    mainViewModel.getWeather("JSON",10,1, mainActivity.getToday().toInt(),1400,"${it.latitude.toInt()}","${it.longitude.toInt()}")
+                }
+            }
+        })
         setListener()
     }
+
     fun setListener(){
         mainActivity.hideBottomNav(false)
         initButton()

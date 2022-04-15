@@ -2,6 +2,7 @@ package com.whitebear.travel.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.location.Location
 import com.whitebear.travel.src.dto.User
 
 class SharedPreferencesUtil (context: Context) {
@@ -66,4 +67,6 @@ class SharedPreferencesUtil (context: Context) {
     fun deleteAutoLogin() {
         preferences.edit().remove("auto").apply()
     }
+
+
 }

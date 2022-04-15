@@ -84,9 +84,11 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
         var mapViewContainer = binding.fragmentNavigatorKakaoMap as ViewGroup
         mapViewContainer.addView(mapView)
         if(mainViewModel.liveNavBucketList.value!!.isEmpty()){
-            var mapPoint = MapPoint.mapPointWithGeoCoord(mainViewModel.userLoc!!.latitude, mainViewModel.userLoc!!.longitude)
-            mapView.setMapCenterPoint(mapPoint, true)
-            mapView.setZoomLevel(6,true)
+            mainViewModel.userLoc.observe(viewLifecycleOwner, {
+                var mapPoint = MapPoint.mapPointWithGeoCoord(it.latitude, it.longitude)
+                mapView.setMapCenterPoint(mapPoint, true)
+                mapView.setZoomLevel(6,true)
+            })
         }else{
             var first = mainViewModel.liveNavBucketList.value!![0]
             var mapPoint = MapPoint.mapPointWithGeoCoord(first.lat, first.long)
