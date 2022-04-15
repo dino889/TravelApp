@@ -166,7 +166,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         Log.d(TAG, "onLocationChanged: ${location.latitude}")
         getToday()
         runBlocking {
-            mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${location.latitude.toInt()}","${location.longitude.toInt()}")
+//            mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${location.latitude.toInt()}","${location.longitude.toInt()}")
         }
     }
     fun getAddress(position: Location) : String {

@@ -61,7 +61,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
         faqBtnClickEvent()
         backBtnClickEvent()
         logoutBtnClickEvent()
-//        withdrawalBtnClickEvent()
+        withdrawalBtnClickEvent()
     }
 
     private fun faqBtnClickEvent() {
@@ -99,11 +99,11 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
         }
     }
 
-//    private fun withdrawalBtnClickEvent() {
-//        binding.settingFragmentTvWithdrawal.setOnClickListener {
-//            showDeleteUserDialog()
-//        }
-//    }
+    private fun withdrawalBtnClickEvent() {
+        binding.settingFragmentTvWithdrawal.setOnClickListener {
+            showDeleteUserDialog()
+        }
+    }
 
 
     /**
@@ -144,7 +144,112 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
         startActivity(intent)
     }
 
+    /**
+     * @author Jiwoo
+     * 사용자 회원탈퇴 다이얼로그
+     */
+    private fun showDeleteUserDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("회원 탈퇴")
+            .setMessage("정말 탈퇴하시겠습니까?")
+            .setPositiveButton("YES", DialogInterface.OnClickListener{ dialogInterface, id ->
+                withdrawal()
+            })
+            .setNeutralButton("NO", null)
+            .create()
 
+        builder.show()
+    }
+
+    /**
+     * 회원 탈퇴
+     * @author Jiwoo
+     */
+    private fun withdrawal() {
+        // 탈퇴기능구현
+        mainViewModel.loginUserInfo.observe(viewLifecycleOwner) {
+            val type = it.social_type
+            if (type == "kakao") {
+                val disposables = CompositeDisposable()
+                // 연결 끊기
+                UserApiClient.rx.unlink()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({
+                        Log.i(TAG, "kakao 연결 끊기 성공. SDK에서 토큰 삭제 됨")
+                    }, { error ->
+                        Log.e(TAG, "kakao 연결 끊기 실패", error)
+                    }).addTo(disposables)
+            } else if (type == "google") {
+                FirebaseAuth.getInstance().currentUser?.delete()!!.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        //로그아웃처리
+                        FirebaseAuth.getInstance().signOut()
+                        mGoogleSignInClient?.signOut()
+                        Log.i(TAG, "firebase auth 로그인 연결 끊기 성공")
+                    } else {
+                        Log.i(TAG, "firebase auth 로그인 user 삭제 실패")
+                    }
+                }
+            } else if(type == "naver") {
+                NidOAuthLogin().callRefreshAccessTokenApi(requireContext(), object : OAuthLoginCallback {
+                    override fun onSuccess() {
+                        Log.i(TAG, "onSuccess: naver token 갱신 성공")
+
+                        NidOAuthLogin().callDeleteTokenApi(requireContext(), object : OAuthLoginCallback {
+                            override fun onSuccess() {
+                                Log.i(TAG, "naver 연결 끊기 성공. SDK에서 토큰 삭제 됨")
+                            }
+
+                            override fun onFailure(httpStatus: Int, message: String) {
+                                val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                                val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                                Log.i(TAG, "delete token errorCode:$errorCode, errorDesc:$errorDescription")
+                            }
+
+                            override fun onError(errorCode: Int, message: String) {
+                                onFailure(errorCode, message)
+                            }
+                        })
+                    }
+
+                    override fun onFailure(httpStatus: Int, message: String) {
+                        val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+                        val errorDescription = NaverIdLoginSDK.getLastErrorDescription()
+                        Log.i(TAG, "refresh token errorCode:$errorCode, errorDesc:$errorDescription")
+                    }
+
+                    override fun onError(errorCode: Int, message: String) {
+                        onFailure(errorCode, message)
+                    }
+
+                })
+
+            }
+
+            var res: Response<HashMap<String, Any>>
+            runBlocking {
+                res = UserService().deleteUser(ApplicationClass.sharedPreferencesUtil.getUser().id)
+            }
+            if (res.code() == 200 || res.code() == 500) {
+                val rbody = res.body()
+                if (rbody != null) {
+                    if (rbody["isSuccess"] == true) {
+                        showCustomToast("회원 탈퇴가 완료되었습니다.")
+                        logout()
+                    } else if (rbody["isSuccess"] == false) {
+                        showCustomToast("회원 탈퇴 실패")
+                    }
+                } else {
+                    showCustomToast("서버 통신 실패")
+                    Log.d(TAG, "withdrawal: ${res.message()}")
+                }
+            }
+            ApplicationClass.sharedPreferencesUtil.deleteUser()
+            ApplicationClass.sharedPreferencesUtil.deleteUserCookie()
+            ApplicationClass.sharedPreferencesUtil.deleteAutoLogin()
+        }
+    }
 
 
     override fun onDestroyView() {
