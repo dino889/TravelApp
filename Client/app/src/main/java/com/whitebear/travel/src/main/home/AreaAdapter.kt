@@ -1,6 +1,7 @@
 package com.whitebear.travel.src.main.home
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -24,10 +25,22 @@ class AreaAdapter() : RecyclerView.Adapter<AreaAdapter.AreaViewHolder>(){
     override fun onBindViewHolder(holder: AreaViewHolder, position: Int) {
         holder.apply {
             bind(list[position])
+            itemView.setOnClickListener{
+                itemClickListener.onClick(it, position, list[position].name, list[position].id)
+            }
         }
     }
 
     override fun getItemCount(): Int {
         return list.size
+    }
+    interface ItemClickListener{
+        fun onClick(view: View, position: Int, areaName: String,areaId:Int)
+    }
+
+    private lateinit var itemClickListener : ItemClickListener
+
+    fun setItemClickListener(itemClickListener: ItemClickListener){
+        this.itemClickListener = itemClickListener
     }
 }

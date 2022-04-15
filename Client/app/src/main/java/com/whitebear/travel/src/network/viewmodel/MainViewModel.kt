@@ -75,11 +75,16 @@ class MainViewModel :ViewModel(){
      * */
 
     private val _areas = MutableLiveData<MutableList<Area>>()
+    private val _area = MutableLiveData<Area>()
     val areas : LiveData<MutableList<Area>>
         get() = _areas
-    
+    val area : LiveData<Area>
+        get() = _area
     private fun setArea(areas : MutableList<Area>) = viewModelScope.launch { 
         _areas.value = areas
+    }
+    private fun setAreaOne(area:Area) = viewModelScope.launch {
+        _area.value = area
     }
     suspend fun getAreas(){
         val response = AreaService().getArea()
@@ -99,6 +104,14 @@ class MainViewModel :ViewModel(){
                     setArea(areas)
                 }
 
+            }
+        }
+    }
+    fun getAreaOne(areaId:Int){
+        for(item in 0..areas.value!!.size-1){
+            if(areas.value!![item].id == areaId){
+                setAreaOne(areas.value!![item])
+                break;
             }
         }
     }
@@ -137,6 +150,7 @@ class MainViewModel :ViewModel(){
             if(response.code() == 200 || response.code() == 500){
                 val res = response.body()
                 if(res!=null){
+                    Log.d(TAG, "getPlaces: $res")
                     var type = object : TypeToken<MutableList<Place>>() {}.type
                     var placeList = CommonUtils.parseDto<MutableList<Place>>(res.data,type)
                     setPlace(placeList)

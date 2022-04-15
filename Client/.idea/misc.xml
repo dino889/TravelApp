@@ -26,10 +26,13 @@
         <entry key="..\:/Users/LeeBoyeon/Desktop/OutSourcing/Client/app/src/main/res/menu/popup_menu.xml" value="0.31354166666666666" />
         <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/drawable/drawable_button_stoke_right.xml" value="0.1" />
         <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/drawable/drawable_dialog_backgroud.xml" value="0.19270833333333334" />
+        <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/drawable/imageview_background.xml" value="0.17864583333333334" />
         <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/dialog_review_write.xml" value="0.264" />
+        <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/fragment_area.xml" value="0.264" />
         <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/fragment_home.xml" value="0.264" />
         <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/fragment_location.xml" value="0.264" />
-        <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/fragment_place.xml" value="0.25364583333333335" />
+        <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/fragment_navigator.xml" value="0.1625" />
+        <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/fragment_place.xml" value="0.1" />
         <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/fragment_place_detail.xml" value="0.47327502429543244" />
         <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/fragment_place_info.xml" value="0.38943248532289626" />
         <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/fragment_place_review.xml" value="0.264" />
