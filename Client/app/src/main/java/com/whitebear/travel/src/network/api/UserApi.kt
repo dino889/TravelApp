@@ -25,8 +25,11 @@ interface UserApi {
     /**
      * 유저 수정
      * */
+//    @PUT("users/{id}")
+//    suspend fun updateUser(@Path("id") id: Int, @Body urlencoded :User) : Response<HashMap<String, Any>>
+    @FormUrlEncoded
     @PUT("users/{id}")
-    suspend fun updateUser(@Path("id") id: Int, @Body urlencoded :User) : Response<HashMap<String, Any>>
+    suspend fun updateUser(@Path("id") id: Int, @Field("nickname") nickname: String, @Field("username") username: String) : Response<HashMap<String, Any>>
 
     /**
      * 로그인

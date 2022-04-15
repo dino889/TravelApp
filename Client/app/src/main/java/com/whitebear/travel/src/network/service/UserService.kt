@@ -10,7 +10,8 @@ class UserService {
 
     suspend fun insertUser(user:User) = RetrofitUtil.userService.insertUser(user.email, user.password, user.username, user.nickname, user.social_type)
 
-    suspend fun updateUser(userId: Int, user:User)= RetrofitUtil.userService.updateUser(userId, user)
+//    suspend fun updateUser(userId: Int, user:User)= RetrofitUtil.userService.updateUser(userId, user)
+    suspend fun updateUser(userId: Int, user:User)= RetrofitUtil.userService.updateUser(userId, user.nickname, user.username)
 
     suspend fun login(email: String, password: String) = RetrofitUtil.userService.login(email, password)
 

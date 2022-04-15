@@ -126,7 +126,7 @@ class SignInFragment : BaseFragment<FragmentSignInBinding>(FragmentSignInBinding
         } else if(email.isEmpty() || password.isEmpty()){
             showCustomToast("E-MAIN, PW를 입력해 주세요")
         } else {
-            showCustomToast("서버 통신에 실패했습니다.")
+            showCustomToast("로그인에 실패했습니다. 다시 시도해 주세요.")
             Log.d(TAG, "loginBtnClickEvent: ${result["data"]} ${result["message"]}")
         }
     }

@@ -29,6 +29,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind,R.lay
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.user = mainViewModel.loginUserInfo.value
         initTabAdapter()
         editProfileBtnClickEvent()
         settingBtnClickEvent()

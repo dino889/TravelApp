@@ -14,6 +14,7 @@ data class User(
     constructor() : this(0, "", "", "", "", "", "", "", "")
     constructor(id: Int) : this(id, "", "", "", "", "", "", "", "")
     constructor(id: Int, token: String) : this(id, "", "", "", "", "", token, "", "")
+    constructor(id: Int, nickname: String, username: String) : this(id = id, "", "", nickname = nickname, username = username, "", "", "", "")
     constructor(email: String, password: String) : this(0, email, "", "", password, "", "", "", "")
     constructor(email: String, password: String, username: String, nickname: String, social_type: String) : this(id = 0, email = email, password = password, username = username, nickname = nickname, social_type = social_type, token = "", createdAt = "", updatedAt = "")
 

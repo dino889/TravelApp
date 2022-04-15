@@ -3,9 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-<!--        <variable-->
-<!--            name="user"-->
-<!--            type="com.whitebear.travel.src." />-->
+        <variable
+            name="user"
+            type="com.whitebear.travel.src.dto.User" />
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -89,25 +89,25 @@
                     android:id="@+id/editProfileFragment_etNick"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="WhiteBear"
+                    android:text="@{user.nickname}"
                     android:background="@drawable/edittext_background"
                     android:hint="NICKNAME" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/editProfileFragment_tilPhone"
+                android:id="@+id/editProfileFragment_tilUserName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:boxBackgroundMode="outline"
                 android:layout_marginTop="10dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/editProfileFragment_etPhone"
+                    android:id="@+id/editProfileFragment_etUserName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="010-1234-5678"
+                    android:text="@{user.username}"
                     android:background="@drawable/edittext_background"
-                    android:hint="Phone" />
+                    android:hint="USER NAME" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -130,23 +130,10 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/edittext_background"
                     android:completionThreshold="1"
-                    android:text="whitebear@gmail.com"
+                    android:text="@{user.email}"
                     android:hint="Email" />
                 </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
-
-<!--        <Button-->
-<!--            android:id="@+id/editProfileFragment_btnConfirm"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:backgroundTint="@color/main"-->
-<!--            android:text="확인"-->
-<!--            android:layout_marginStart="20dp"-->
-<!--            android:layout_marginEnd="20dp"-->
-<!--            android:layout_marginBottom="30dp"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent" />-->
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

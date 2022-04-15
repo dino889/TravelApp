@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.whitebear.travel.R
+import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentHomeBinding
 import com.whitebear.travel.src.dto.Weather
@@ -70,6 +71,7 @@ class HomeFragment: Fragment(){
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
         runBlocking {
+            mainViewModel.getUserInfo(ApplicationClass.sharedPreferencesUtil.getUser().id, true)
             mainViewModel.getAreas()
             if(mainViewModel.userLoc!=null){
                 mainViewModel.getWeather("JSON",10,1,mainViewModel.today!!,1400,"${mainViewModel.userLoc!!.latitude.toInt()}","${mainViewModel.userLoc!!.longitude.toInt()}")
