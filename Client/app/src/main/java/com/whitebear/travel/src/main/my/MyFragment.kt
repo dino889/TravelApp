@@ -39,8 +39,8 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind,R.lay
         val viewPagerAdapter = MyTabPageAdapter(this)
         val tabList = listOf("최근 조회", "찜하기")
 
-        viewPagerAdapter.addFragment(LikePlaceRouteFragment())
         viewPagerAdapter.addFragment(RecentlyKeywordFragment())
+        viewPagerAdapter.addFragment(LikePlaceRouteFragment())
 
         binding.myPageFragmentVp.adapter = viewPagerAdapter
         TabLayoutMediator(binding.myPageFragmentTabLayout, binding.myPageFragmentVp) { tab, position ->

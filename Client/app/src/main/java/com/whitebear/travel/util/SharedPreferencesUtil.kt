@@ -3,11 +3,12 @@ package com.whitebear.travel.util
 import android.content.Context
 import android.content.SharedPreferences
 import com.whitebear.travel.src.dto.User
+import org.json.JSONArray
 
 class SharedPreferencesUtil (context: Context) {
     val SHARED_PREFERENCES_NAME = "whitebear_preference"
     val COOKIES_KEY_NAME = "cookies"
-
+    val keywords : ArrayList<String> = ArrayList()
     var preferences: SharedPreferences = context.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE)
 
     //사용자 정보 저장
@@ -66,4 +67,5 @@ class SharedPreferencesUtil (context: Context) {
     fun deleteAutoLogin() {
         preferences.edit().remove("auto").apply()
     }
+
 }

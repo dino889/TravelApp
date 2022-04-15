@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.reflect.Type
+import java.security.Key
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -388,5 +389,33 @@ class MainViewModel :ViewModel(){
     fun insertPlaceShopList(place:Place){
         placeShopResponse.add(place)
         liveNavBucketList.value = placeShopResponse
+    }
+    /**
+     * searchHistory ViewModel
+     * */
+    private val keywords = mutableListOf<Keyword>()
+    var hashs = HashMap<String,String>()
+    val liveKeywords = MutableLiveData<MutableList<Keyword>>().apply {
+        value = keywords
+    }
+    fun insertKeywords(keyword:Keyword){
+
+        hashs.put(keyword.keyword, keyword.curDate)
+        Log.d(TAG, "insertKeywords: $hashs")
+
+        Log.d(TAG, "insertKeywords: ${hashs.get(keyword.keyword)}")
+        var keys =
+            hashs[keyword.keyword]?.let {
+                Keyword(
+                    keyword.keyword,
+                    keyword.location,
+                    it
+                )
+            }
+
+        keywords.add(keys!!)
+        liveKeywords.value = keywords
+
+        Log.d(TAG, "insertKeywords: $keywords")
     }
 }
