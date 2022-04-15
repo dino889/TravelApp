@@ -3,7 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-
+        <variable
+            name="user"
+            type="com.whitebear.travel.src.dto.User" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -68,7 +70,7 @@
                             android:id="@+id/myPageFragment_tvUserNick"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="WhiteBear"
+                            android:text="@{user.nickname}"
                             android:textColor="@color/black"
                             android:textSize="18sp"
                             android:textStyle="bold"
@@ -98,10 +100,10 @@
                         android:layout_marginBottom="5dp">
 
                         <TextView
-                            android:id="@+id/myPageFragment_tvPhone"
+                            android:id="@+id/myPageFragment_tvname"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Phone"
+                            android:text="Name"
                             android:textColor="@color/black"
                             android:textStyle="bold"
                             app:layout_constraintBottom_toBottomOf="parent"
@@ -109,16 +111,16 @@
                             app:layout_constraintTop_toTopOf="parent" />
 
                         <TextView
-                            android:id="@+id/myPageFragment_tvUserPhone"
+                            android:id="@+id/myPageFragment_tvUserName"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
-                            android:text="010-1234-5678"
+                            android:text="@{user.username}"
                             android:textColor="@color/black"
                             android:textSize="12sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toEndOf="@+id/myPageFragment_tvPhone"
+                            app:layout_constraintStart_toEndOf="@+id/myPageFragment_tvname"
                             app:layout_constraintTop_toTopOf="parent" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -145,7 +147,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_marginStart="5dp"
-                            android:text="whitebear@gmail.com"
+                            android:text="@{user.email}"
                             android:textColor="@color/black"
                             android:textSize="12sp"
                             app:layout_constraintBottom_toBottomOf="parent"
