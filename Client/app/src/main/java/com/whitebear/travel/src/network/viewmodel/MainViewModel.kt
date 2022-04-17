@@ -402,18 +402,24 @@ class MainViewModel :ViewModel(){
 
         hashs.put(keyword.keyword, keyword.curDate)
         Log.d(TAG, "insertKeywords: $hashs")
-
+        var it = hashs.iterator()
         Log.d(TAG, "insertKeywords: ${hashs.get(keyword.keyword)}")
-        var keys =
-            hashs[keyword.keyword]?.let {
-                Keyword(
-                    keyword.keyword,
-                    keyword.location,
-                    it
-                )
-            }
+        while(it.hasNext()){
+            var value = it.next()
 
-        keywords.add(keys!!)
+            var keys = Keyword(value.key, keyword.location,value.value)
+            keywords.add(keys)
+        }
+//        var keys =
+//            hashs[keyword.keyword]?.let {
+//                Keyword(
+//                    keyword.keyword,
+//                    keyword.location,
+//                    it
+//                )
+//            }
+
+//        keywords.add(keys!!)
         liveKeywords.value = keywords
 
         Log.d(TAG, "insertKeywords: $keywords")

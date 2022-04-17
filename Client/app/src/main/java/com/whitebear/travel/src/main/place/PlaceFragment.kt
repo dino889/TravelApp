@@ -100,9 +100,10 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
                         nows
                     )
                     mainViewModel.insertKeywords(keywords)
-                    return true
+
+                    return false
                 }
-                return false
+                return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
