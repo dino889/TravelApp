@@ -165,6 +165,26 @@
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toStartOf="@+id/fragment_home_weather_SKY"
                                 app:layout_constraintTop_toTopOf="parent" />
+
+                            <TextView
+                                android:id="@+id/fragment_home_pm10"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:textColor="#4CAF50"
+                                android:textSize="10sp"
+                                app:layout_constraintBottom_toBottomOf="@+id/fragment_home_weather_TMP"
+                                app:layout_constraintEnd_toStartOf="@+id/fragment_home_weather_TMP" />
+
+                            <TextView
+                                android:id="@+id/fragment_home_pm25"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="5dp"
+                                android:textColor="#4CAF50"
+                                android:textSize="10sp"
+                                app:layout_constraintBottom_toBottomOf="@id/fragment_home_pm10"
+                                app:layout_constraintEnd_toStartOf="@+id/fragment_home_pm10" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
                     </androidx.cardview.widget.CardView>
 

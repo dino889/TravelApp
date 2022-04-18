@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.SearchView
 import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
@@ -30,6 +32,8 @@ private const val TAG = "PlaceFragment"
 class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::bind, R.layout.fragment_place) {
     private lateinit var mainActivity : MainActivity
     private lateinit var placeAdapter: PlaceAdapter
+
+    private var areaName = "대구"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -59,6 +63,45 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
     }
 
     fun initSpinner(){
+        var spinnerArr = arrayListOf<String>("별점순","리뷰 적은순","리뷰 많은순")
+        val adapter = ArrayAdapter(requireContext(), R.layout.support_simple_spinner_dropdown_item, spinnerArr)
+        binding.fragmentPlaceFilterSpinner.adapter = adapter
+
+        binding.fragmentPlaceFilterSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if(position == 0){
+                    Log.d(TAG, "onItemSelected: $areaName")
+                    runBlocking {
+                        mainViewModel.getPlaces(areaName)
+                    }
+                }
+                if(position == 1){
+                    runBlocking {
+                        Log.d(TAG, "onItemSelected: $areaName")
+                        mainViewModel.getPlacesToSort(areaName,"review")
+                    }
+                    Log.d(TAG, "onItemSelected: 1")
+                }
+                if(position == 2){
+                    runBlocking {
+                        mainViewModel.getPlacesToSort(areaName,"review_asc")
+                    }
+                    Log.d(TAG, "onItemSelected: 2")
+                }
+
+                initAdapter()
+                placeAdapter.notifyDataSetChanged()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
+        }
 
     }
     fun initAdapter(){
@@ -132,7 +175,10 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
         placeAdapter = PlaceAdapter()
         binding.fragmentPlaceTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-
+                binding.fragmentPlaceFilterSpinner.setSelection(0)
+                if (tab != null) {
+                    areaName = tab?.text.toString()
+                }
                 runBlocking {
                     mainViewModel.getPlaces(tab?.text.toString())
                 }

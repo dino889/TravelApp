@@ -1,5 +1,6 @@
 package com.whitebear.travel.src.main.home
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import android.os.Bundle
@@ -80,6 +81,7 @@ class HomeFragment: Fragment(){
             if(it != null) {
                 runBlocking {
                     mainViewModel.getWeather("JSON",10,1, mainActivity.getToday().toInt(),1400,"${it.latitude.toInt()}","${it.longitude.toInt()}")
+                    mainViewModel.getNearbyCenter(it.latitude, it.longitude)
                 }
             }
         })
@@ -92,6 +94,7 @@ class HomeFragment: Fragment(){
         initBanner()
         initAdapter()
         initWeather()
+        initMeasure()
     }
     fun initButton(){
         binding.fragmentHomeNavBtn.setOnClickListener {
@@ -179,7 +182,29 @@ class HomeFragment: Fragment(){
             }
         }
     }
+    @SuppressLint("SetTextI18n")
+    private fun initMeasure(){
+        var tm = mainViewModel.coordinates.value!!
+        var tmX = tm.documents!![0]!!.x
+        var tmY = tm.documents!![0]!!.y
+        runBlocking {
+            mainViewModel.getFindMyCenter(tmX!!, tmY!!)
+        }
 
+        var station = mainViewModel.stations.value!!
+        var stationName = station.response!!.body!!.stations?.get(0)!!.stationName
+
+        runBlocking {
+            mainViewModel.getAirQuality(stationName!!)
+        }
+
+        mainViewModel.air.observe(viewLifecycleOwner, {
+            var curAir = it.response!!.body!!.measuredValues?.get(0)
+            Log.d(TAG, "initMeasure: $curAir")
+            binding.fragmentHomePm10.text = "미세먼지 ${curAir!!.pm10Value}"
+            binding.fragmentHomePm25.text = "초미세먼지 ${curAir!!.pm25Value} |"
+        })
+    }
     private fun autoScrollStart(intervalTime:Long){
         myHandler.removeMessages(0)
         myHandler.sendEmptyMessageDelayed(0,intervalTime)
