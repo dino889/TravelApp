@@ -5,8 +5,8 @@ import com.whitebear.travel.util.RetrofitUtil
 import retrofit2.Response
 
 class WeatherService {
-    suspend fun getWeather(dataType:String,numOfRows:Int, pageNo:Int, baseDate:Int, baseTime:Int, nx:String, ny:String ): Response<Weather>
-        = RetrofitUtil.weatherService.getWeather(dataType,numOfRows,pageNo,baseDate,baseTime,nx,ny)
+    suspend fun getWeather(dataType:String,numOfRows:Int, pageNo:Int, baseDate:Int, baseTime:String, nx:String, ny:String ): Response<Weather>
+    = RetrofitUtil.weatherService.getWeather(dataType,numOfRows,pageNo,baseDate,baseTime,nx,ny)
 
     suspend fun getAirQuality(stationName:String) = RetrofitUtil.weatherService.getAirQuality(stationName)
 
