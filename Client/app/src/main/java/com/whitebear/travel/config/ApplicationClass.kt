@@ -1,15 +1,19 @@
 package com.whitebear.travel.config
 
 import android.app.Application
+import android.util.Log
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.kakao.sdk.common.KakaoSdk
+import com.tickaroo.tikxml.TikXml
+import com.tickaroo.tikxml.retrofit.TikXmlConverterFactory
 import com.whitebear.travel.R
 import com.whitebear.travel.config.intercepter.AddCookiesInterceptor
 import com.whitebear.travel.config.intercepter.ReceivedCookiesInterceptor
 import com.whitebear.travel.config.intercepter.XAccessTokenInterceptor
 import com.whitebear.travel.util.SharedPreferencesUtil
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.scalars.ScalarsConverterFactory
@@ -35,6 +39,9 @@ class ApplicationClass : Application() {
         //shared preference 초기화
         sharedPreferencesUtil = SharedPreferencesUtil(applicationContext)
 
+
+
+
         val okHttpClient = OkHttpClient.Builder()
 //            .addInterceptor(AddCookiesInterceptor())
 //            .addInterceptor(ReceivedCookiesInterceptor())
@@ -46,11 +53,14 @@ class ApplicationClass : Application() {
         val gson : Gson = GsonBuilder()
             .setLenient()
             .create()
-        
+
+        val parser = TikXml.Builder().exceptionOnUnreadXml(false).build()
+
         retrofit = Retrofit.Builder()
             .baseUrl(SERVER_URL)
             .addConverterFactory(GsonConverterFactory.create(gson))
             .addConverterFactory(ScalarsConverterFactory.create())
+            .addConverterFactory(TikXmlConverterFactory.create(parser))
             .client(okHttpClient)
             .build()
 

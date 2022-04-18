@@ -23,12 +23,20 @@ import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentHomeBinding
+import com.whitebear.travel.src.dto.Responses
 import com.whitebear.travel.src.dto.Weather
+import com.whitebear.travel.src.dto.covid.Covid
 import com.whitebear.travel.src.main.MainActivity
+import com.whitebear.travel.src.network.service.DataService
 import com.whitebear.travel.src.network.viewmodel.MainViewModel
 import kotlinx.coroutines.runBlocking
+import retrofit2.Response
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 private const val TAG = "HomeFragment"
 class HomeFragment: Fragment(){
@@ -60,15 +68,16 @@ class HomeFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        return super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-    @RequiresApi(Build.VERSION_CODES.O)
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
@@ -91,6 +100,8 @@ class HomeFragment: Fragment(){
             }
         })
         setListener()
+
+        getCovidState()
     }
 
     fun setListener(){
@@ -231,11 +242,26 @@ class HomeFragment: Fragment(){
         myHandler.removeMessages(0)
     }
 
-    companion object {
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                }
+    /**
+     * 코로나 확진자 현황 받아오는 함수
+     */
+    private fun getCovidState() {
+        val todayDate = LocalDate.now()
+        val yesterdayDate = todayDate.minusDays(1)
+        val dateFormat = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val today = dateFormat.format(todayDate)
+        val yesterday = dateFormat.format(yesterdayDate)
+
+
+        Log.d(TAG, "getCovidState: $yesterday / $today")
+        try {
+            runBlocking {
+//                var response = DataService().getCovidState(yesterday, today)
+                var response = DataService().getCovidState("20220417", "20220418")
+                Log.d(TAG, "getCovidState: $response")
             }
+        } catch (e : Exception) {
+            Log.e(TAG, "getCovidState: ${e.printStackTrace()} ${e.message}", )
+        }
     }
 }

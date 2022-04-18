@@ -35,8 +35,8 @@ interface DataApi {
     suspend fun getTmCoordinates(@Query("x")long:Double, @Query("y")lat:Double):Response<TmCoordinatesResponse>
 
 
-//    @Headers("Content-Type: application/xml")
+    @Headers("Content-Type: application/xml")
     @GET("http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson?serviceKey=mp%2Bwyp26riz6pcVoD5kh8hTaDST8RtkblivAF1iro%2FIGvP950xdhKViJgSnBnGGu0kDp5m%2BKUG5L6xC1nI%2BL1w%3D%3D")
-    suspend fun getCovidState(@Query("startCreateDt") startCreateDt: String, @Query("endCreateDt") endCreateDt: String) : Response<List<Covid>>
+    suspend fun getCovidState(@Query("startCreateDt") startCreateDt: String, @Query("endCreateDt") endCreateDt: String) : Response<Array<Covid>>
 
 }

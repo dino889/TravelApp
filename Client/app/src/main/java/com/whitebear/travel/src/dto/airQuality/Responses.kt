@@ -3,7 +3,7 @@ package com.whitebear.travel.src.dto
 import com.google.gson.annotations.SerializedName
 import com.whitebear.travel.src.dto.airQuality.Measure
 
-data class Responses (
+data class Responses<T>(
     @SerializedName("body")
     val body: Body?,
     @SerializedName("header")

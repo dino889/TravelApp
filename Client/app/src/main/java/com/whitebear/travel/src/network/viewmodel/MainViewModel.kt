@@ -15,7 +15,7 @@ import com.whitebear.travel.src.dto.tm.TmCoordinatesResponse
 import com.whitebear.travel.src.network.service.AreaService
 import com.whitebear.travel.src.network.service.PlaceService
 import com.whitebear.travel.src.network.service.UserService
-import com.whitebear.travel.src.network.service.WeatherService
+import com.whitebear.travel.src.network.service.DataService
 import com.whitebear.travel.util.CommonUtils
 import kotlinx.coroutines.launch
 import java.lang.reflect.Type
@@ -81,7 +81,7 @@ class MainViewModel :ViewModel(){
     suspend fun getWeather(dataType : String, numOfRows : Int, pageNo : Int,
                            baseDate : Int, baseTime : String, nx : String, ny : String){
 
-        val response = WeatherService().getWeather(dataType, numOfRows, pageNo, baseDate, baseTime, nx, ny)
+        val response = DataService().getWeather(dataType, numOfRows, pageNo, baseDate, baseTime, nx, ny)
         Log.d(TAG, "getWeather: ${response.code()}")
         viewModelScope.launch { 
             if(response.code() == 200){
@@ -100,7 +100,7 @@ class MainViewModel :ViewModel(){
         }
     }
     suspend fun getNearbyCenter(lat:Double, lng:Double){
-        val response = WeatherService().getTmCoordinates(lng, lat)
+        val response = DataService().getTmCoordinates(lng, lat)
         Log.d(TAG, "getNearbyCenter: ${response.code()}")
         if(response.code() == 200){
             var res = response.body()
@@ -112,7 +112,7 @@ class MainViewModel :ViewModel(){
         }
     }
     suspend fun getFindMyCenter(lat:Double, lng:Double) {
-        val response = WeatherService().getMeasure(lat,lng)
+        val response = DataService().getMeasure(lat,lng)
         if(response.code() == 200){
             var res = response.body()
             if(res!=null){
@@ -124,7 +124,7 @@ class MainViewModel :ViewModel(){
     }
     
     suspend fun getAirQuality(stationName:String){
-        val response = WeatherService().getAirQuality(stationName)
+        val response = DataService().getAirQuality(stationName)
 
         if(response.code() == 200){
             var res = response.body()
