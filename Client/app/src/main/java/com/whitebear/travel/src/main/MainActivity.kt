@@ -96,6 +96,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             binding.activityMainBottomNav.visibility = View.VISIBLE
         }
     }
+
     /**
      * 위치 권한
      */
@@ -170,7 +171,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     // 시스템으로 부터 위치 정보를 콜백으로 받음
 
     private val mLocationCallback = object : LocationCallback() {
-        @RequiresApi(Build.VERSION_CODES.O)
         override fun onLocationResult(locationResult: LocationResult) {
             locationResult.lastLocation
             onLocationChanged(locationResult.lastLocation)
@@ -180,7 +180,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     // 시스템으로 부터 받은 위치정보를 화면에 갱신해주는 메소드
-    @RequiresApi(Build.VERSION_CODES.O)
     fun onLocationChanged(location: Location) {
         mLastLocation = location
         mainViewModel.setUserLoc(location, getAddress(location))
@@ -188,7 +187,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         getToday()
         //lat=35.8988, long=128.599
         runBlocking {
-            mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${location.latitude.toInt()}","${location.longitude.toInt()}")
+            mainViewModel.getWeather("JSON",10,1,today.toInt(),"0200","${location.latitude.toInt()}","${location.longitude.toInt()}")
         }
     }
 
@@ -201,7 +200,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         return address
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getToday() : String {
         var current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")

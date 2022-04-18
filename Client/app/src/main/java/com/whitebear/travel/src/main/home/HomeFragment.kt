@@ -80,16 +80,13 @@ class HomeFragment: Fragment(){
         mainViewModel.userLoc.observe(viewLifecycleOwner) {
             if (it != null) {
                 runBlocking {
-                    mainViewModel.getWeather(
-                        "JSON",
-                        10,
-                        1,
-                        mainActivity.getToday().toInt(),
-                        1400,
-                        "${it.latitude.toInt()}",
-                        "${it.longitude.toInt()}"
-                    )
+                    mainViewModel.getWeather("JSON",10,1, mainActivity.getToday().toInt(),"0200","${it.latitude.toInt()}","${it.longitude.toInt()}")
                     mainViewModel.getNearbyCenter(it.latitude, it.longitude)
+                    binding.homeFragmentTvFailLoc.visibility = View.INVISIBLE
+                    binding.fragmentHomeWeatherSKY.visibility = View.VISIBLE
+                    binding.fragmentHomeWeatherTMP.visibility = View.VISIBLE
+                    binding.fragmentHomePm10.visibility = View.VISIBLE
+                    binding.fragmentHomePm25.visibility = View.VISIBLE
                 }
             }
         }
@@ -104,11 +101,13 @@ class HomeFragment: Fragment(){
         initWeather()
         initMeasure()
     }
+
     fun initButton(){
         binding.fragmentHomeNavBtn.setOnClickListener {
             this@HomeFragment.findNavController().navigate(R.id.navigatorFragment)
         }
     }
+
     private fun initAdapter(){
         areaAdapter = AreaAdapter()
         mainViewModel.areas.observe(viewLifecycleOwner) {
@@ -127,6 +126,7 @@ class HomeFragment: Fragment(){
         })
 
     }
+
     private fun initWeather(){
         mainViewModel.weathers.observe(viewLifecycleOwner) {
             var curWeather = it.response.body.items.item
@@ -193,21 +193,28 @@ class HomeFragment: Fragment(){
             }
         }
     }
-    @SuppressLint("SetTextI18n")
+
     private fun initMeasure(){
-        var tm = mainViewModel.coordinates.value!!
-        var tmX = tm.documents!![0]!!.x
-        var tmY = tm.documents!![0]!!.y
-        runBlocking {
-            mainViewModel.getFindMyCenter(tmX!!, tmY!!)
-        }
+        mainViewModel.coordinates.observe(viewLifecycleOwner, {
+//            var tm = mainViewModel.coordinates.value!!
+            var tm = it
+            var tmX = tm.documents!![0]!!.x
+            var tmY = tm.documents!![0]!!.y
+            runBlocking {
+                mainViewModel.getFindMyCenter(tmX!!, tmY!!)
+            }
+        })
 
-        var station = mainViewModel.stations.value!!
-        var stationName = station.response!!.body!!.stations?.get(0)!!.stationName
+        mainViewModel.stations.observe(viewLifecycleOwner, {
+//            var station = mainViewModel.stations.value!!
+            var station = it
+            var stationName = station.response!!.body!!.stations?.get(0)!!.stationName
 
-        runBlocking {
-            mainViewModel.getAirQuality(stationName!!)
-        }
+            runBlocking {
+                mainViewModel.getAirQuality(stationName!!)
+            }
+        })
+
 
         mainViewModel.air.observe(viewLifecycleOwner, {
             var curAir = it.response!!.body!!.measuredValues?.get(0)
@@ -216,6 +223,7 @@ class HomeFragment: Fragment(){
             binding.fragmentHomePm25.text = "초미세먼지 ${curAir!!.pm25Value} |"
         })
     }
+
     private fun autoScrollStart(intervalTime:Long){
         myHandler.removeMessages(0)
         myHandler.sendEmptyMessageDelayed(0,intervalTime)
@@ -224,6 +232,7 @@ class HomeFragment: Fragment(){
     private fun autoScrollStop(){
         myHandler.removeMessages(0)
     }
+
     companion object {
         fun newInstance(param1: String, param2: String) =
             HomeFragment().apply {

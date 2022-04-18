@@ -79,17 +79,20 @@ class MainViewModel :ViewModel(){
         _air.value = air
     }
     suspend fun getWeather(dataType : String, numOfRows : Int, pageNo : Int,
-                           baseDate : Int, baseTime : Int, nx : String, ny : String){
+                           baseDate : Int, baseTime : String, nx : String, ny : String){
 
         val response = WeatherService().getWeather(dataType, numOfRows, pageNo, baseDate, baseTime, nx, ny)
         viewModelScope.launch {
             if(response.code() == 200){
                 var res = response.body()
-                var type = object:TypeToken<Weather>() {}.type
-                var weatherList =
-                    response.body()?.let { CommonUtils.parseDto<Weather>(it,type) }
-                if (weatherList != null) {
-                    setWeather(weatherList)
+                if(res != null) {
+                    var type = object:TypeToken<Weather>() {}.type
+                    var weatherList = CommonUtils.parseDto<Weather>(res ,type)
+                    if (weatherList != null) {
+                        setWeather(weatherList)
+                    }
+                } else {
+                    Log.e(TAG, "getWeather: ${response.message()}", )
                 }
             }
             
