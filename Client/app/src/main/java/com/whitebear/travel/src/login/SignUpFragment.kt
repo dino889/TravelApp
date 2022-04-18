@@ -12,17 +12,20 @@ import android.view.WindowManager
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import com.google.android.material.snackbar.Snackbar
+import com.google.common.reflect.TypeToken
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.whitebear.travel.R
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentSignUpBinding
 import com.whitebear.travel.src.dto.User
 import com.whitebear.travel.src.network.service.UserService
+import com.whitebear.travel.util.CommonUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.coroutines.runBlocking
 import retrofit2.Response
+import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
@@ -61,10 +64,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
      * email 중복 체크
      * @return 중복된 이메일이 없으면 true 반환
      */
-    /**
-     * email 중복 체크
-     * @return 중복된 이메일이 없으면 true 반환
-     */
     private fun existEmailChk(email: String) : Boolean {
         var existEmailRes : HashMap<String, Any>
         runBlocking {
@@ -79,15 +78,17 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
             return true
         } else if(existEmailRes["isSuccess"] == true && msg.contains("exist email") ) { // 이미 존재하는 이메일
             binding.signUpFragmentTilEmail.error = "중복된 이메일입니다. 다시 입력해 주세요."
-//            if(socialType == "none") {
-//                binding.joinFragmentClCertNum.visibility = View.GONE
-//                showCustomToast("이미 존재하는 이메일입니다.")
-//                return false
-//            } else {
-//                Snackbar.make(requireView(), "이미 가입하신 적이 있으시네요! \n$socialType (으)로 로그인 해주세요╰(*°▽°*)╯", Snackbar.LENGTH_LONG).show()
-//                (requireActivity() as LoginActivity).onBackPressed()
-//                return false
-//            }
+            val type: Type = object : TypeToken<HashMap<String, Any>>() {}.type
+            val socialType = CommonUtils.parseDto<HashMap<String, Any>>(existEmailRes["data"]!!, type)
+
+            if(socialType["social_type"] == "none") {
+                showCustomToast("이미 존재하는 이메일입니다.")
+                return false
+            } else {
+                Snackbar.make(requireView(), "이미 가입하신 적이 있으시네요! \n$socialType (으)로 로그인 해주세요╰(*°▽°*)╯", Snackbar.LENGTH_LONG).show()
+                (requireActivity() as LoginActivity).onBackPressed()
+                return false
+            }
             return false
         } else {
             showCustomToast("서버 통신에 실패했습니다.")

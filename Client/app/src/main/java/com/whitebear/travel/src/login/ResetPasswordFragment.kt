@@ -7,17 +7,22 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.EditText
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.whitebear.travel.R
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentResetPasswordBinding
 import com.whitebear.travel.src.dto.User
+import com.whitebear.travel.src.main.MainActivity
 import com.whitebear.travel.src.network.service.UserService
+import com.whitebear.travel.util.CommonUtils
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.coroutines.runBlocking
+import okio.ByteString.Companion.toByteString
 import retrofit2.Response
+import java.lang.reflect.Type
 import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
 
@@ -25,7 +30,7 @@ class ResetPasswordFragment : BaseFragment<FragmentResetPasswordBinding>(Fragmen
     private val TAG = "ResetPasswordF"
     private lateinit var loginActivity: LoginActivity
     private lateinit var editTextSubscription: Disposable
-    private var isVerificationSuccess = false
+    private var userId = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,8 +47,8 @@ class ResetPasswordFragment : BaseFragment<FragmentResetPasswordBinding>(Fragmen
 
         initDomain()
 
-        getAuthNumClickEvent()
-//        changePwBtnClickEvent()
+        getAuthClickEvent()
+        changePwBtnClickEvent()
 
         loginActivity.runOnUiThread(kotlinx.coroutines.Runnable {
             inputObservable()
@@ -62,96 +67,99 @@ class ResetPasswordFragment : BaseFragment<FragmentResetPasswordBinding>(Fragmen
     }
 
 
-    // 인증번호 받기 버튼 클릭 이벤트
-    private fun getAuthNumClickEvent() {
-        binding.resetPwFragmentBtnGetAuthNum.setOnClickListener {
+    // 인증하기 버튼 클릭 이벤트
+    private fun getAuthClickEvent() {
+        binding.resetPwFragmentBtnGetAuth.setOnClickListener {
             // 1. 이메일 형식 확인
-            // 2. 1이 true이면 이메일 중복 여부 확인
-            // 3. 2를 통해 사용자가 입력한 이메일이 존재한다면 해당 이메일로 인증번호 발송
-//            val res = existEmailChk(validatedEmail())
-//            if(res == true) {
-////                sendCodeToEmail()
-//            }
+            // 2. 1이 true이면 이메일과 username으로 회원 정보가 존재하는지 체크
+            // 3. 2가 true이면 비밀번호 변경 레이아웃 visible + 변경 버튼 클릭 이벤트 활성화
+            val email = validatedEmail()
+            if(email == null || binding.resetPwFragmentTietUserName.text.toString().trim().isEmpty()) {
+                showCustomToast("해당하는 사용자 정보가 없습니다. \n입력 값을 확인해 주세요.")
+            } else {
+                val res = existEmailChk(email)
+
+                if(res != null) {
+                    if(res["social_type"] == "none") {
+                        val response : Response<HashMap<String, Any>>
+                        runBlocking {
+                            response = UserService().selectUserByEmailUsername(email, binding.resetPwFragmentTietUserName.text.toString())
+                        }
+                        Log.d(TAG, "getAuthClickEvent: $response")
+                        if(response.code() == 400) {
+                            showCustomToast("일치하는 회원 정보가 없습니다.")
+                        }
+                        if(response.code() == 200 || response.code() == 500) {
+                            val rbody = response.body()
+                            if(rbody != null) {
+                                if(rbody["isSuccess"] == true && rbody["data"] != null) {
+                                    showCustomToast("인증에 성공했습니다.")
+                                    binding.resetPwFragmentBtnGetAuth.isEnabled = false
+                                    val type: Type = object : TypeToken<User>() {}.type
+                                    val user = CommonUtils.parseDto<User>(rbody["data"]!!, type)
+                                    Log.d(TAG, "getAuthNumClickEvent: ${user.id}")
+
+                                    binding.resetPwFragmentTilPw1.visibility = View.VISIBLE
+                                    binding.resetPwFragmentTilPw2.visibility = View.VISIBLE
+                                    binding.resetPwFragmentBtnChangePw.visibility = View.VISIBLE
+                                    userId = user.id
+
+                                } else if(rbody["isSuccess"] == false) {
+                                    showCustomToast("일치하는 회원 정보가 없습니다.")
+                                }
+                            } else {
+                                showCustomToast("서버 통신 실패")
+                                Log.d(TAG, "changePwBtnClickEvent: ${response.message()}")
+                            }
+                        }
+                    } else {
+                        Snackbar.make(requireView(), "소셜 로그인 회원이시네요! \n${res["social_type"]} (으)로 로그인 해주세요╰(*°▽°*)╯", Snackbar.LENGTH_LONG).show()
+                        (requireActivity() as LoginActivity).onBackPressed()
+                    }
+
+                }
+            }
         }
     }
 
-//    // 인증번호 확인 버튼 클릭 이벤트
-//    private fun okBtnClickEvent(code: String) {
-//        Log.d(TAG, "okBtnClickEvent: $code")
-//        binding.resetPwFragmentBtnConfirm.setOnClickListener {
-//            if(code == binding.resetPwFragmentEtCertNum.text.toString()) {
-//                showCustomToast("이메일 인증에 성공했습니다")
-//                binding.resetPwFragmentBtnGetAuthNum.isEnabled = false
-//                binding.resetPwFragmentTilCertNum.isEnabled = false
-//
-//                binding.resetPwFragmentTilPw1.visibility = View.VISIBLE
-//                binding.resetPwFragmentTilPw2.visibility = View.VISIBLE
-//                isVerificationSuccess = true
-//            } else {
-//                showCustomToast("이메일 인증에 실패했습니다")
-//                binding.resetPwFragmentBtnGetAuthNum.isEnabled = true
-//                binding.resetPwFragmentTilCertNum.isEnabled = true
-//
-//                binding.resetPwFragmentTilPw1.visibility = View.INVISIBLE
-//                binding.resetPwFragmentTilPw2.visibility = View.INVISIBLE
-//                isVerificationSuccess = false
-//            }
-//        }
-//    }
 
-//    // 비밀번호 변경 버튼 클릭 이벤트
-//    private fun changePwBtnClickEvent() {
-//        binding.resetPwFragmentBtnChangePw.setOnClickListener {
-//            val pw1 = binding.resetPwFragmentEtPw1.text.toString()
-//            val pw2 = binding.resetPwFragmentEtPw2.text.toString()
-//            val email = validatedEmail()
-//
-//            if(pw1 == pw2 && isVerificationSuccess == true) {
-//                val encPw = loginActivity.sha256(pw2)
-//                val user = User(password = encPw, email = email!!)
-//                var result : Response<HashMap<String, Any>>
-//                runBlocking {
-//                    result = UserService().updateUser()
-//                }
-//                if(result.code() == 200 || result.code() == 500) {
-//                    val rbody = result.body()
-//                    if(rbody != null) {
-//                        if(rbody.data["isSuccess"] == true && rbody.message == "비밀번호 초기화 성공") {
-//                            showCustomToast("비밀번호가 성공적으로 변경되었습니다. 새로운 비밀번호로 로그인 해주세요.")
-//                            (requireActivity() as LoginActivity).onBackPressed()
-//                        } else if(rbody.data["isSuccess"] == false) {
-//                            showCustomToast("비밀번호 초기화 실패")
-//                        }
-//                        if(rbody.success == false) {
-//                            showCustomToast("서버 통신 실패")
-//                            Log.d(TAG, "changePwBtnClickEvent: ${rbody.message}")
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun sendCodeToEmail() {
-//        var codeRes = Message()
-//
-//        runBlocking {
-//            codeRes = mainViewModel.sendCodeToEmail(validatedEmail()!!)
-//        }
-//        if(codeRes.data["code"] != null && codeRes.message == "이메일 인증 요청 성공") {
-//            showCustomToast("입력하신 이메일로 인증번호가 전송되었습니다.")
-//            okBtnClickEvent(codeRes.data["code"] as String)
-//
-//        } else if(codeRes.data["code"] == null && codeRes.message == "이메일 인증 요청 실패") {
-//
-//            showCustomToast(codeRes.message)    // 이메일 존재O, but 이메일 인증 요청 실패
-//
-//        } else {
-//            showCustomToast("서버 통신에 실패했습니다.")
-//            Log.d(TAG, "certBtnClickEvent: ${codeRes.message}")
-//        }
-//    }
-//
+    // 비밀번호 변경 버튼 클릭 이벤트
+    private fun changePwBtnClickEvent() {
+
+        binding.resetPwFragmentBtnChangePw.setOnClickListener {
+            Log.d(TAG, "changePwBtnClickEvent: $userId")
+            if(userId != -1) {
+                val pw1 = binding.resetPwFragmentEtPw1.text.toString()
+                val pw2 = binding.resetPwFragmentEtPw2.text.toString()
+
+                if (pw1 == pw2) {
+                    val encPw = loginActivity.sha256(pw2)
+                    var result: Response<HashMap<String, Any>>
+                    runBlocking {
+                        result = UserService().updateUserPw(userId, encPw)
+                    }
+                    Log.d(TAG, "changePwBtnClickEvent: $result")
+                    if (result.code() == 200 || result.code() == 500) {
+                        val rbody = result.body()
+                        if (rbody != null) {
+                            if (rbody["isSuccess"] == true) {
+                                showCustomToast("비밀번호가 성공적으로 변경되었습니다. 새로운 비밀번호로 로그인 해주세요.")
+                                (requireActivity() as LoginActivity).onBackPressed()
+                            } else if (rbody["isSuccess"] == false) {
+                                showCustomToast("비밀번호 초기화 실패")
+                            }
+                        } else {
+                            showCustomToast("서버 통신 실패")
+                            Log.d(TAG, "updateUser: ${result.message()}")
+                        }
+                    }
+                }
+            } else {
+                showCustomToast("비밀번호를 변경할 수 없습니다.")
+            }
+        }
+    }
+
 
     /**
      * email 입력 데이터 검사
@@ -178,44 +186,58 @@ class ResetPasswordFragment : BaseFragment<FragmentResetPasswordBinding>(Fragmen
         else {
             binding.resetPwFragmentTilEmail.isErrorEnabled = false
             binding.resetPwFragmentTilDomain.isErrorEnabled = false
-            return email
+            if(existEmailChk(email) != null) {
+                return email
+            } else {
+                return null
+            }
+
         }
     }
 
+    /**
+     * email 중복 체크
+     * @return 중복된 이메일이 없으면 true 반환
+     */
+    private fun existEmailChk(email: String) : HashMap<String, Any>? {
+        var existEmailRes : HashMap<String, Any>
+        runBlocking {
+            existEmailRes = mainViewModel.existsChkUserEmail(email)
+        }
 
-//    /**
-//     * email 중복 체크
-//     * @return 중복된 이메일이 없으면 true 반환
-//     */
-//    private fun existEmailChk(email: String?) : Boolean {
-//        var existEmailRes : HashMap<String, Any> = hashMapOf()
-//        runBlocking {
-//            if(email != null) {
-//                existEmailRes = mainViewModel.existsChkUserEmail(email)
-//            }
-//        }
-//
-//        if(existEmailRes["isSuccess"] == false) {  // 중복되는 이메일 없음.
-//            binding.resetPwFragmentClCertNum.visibility = View.INVISIBLE
+        val msg = existEmailRes["message"] as String
+
+        if(existEmailRes["isSuccess"] == true && msg.contains("there is no email")) {   // 중복되는 이메일 없음.
+            binding.resetPwFragmentTilPw1.visibility = View.INVISIBLE
+            binding.resetPwFragmentTilPw2.visibility = View.INVISIBLE
+            binding.resetPwFragmentBtnChangePw.visibility = View.INVISIBLE
 //            showCustomToast("존재하는 이메일이 없습니다. 입력 값을 다시 확인해 주세요.")
-//            return false
-//        } else if(existEmailRes["isSuccess"] == true) {  // 이미 존재하는 이메일
-//            val socialType = existEmailRes["data"]
-//            if(socialType == "none") {
-//                binding.resetPwFragmentClCertNum.visibility = View.VISIBLE  // 인증번호 입력 보이도록하기
+            return null
+        } else if(existEmailRes["isSuccess"] == true && msg.contains("exist email") ) { // 이미 존재하는 이메일
+            val type: Type = object : TypeToken<HashMap<String, Any>>() {}.type
+            val socialType = CommonUtils.parseDto<HashMap<String, Any>>(existEmailRes["data"]!!, type)
+            Log.d(TAG, "existEmailChk: $socialType")
+            return socialType
+//            if(socialType["social_type"] == "none") {
+////                binding.resetPwFragmentTilPw1.visibility = View.INVISIBLE
+////                binding.resetPwFragmentTilPw2.visibility = View.INVISIBLE
+////                binding.resetPwFragmentBtnChangePw.visibility = View.INVISIBLE  // 인증번호 입력 보이도록하기
 //                return true
 //            } else {
-//                Snackbar.make(requireView(), "소셜 로그인 회원이시네요! \n$socialType (으)로 로그인 해주세요╰(*°▽°*)╯", Snackbar.LENGTH_LONG).show()
 //                (requireActivity() as LoginActivity).onBackPressed()
+//                Snackbar.make(requireView(), "소셜 로그인 회원이시네요! \n$socialType (으)로 로그인 해주세요╰(*°▽°*)╯", Snackbar.LENGTH_LONG).show()
 //                return false
 //            }
-//        } else {
-//            showCustomToast("서버 통신에 실패했습니다.")
-//            Log.d(TAG, "existEmailChk: ${existEmailRes["message"]}")
-//            binding.resetPwFragmentClCertNum.visibility = View.INVISIBLE
-//            return false
-//        }
-//    }
+        } else {
+            binding.resetPwFragmentTilPw1.visibility = View.INVISIBLE
+            binding.resetPwFragmentTilPw2.visibility = View.INVISIBLE
+            binding.resetPwFragmentBtnChangePw.visibility = View.INVISIBLE
+            showCustomToast("서버 통신에 실패했습니다.")
+            Log.d(TAG, "existEmailChk: ${existEmailRes["message"]}")
+            return null
+        }
+    }
+
 
     /**
      * 각 EditText 쿼리 디바운스 적용
