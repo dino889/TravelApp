@@ -113,8 +113,8 @@ class ResetPasswordFragment : BaseFragment<FragmentResetPasswordBinding>(Fragmen
                             }
                         }
                     } else {
-                        (requireActivity() as LoginActivity).onBackPressed()
                         Snackbar.make(requireView(), "소셜 로그인 회원이시네요! \n${res["social_type"]} (으)로 로그인 해주세요╰(*°▽°*)╯", Snackbar.LENGTH_LONG).show()
+                        (requireActivity() as LoginActivity).onBackPressed()
                     }
 
                 }
