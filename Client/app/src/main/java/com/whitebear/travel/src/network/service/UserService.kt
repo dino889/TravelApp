@@ -1,6 +1,6 @@
 package com.whitebear.travel.src.network.service
 
-import com.navercorp.nid.profile.NidProfileCallback
+//import com.navercorp.nid.profile.NidProfileCallback
 import com.whitebear.travel.src.dto.User
 import com.whitebear.travel.util.RetrofitUtil
 

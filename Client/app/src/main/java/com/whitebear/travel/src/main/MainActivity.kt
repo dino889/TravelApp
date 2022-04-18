@@ -41,6 +41,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private val LOCATION_CODE = 100
     private var today = ""
     private var hour = ""
+    private var addr = ""
+    private var today2Type = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -52,6 +55,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
     private fun setInstance(){
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+//        getMeasure()
+
     }
 
     private fun initNavigation(){
@@ -161,19 +166,20 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     @RequiresApi(Build.VERSION_CODES.O)
     fun onLocationChanged(location: Location) {
         mLastLocation = location
-
         mainViewModel.setUserLoc(location, getAddress(location))
         Log.d(TAG, "onLocationChanged: ${location.latitude}")
         getToday()
+        //lat=35.8988, long=128.599
         runBlocking {
 //            mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${location.latitude.toInt()}","${location.longitude.toInt()}")
+            mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"35","128")
         }
     }
     fun getAddress(position: Location) : String {
         val geoCoder = Geocoder(this, Locale.getDefault())
         val address = geoCoder.getFromLocation(position.latitude, position.longitude, 1).first()
             .getAddressLine(0)
-
+        addr = address
         Log.d(TAG, "Address, $address")
         return address
     }
@@ -181,10 +187,34 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     fun getToday(){
         var current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val formattering = DateTimeFormatter.ofPattern("yyyy-MM-dd")
         val hourFormatt = DateTimeFormatter.ofPattern("HH")
         val formatted = current.format(formatter)
-        val formatted2 = current.format(hourFormatt)
+        val formatted2 = current.format(formattering)
+//        val formatted2 = current.format(hourFormatt)
         today = formatted
+        today2Type = formatted2
         mainViewModel.setToday(today.toInt())
     }
+//    private fun getMeasure(){
+//        Log.d(TAG, "getMeasure: ")
+////        var sidoName = "대구"
+////        var searchCondition = "DAILY"
+////        var pageNo = 1
+////        var numOfRows = 100
+////        var returnType = "json"
+////        var serviceKey = ""
+////        var ver = 1.0
+//        Log.d(TAG, "getMeasure: $today2Type")
+//        var searchDate = "2022-04-18"
+//        var returnType  = "json"
+//        var serviceKey = "02DFWIMCh4ja1%2FJLxBL94may6yu73Byr8JXuqG6WvW9e4DTCgPCJZGHksn4qJ%2F1yKl9Vv7TWf5nxyjOPiArNuw%3D%3D"
+//        var numOfRows  = 100
+//        var page = 1
+//        Log.d(TAG, "getMeasure: 2")
+//        runBlocking {
+//            mainViewModel.getMeasure(searchDate,returnType,serviceKey,numOfRows,page)
+//        }
+////        Log.d(TAG, "getMeasure: 3")
+//    }
 }

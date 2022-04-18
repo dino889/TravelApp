@@ -3,6 +3,7 @@ package com.whitebear.travel.src.network.api
 import com.whitebear.travel.src.dto.*
 import retrofit2.Response
 import retrofit2.http.*
+import retrofit2.http.Body
 
 interface PlaceApi {
 
@@ -26,5 +27,8 @@ interface PlaceApi {
 
     @GET("places/userlike/{id}")
     suspend fun getLikePlacebyUser(@Path("id")userId:Int) : Response<Message2>
+
+    @GET("places")
+    suspend fun getPlaceByAreaToSort(@Query("areaName") areaName : String, @Query("sort")sort:String) : Response<Message>
 
 }

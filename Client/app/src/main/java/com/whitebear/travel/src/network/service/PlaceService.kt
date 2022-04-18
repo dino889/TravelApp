@@ -9,6 +9,7 @@ import retrofit2.Response
 
 class PlaceService {
     suspend fun getPlaceByArea(areaName:String) : Response<Message> = RetrofitUtil.placeService.getPlaceByArea(areaName)
+
     suspend fun getPlaceById(id:Int):Response<Message> = RetrofitUtil.placeService.getPlaceById(id)
 
     suspend fun insertPlaceReview(placeReview:PlaceReview) : Response<Message> = RetrofitUtil.placeService.insertPlaceReview(placeReview)
@@ -20,4 +21,6 @@ class PlaceService {
     suspend fun getLikePlaceByUser(userId:Int) : Response<Message2> = RetrofitUtil.placeService.getLikePlacebyUser(userId)
 
     suspend fun placeLike(placeLike: PlaceLike) : Response<Message> = RetrofitUtil.placeService.placeLike(placeLike)
+
+    suspend fun getPlaceByAreaSorting(areaName:String, sorting:String) : Response<Message> = RetrofitUtil.placeService.getPlaceByAreaToSort(areaName,sorting)
 }

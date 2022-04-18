@@ -7,21 +7,18 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflect.TypeToken
-import com.google.gson.JsonArray
-import com.google.gson.JsonObject
-import com.google.gson.JsonParser
 import com.whitebear.travel.src.dto.*
+import com.whitebear.travel.src.dto.airQuality.AirQuality
+import com.whitebear.travel.src.dto.airQuality.Measure
+import com.whitebear.travel.src.dto.stationResponse.StationResponse
+import com.whitebear.travel.src.dto.tm.TmCoordinatesResponse
 import com.whitebear.travel.src.network.service.AreaService
 import com.whitebear.travel.src.network.service.PlaceService
 import com.whitebear.travel.src.network.service.UserService
 import com.whitebear.travel.src.network.service.WeatherService
 import com.whitebear.travel.util.CommonUtils
 import kotlinx.coroutines.launch
-import org.json.JSONArray
-import org.json.JSONObject
 import java.lang.reflect.Type
-import java.security.Key
-import java.util.*
 import kotlin.collections.HashMap
 
 private const val TAG = "mainViewModel"
@@ -46,10 +43,36 @@ class MainViewModel :ViewModel(){
         _today = today
     }
     private val _weathers = MutableLiveData<Weather>()
+    private val _measures = MutableLiveData<Measure>()
+    private val _coordinates = MutableLiveData<TmCoordinatesResponse>()
+    private val _stations = MutableLiveData<StationResponse>()
+    private val _air = MutableLiveData<AirQuality>()
+
     val weathers : LiveData<Weather>
         get() = _weathers
+    val measures : LiveData<Measure>
+        get() = _measures
+    val coordinates : LiveData<TmCoordinatesResponse>
+        get() = _coordinates
+    val stations : LiveData<StationResponse>
+        get() = _stations
+    val air : LiveData<AirQuality>
+        get() = _air
+
     private fun setWeather(weather: Weather) = viewModelScope.launch {
         _weathers.value = weather
+    }
+    private fun setMeasure(measure: Measure) = viewModelScope.launch {
+        _measures.value = measure
+    }
+    private fun setTm(coordinates:TmCoordinatesResponse) = viewModelScope.launch {
+        _coordinates.value = coordinates
+    }
+    private fun setStation(station:StationResponse) = viewModelScope.launch {
+        _stations.value = station
+    }
+    private fun setAir(air:AirQuality) = viewModelScope.launch {
+        _air.value = air
     }
     suspend fun getWeather(dataType : String, numOfRows : Int, pageNo : Int,
                            baseDate : Int, baseTime : Int, nx : String, ny : String){
@@ -59,16 +82,50 @@ class MainViewModel :ViewModel(){
         viewModelScope.launch { 
             if(response.code() == 200){
                 var res = response.body()
-                Log.d(TAG, "getWeather: ${res}")
                 var type = object:TypeToken<Weather>() {}.type
                 var weatherList =
                     response.body()?.let { CommonUtils.parseDto<Weather>(it,type) }
-                Log.d(TAG, "getWeather: $weatherList")
                 if (weatherList != null) {
                     setWeather(weatherList)
                 }
             }
             
+        }
+    }
+    suspend fun getNearbyCenter(lat:Double, lng:Double){
+        val response = WeatherService().getTmCoordinates(lng, lat)
+        Log.d(TAG, "getNearbyCenter: ${response.code()}")
+        if(response.code() == 200){
+            var res = response.body()
+            if(res!=null){
+                var type = object:TypeToken<TmCoordinatesResponse>() {}.type
+                var tmCoordinate = CommonUtils.parseDto<TmCoordinatesResponse>(res,type)
+                setTm(tmCoordinate)
+            }
+        }
+    }
+    suspend fun getFindMyCenter(lat:Double, lng:Double) {
+        val response = WeatherService().getMeasure(lat,lng)
+        if(response.code() == 200){
+            var res = response.body()
+            if(res!=null){
+                var type = object : TypeToken<StationResponse>() {}.type
+                var station = CommonUtils.parseDto<StationResponse>(res,type)
+                setStation(station)
+            }
+        }
+    }
+    
+    suspend fun getAirQuality(stationName:String){
+        val response = WeatherService().getAirQuality(stationName)
+
+        if(response.code() == 200){
+            var res = response.body()
+            if(res!=null){
+                var type = object : TypeToken<AirQuality>() {}.type
+                var airQuality = CommonUtils.parseDto<AirQuality>(res,type)
+                setAir(airQuality)
+            }
         }
     }
     /**
@@ -151,7 +208,21 @@ class MainViewModel :ViewModel(){
             if(response.code() == 200 || response.code() == 500){
                 val res = response.body()
                 if(res!=null){
-                    Log.d(TAG, "getPlaces: $res")
+                    var type = object : TypeToken<MutableList<Place>>() {}.type
+                    var placeList = CommonUtils.parseDto<MutableList<Place>>(res.data,type)
+                    setPlace(placeList)
+                }
+            }
+        }
+    }
+    suspend fun getPlacesToSort(areaName: String, sort:String){
+        val response = PlaceService().getPlaceByAreaSorting(areaName,sort)
+        Log.d(TAG, "getPlacesToSort: SORT $sort")
+        viewModelScope.launch {
+            if(response.code() == 200 || response.code() == 500){
+                val res = response.body()
+                Log.d(TAG, "getPlacesToSort: $res")
+                if(res!=null){
                     var type = object : TypeToken<MutableList<Place>>() {}.type
                     var placeList = CommonUtils.parseDto<MutableList<Place>>(res.data,type)
                     setPlace(placeList)
@@ -167,7 +238,6 @@ class MainViewModel :ViewModel(){
                 if(res!=null){
                     var type = object : TypeToken<Place>() {}.type
                     var place = CommonUtils.parseDto<Place>(res.data, type)
-                    Log.d(TAG, "getPlace: ${res.data}")
                     setPlaceOne(place)
                 }
             }
@@ -175,14 +245,10 @@ class MainViewModel :ViewModel(){
     }
     suspend fun getPlaceReview(placeId:Int){
         val response = PlaceService().getPlaceReview(placeId)
-        Log.d(TAG, "getPlaceReview: ${response.code()}")
         viewModelScope.launch {
             if(response.code()==200 || response.code() == 500){
-                Log.d(TAG, "getPlaceReview: ${response.code()}")
                 val res = response.body()
-                Log.d(TAG, "getPlaceReview: $res")
                 if(res!=null){
-                    Log.d(TAG, "getPlaceReview: $res")
                     var type = object : TypeToken<MutableList<PlaceReview>>() {}.type
                     var placeReview = CommonUtils.parseDto<MutableList<PlaceReview>>(res.data, type)
                     setPlaceReview(placeReview)
@@ -190,7 +256,6 @@ class MainViewModel :ViewModel(){
             }else if(response.code() == 201){
                 val res = response.body()
                 if(res!=null){
-                    Log.d(TAG, "getPlaceReview: ${res.data}")
                     var type = object : TypeToken<MutableList<PlaceReview>>() {}.type
                     var placeReview = CommonUtils.parseDto<MutableList<PlaceReview>>(res.data, type)
                     setPlaceReview(placeReview)
