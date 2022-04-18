@@ -51,9 +51,16 @@ interface UserApi {
     suspend fun doubleCheckEmail(@Query("email") email:String) : Response<HashMap<String, Any>>
 
 
-//    /**
-//     * naverLogin Profile get
-//     */
-//    @GET
-//    fun callProfileApi(callback: NidProfileCallback<NidProfileResponse>)
+    /**
+     * 사용자 비밀번호 변경
+     */
+    @FormUrlEncoded
+    @PUT("users/{id}")
+    suspend fun updateUserPw(@Path("id") id: Int, @Field("password") password: String) : Response<HashMap<String, Any>>
+
+    /**
+     * email, username 으로 사용자 정보 조회 -> 비밀번호 변경 시 사용자 인증
+     */
+    @GET("users/find")
+    suspend fun selectUserByEmailUsername(@Query("email") email: String, @Query("username") username: String) : Response<HashMap<String, Any>>
 }
