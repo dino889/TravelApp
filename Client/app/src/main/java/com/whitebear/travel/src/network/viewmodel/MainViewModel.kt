@@ -26,22 +26,26 @@ class MainViewModel :ViewModel(){
     /**
      * Weather ViewModel
      * */
-    val userLoc : Location?
+    val userLoc : LiveData<Location>
         get() = _userLoc
     val userAddr : String?
         get() = _userAddr
     val today : Int?
         get() = _today
-    private var _userLoc : Location? = null
+
+    private var _userLoc = MutableLiveData<Location>()
     private var _userAddr : String? = null
     private var _today : Int? = null
+
     fun setUserLoc(location : Location, addr: String) {
-        _userLoc = location
+        _userLoc.value = location
         _userAddr = addr
     }
+
     fun setToday(today: Int){
         _today = today
     }
+
     private val _weathers = MutableLiveData<Weather>()
     private val _measures = MutableLiveData<Measure>()
     private val _coordinates = MutableLiveData<TmCoordinatesResponse>()

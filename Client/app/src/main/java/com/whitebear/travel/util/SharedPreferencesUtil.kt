@@ -2,6 +2,7 @@ package com.whitebear.travel.util
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.location.Location
 import com.whitebear.travel.src.dto.User
 import org.json.JSONArray
 

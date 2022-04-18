@@ -19,6 +19,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.google.android.gms.location.*
 import com.whitebear.travel.R
+import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseActivity
 import com.whitebear.travel.databinding.ActivityMainBinding
 import com.whitebear.travel.src.network.viewmodel.MainViewModel
@@ -49,6 +50,18 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
         initNavigation()
         setInstance()
+//        if(mainViewModel.userLoc == null) {
+//            val userLastLoc = ApplicationClass.sharedPreferencesUtil.getUserLoc()
+//            if(userLastLoc != null) {
+//                runBlocking {
+//                    mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${userLastLoc.latitude.toInt()}","${userLastLoc.longitude.toInt()}")
+//                }
+//            }
+//        } else if(mainViewModel.userLoc != null) {
+//            runBlocking {
+//                mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${mainViewModel.userLoc!!.latitude.toInt()}","${mainViewModel.userLoc!!.longitude.toInt()}")
+//            }
+//        }
         if(checkPermissionForLocation(this)) {
             startLocationUpdates()
         }
@@ -100,8 +113,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             true
         }
     }
-    fun checkPermission(permissions: Array<out String>, type: Int): Boolean
-    {
+
+    fun checkPermission(permissions: Array<out String>, type: Int): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             for (permission in permissions) {
                 if (ContextCompat.checkSelfPermission(
@@ -115,6 +128,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
         return true
     }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray)
     {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -148,7 +162,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         Log.d(TAG, "startLocationUpdates: 2?")
         // 기기의 위치에 관한 정기 업데이트를 요청하는 메서드 실행
         // 지정한 루퍼 스레드(Looper.myLooper())에서 콜백(mLocationCallback)으로 위치 업데이트를 요청
-        mFusedLocationProviderClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper()!!)
+        runBlocking {
+            mFusedLocationProviderClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper()!!)
+        }
 
     }
     // 시스템으로 부터 위치 정보를 콜백으로 받음
@@ -162,6 +178,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             // 시스템에서 받은 location 정보를 onLocationChanged()에 전달
         }
     }
+
     // 시스템으로 부터 받은 위치정보를 화면에 갱신해주는 메소드
     @RequiresApi(Build.VERSION_CODES.O)
     fun onLocationChanged(location: Location) {
@@ -171,10 +188,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         getToday()
         //lat=35.8988, long=128.599
         runBlocking {
-//            mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${location.latitude.toInt()}","${location.longitude.toInt()}")
-            mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"35","128")
+            mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${location.latitude.toInt()}","${location.longitude.toInt()}")
         }
     }
+
     fun getAddress(position: Location) : String {
         val geoCoder = Geocoder(this, Locale.getDefault())
         val address = geoCoder.getFromLocation(position.latitude, position.longitude, 1).first()
@@ -183,8 +200,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         Log.d(TAG, "Address, $address")
         return address
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getToday(){
+    fun getToday() : String {
         var current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
         val formattering = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -195,6 +213,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         today = formatted
         today2Type = formatted2
         mainViewModel.setToday(today.toInt())
+        return today
     }
 //    private fun getMeasure(){
 //        Log.d(TAG, "getMeasure: ")
