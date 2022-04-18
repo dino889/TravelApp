@@ -1,6 +1,7 @@
 package com.whitebear.travel.src.main.place
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
@@ -9,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
+import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -18,8 +20,11 @@ import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentPlaceBinding
+import com.whitebear.travel.src.dto.Keyword
 import com.whitebear.travel.src.main.MainActivity
 import kotlinx.coroutines.runBlocking
+import java.text.SimpleDateFormat
+import java.time.LocalDateTime
 
 private const val TAG = "PlaceFragment"
 class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::bind, R.layout.fragment_place) {
@@ -83,8 +88,22 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
         })
         placeAdapter.filter.filter("")
         binding.fragmentPlaceSv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            @RequiresApi(Build.VERSION_CODES.O)
             override fun onQueryTextSubmit(query: String?): Boolean {
-                return false
+                var curTime = System.currentTimeMillis()
+                var formatter = SimpleDateFormat("yyyy-MM-dd HH:ss")
+                var nows = formatter.format(curTime)
+                if(query!=null){
+                    var keywords = Keyword(
+                        query,
+                        "장소",
+                        nows
+                    )
+                    mainViewModel.insertKeywords(keywords)
+
+                    return false
+                }
+                return true
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {

@@ -32,11 +32,14 @@ class RecentlyKeywordFragment : BaseFragment<FragmentRecentlyKeywordBinding>(Fra
     private fun initRecyclerviewAdapter() {
         recentlyKeywordAdapter = RecentlyKeywordAdapter()
 //        recentlyKeywordAdapter.list = it
-        recentlyKeywordAdapter.setItemClickListener(object : RecentlyKeywordAdapter.ItemClickListener {
-            override fun onClick(view: View, position: Int) {
-
-            }
+        mainViewModel.liveKeywords.observe(viewLifecycleOwner, {
+            recentlyKeywordAdapter.list = it
         })
+//        recentlyKeywordAdapter.setItemClickListener(object : RecentlyKeywordAdapter.ItemClickListener {
+//            override fun onClick(view: View, position: Int) {
+//
+//            }
+//        })
         binding.myPostFragmentRv.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = recentlyKeywordAdapter

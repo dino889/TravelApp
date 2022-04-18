@@ -9,7 +9,20 @@
         android:id="@+id/homeFragment"
         android:name="com.whitebear.travel.src.main.home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_areaFragment"
+            app:destination="@id/areaFragment" >
+            <argument
+                android:name="areaName"
+                app:argType="string"
+                android:defaultValue=""/>
+            <argument
+                android:name="areaId"
+                app:argType="integer"
+                android:defaultValue="0"/>
+        </action>
+    </fragment>
     <fragment
         android:id="@+id/locationFragment"
         android:name="com.whitebear.travel.src.main.location.LocationFragment"
@@ -88,4 +101,9 @@
         android:name="com.whitebear.travel.src.main.home.NavigatorFragment"
         android:label="fragment_navigator"
         tools:layout="@layout/fragment_navigator" />
+    <fragment
+        android:id="@+id/areaFragment"
+        android:name="com.whitebear.travel.src.main.home.AreaFragment"
+        android:label="fragment_area"
+        tools:layout="@layout/fragment_area" />
 </navigation>

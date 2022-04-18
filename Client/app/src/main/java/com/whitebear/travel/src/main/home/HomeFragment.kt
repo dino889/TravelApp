@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -98,16 +99,21 @@ class HomeFragment: Fragment(){
         }
     }
     private fun initAdapter(){
+        areaAdapter = AreaAdapter()
         mainViewModel.areas.observe(viewLifecycleOwner, {
-            areaAdapter = AreaAdapter()
             areaAdapter.list = it
-            binding.fragmentHomeAreaRv.apply {
-                layoutManager = GridLayoutManager(context,5)
-                adapter = areaAdapter
-                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        })
+        binding.fragmentHomeAreaRv.apply {
+            layoutManager = GridLayoutManager(context,5)
+            adapter = areaAdapter
+            adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        }
+        areaAdapter.setItemClickListener(object : AreaAdapter.ItemClickListener{
+            override fun onClick(view: View, position: Int, areaName: String, areaId:Int) {
+                var area = bundleOf("areaName" to areaName, "areaId" to areaId)
+                this@HomeFragment.findNavController().navigate(R.id.areaFragment,area)
             }
         })
-        
 
     }
     private fun initWeather(){

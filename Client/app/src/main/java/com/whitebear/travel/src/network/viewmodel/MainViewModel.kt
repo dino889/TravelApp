@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 import org.json.JSONObject
 import java.lang.reflect.Type
+import java.security.Key
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -79,11 +80,16 @@ class MainViewModel :ViewModel(){
      * */
 
     private val _areas = MutableLiveData<MutableList<Area>>()
+    private val _area = MutableLiveData<Area>()
     val areas : LiveData<MutableList<Area>>
         get() = _areas
-    
+    val area : LiveData<Area>
+        get() = _area
     private fun setArea(areas : MutableList<Area>) = viewModelScope.launch { 
         _areas.value = areas
+    }
+    private fun setAreaOne(area:Area) = viewModelScope.launch {
+        _area.value = area
     }
     suspend fun getAreas(){
         val response = AreaService().getArea()
@@ -103,6 +109,14 @@ class MainViewModel :ViewModel(){
                     setArea(areas)
                 }
 
+            }
+        }
+    }
+    fun getAreaOne(areaId:Int){
+        for(item in 0..areas.value!!.size-1){
+            if(areas.value!![item].id == areaId){
+                setAreaOne(areas.value!![item])
+                break;
             }
         }
     }
@@ -141,6 +155,7 @@ class MainViewModel :ViewModel(){
             if(response.code() == 200 || response.code() == 500){
                 val res = response.body()
                 if(res!=null){
+                    Log.d(TAG, "getPlaces: $res")
                     var type = object : TypeToken<MutableList<Place>>() {}.type
                     var placeList = CommonUtils.parseDto<MutableList<Place>>(res.data,type)
                     setPlace(placeList)
@@ -378,5 +393,39 @@ class MainViewModel :ViewModel(){
     fun insertPlaceShopList(place:Place){
         placeShopResponse.add(place)
         liveNavBucketList.value = placeShopResponse
+    }
+    /**
+     * searchHistory ViewModel
+     * */
+    private val keywords = mutableListOf<Keyword>()
+    var hashs = HashMap<String,String>()
+    val liveKeywords = MutableLiveData<MutableList<Keyword>>().apply {
+        value = keywords
+    }
+    fun insertKeywords(keyword:Keyword){
+
+        hashs.put(keyword.keyword, keyword.curDate)
+        Log.d(TAG, "insertKeywords: $hashs")
+        var it = hashs.iterator()
+        Log.d(TAG, "insertKeywords: ${hashs.get(keyword.keyword)}")
+        while(it.hasNext()){
+            var value = it.next()
+
+            var keys = Keyword(value.key, keyword.location,value.value)
+            keywords.add(keys)
+        }
+//        var keys =
+//            hashs[keyword.keyword]?.let {
+//                Keyword(
+//                    keyword.keyword,
+//                    keyword.location,
+//                    it
+//                )
+//            }
+
+//        keywords.add(keys!!)
+        liveKeywords.value = keywords
+
+        Log.d(TAG, "insertKeywords: $keywords")
     }
 }
