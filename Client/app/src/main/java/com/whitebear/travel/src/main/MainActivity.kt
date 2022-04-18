@@ -108,8 +108,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             true
         }
     }
-    fun checkPermission(permissions: Array<out String>, type: Int): Boolean
-    {
+
+    fun checkPermission(permissions: Array<out String>, type: Int): Boolean {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             for (permission in permissions) {
                 if (ContextCompat.checkSelfPermission(
@@ -123,6 +123,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
         return true
     }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray)
     {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
@@ -156,7 +157,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         Log.d(TAG, "startLocationUpdates: 2?")
         // 기기의 위치에 관한 정기 업데이트를 요청하는 메서드 실행
         // 지정한 루퍼 스레드(Looper.myLooper())에서 콜백(mLocationCallback)으로 위치 업데이트를 요청
-        mFusedLocationProviderClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper()!!)
+        runBlocking {
+            mFusedLocationProviderClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper()!!)
+        }
 
     }
     // 시스템으로 부터 위치 정보를 콜백으로 받음
@@ -170,6 +173,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             // 시스템에서 받은 location 정보를 onLocationChanged()에 전달
         }
     }
+
     // 시스템으로 부터 받은 위치정보를 화면에 갱신해주는 메소드
     @RequiresApi(Build.VERSION_CODES.O)
     fun onLocationChanged(location: Location) {
@@ -182,6 +186,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${location.latitude.toInt()}","${location.longitude.toInt()}")
         }
     }
+
     fun getAddress(position: Location) : String {
         val geoCoder = Geocoder(this, Locale.getDefault())
         val address = geoCoder.getFromLocation(position.latitude, position.longitude, 1).first()
@@ -190,8 +195,9 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         Log.d(TAG, "Address, $address")
         return address
     }
+
     @RequiresApi(Build.VERSION_CODES.O)
-    fun getToday() : String{
+    fun getToday() : String {
         var current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
         val hourFormatt = DateTimeFormatter.ofPattern("HH")

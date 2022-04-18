@@ -61,10 +61,6 @@ class SignUpFragment : BaseFragment<FragmentSignUpBinding>(FragmentSignUpBinding
      * email 중복 체크
      * @return 중복된 이메일이 없으면 true 반환
      */
-    /**
-     * email 중복 체크
-     * @return 중복된 이메일이 없으면 true 반환
-     */
     private fun existEmailChk(email: String) : Boolean {
         var existEmailRes : HashMap<String, Any>
         runBlocking {
