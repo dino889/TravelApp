@@ -77,14 +77,22 @@ class HomeFragment: Fragment(){
             mainViewModel.getAreas()
         }
 
-        mainViewModel.userLoc.observe(viewLifecycleOwner, {
-            if(it != null) {
+        mainViewModel.userLoc.observe(viewLifecycleOwner) {
+            if (it != null) {
                 runBlocking {
-                    mainViewModel.getWeather("JSON",10,1, mainActivity.getToday().toInt(),1400,"${it.latitude.toInt()}","${it.longitude.toInt()}")
+                    mainViewModel.getWeather(
+                        "JSON",
+                        10,
+                        1,
+                        mainActivity.getToday().toInt(),
+                        1400,
+                        "${it.latitude.toInt()}",
+                        "${it.longitude.toInt()}"
+                    )
                     mainViewModel.getNearbyCenter(it.latitude, it.longitude)
                 }
             }
-        })
+        }
         setListener()
     }
 
@@ -103,9 +111,9 @@ class HomeFragment: Fragment(){
     }
     private fun initAdapter(){
         areaAdapter = AreaAdapter()
-        mainViewModel.areas.observe(viewLifecycleOwner, {
+        mainViewModel.areas.observe(viewLifecycleOwner) {
             areaAdapter.list = it
-        })
+        }
         binding.fragmentHomeAreaRv.apply {
             layoutManager = GridLayoutManager(context,5)
             adapter = areaAdapter
@@ -120,39 +128,42 @@ class HomeFragment: Fragment(){
 
     }
     private fun initWeather(){
-        mainViewModel.weathers.observe(viewLifecycleOwner, {
+        mainViewModel.weathers.observe(viewLifecycleOwner) {
             var curWeather = it.response.body.items.item
             Log.d(TAG, "initWeather: $curWeather")
             var str = ""
             var temperature = ""
-            for(item in 0.. curWeather.size-1){
+            for (item in 0..curWeather.size - 1) {
 //                var str = ""
-                if(curWeather[item].category.equals("SKY")){
+                if (curWeather[item].category.equals("SKY")) {
                     str += "현재 날씨는"
-                    if(curWeather[item].fcstValue.equals("1")){
+                    if (curWeather[item].fcstValue.equals("1")) {
                         Glide.with(this)
                             .load(R.drawable.weather1)
                             .into(binding.fragmentHomeWeatherSKY)
-                    }else if(curWeather[item].fcstValue.equals("2")){
+                    } else if (curWeather[item].fcstValue.equals("2")) {
                         Glide.with(this)
                             .load(R.drawable.weather2)
                             .into(binding.fragmentHomeWeatherSKY)
-                    }else if(curWeather[item].fcstValue.equals("3")){
+                    } else if (curWeather[item].fcstValue.equals("3")) {
                         Glide.with(this)
                             .load(R.drawable.weather3)
                             .into(binding.fragmentHomeWeatherSKY)
-                    }else if(curWeather[item].fcstValue.equals("4")){
+                    } else if (curWeather[item].fcstValue.equals("4")) {
                         Glide.with(this)
                             .load(R.drawable.weather4)
                             .into(binding.fragmentHomeWeatherSKY)
                     }
                 }
 //                var temperature = ""
-                if(curWeather[item].category.equals("T3H") || curWeather[item].category.equals("T1H") || curWeather[item].category.equals("TMP")){
+                if (curWeather[item].category.equals("T3H") || curWeather[item].category.equals("T1H") || curWeather[item].category.equals(
+                        "TMP"
+                    )
+                ) {
                     binding.fragmentHomeWeatherTMP.setText(curWeather[item].fcstValue + "℃")
                 }
             }
-        })
+        }
 
     }
     private fun initBanner(){
