@@ -78,8 +78,7 @@ class MainViewModel :ViewModel(){
                            baseDate : Int, baseTime : Int, nx : String, ny : String){
 
         val response = WeatherService().getWeather(dataType, numOfRows, pageNo, baseDate, baseTime, nx, ny)
-        Log.d(TAG, "getWeather: ${response.code()}")
-        viewModelScope.launch { 
+        viewModelScope.launch {
             if(response.code() == 200){
                 var res = response.body()
                 var type = object:TypeToken<Weather>() {}.type
