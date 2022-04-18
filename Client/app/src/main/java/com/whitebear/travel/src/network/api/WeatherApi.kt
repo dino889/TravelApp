@@ -15,7 +15,7 @@ interface WeatherApi {
                            @Query("numOfRows")num_of_rows:Int,
                            @Query("pageNo")page_no:Int,
                            @Query("base_date") base_date : Int,
-                           @Query("base_time") base_time : Int,
+                           @Query("base_time") base_time : String,
                            @Query("nx") nx : String,
                            @Query("ny") ny : String) : Response<Weather>
 
