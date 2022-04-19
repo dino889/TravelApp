@@ -42,7 +42,7 @@ class LikePlaceFragment : BaseFragment<FragmentLikePlaceBinding>(FragmentLikePla
         })
         likePlaceRecyclerviewAdapter.setItemClickListener(object : LikePlaceRecyclerviewAdapter.ItemClickListener {
             override fun onClick(view: View, position: Int, placeId: Int) {
-                this@LikePlaceFragment.findNavController().navigate(R.id.placeDetailFragment, bundleOf("placeId" to placeId))
+                this@LikePlaceFragment.findNavController().navigate(R.id.placeDetailFragment, bundleOf("placeId" to placeId, "heartFlag" to true))
             }
         })
 

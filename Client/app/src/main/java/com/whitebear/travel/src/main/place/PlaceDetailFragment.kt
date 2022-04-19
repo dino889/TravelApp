@@ -1,6 +1,7 @@
 package com.whitebear.travel.src.main.place
 
 import android.animation.ValueAnimator
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -15,14 +16,23 @@ import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentPlaceDetailBinding
 import com.whitebear.travel.src.dto.Message
 import com.whitebear.travel.src.dto.PlaceLike
+import com.whitebear.travel.src.main.MainActivity
 import com.whitebear.travel.src.network.service.PlaceService
 import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 
 private const val TAG = "PlaceDetailFragment"
 class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPlaceDetailBinding::bind,R.layout.fragment_place_detail) {
+    private lateinit var mainActivity : MainActivity
+
     private var placeId = 0
     private var heartFlag = false
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.apply {
@@ -31,6 +41,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
             heartFlag = getBoolean("heartFlag")
             Log.d(TAG, "onCreate: $heartFlag")
         }
+        mainActivity.hideBottomNav(true)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -115,12 +126,9 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
             tab.text = tabList.get(position)
         }.attach()
     }
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            PlaceDetailFragment().apply {
-                arguments = Bundle().apply {
-                }
-            }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainActivity.hideBottomNav(false)
     }
 }
