@@ -213,25 +213,5 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         mainViewModel.setToday(today.toInt())
         return today
     }
-//    private fun getMeasure(){
-//        Log.d(TAG, "getMeasure: ")
-////        var sidoName = "대구"
-////        var searchCondition = "DAILY"
-////        var pageNo = 1
-////        var numOfRows = 100
-////        var returnType = "json"
-////        var serviceKey = ""
-////        var ver = 1.0
-//        Log.d(TAG, "getMeasure: $today2Type")
-//        var searchDate = "2022-04-18"
-//        var returnType  = "json"
-//        var serviceKey = "02DFWIMCh4ja1%2FJLxBL94may6yu73Byr8JXuqG6WvW9e4DTCgPCJZGHksn4qJ%2F1yKl9Vv7TWf5nxyjOPiArNuw%3D%3D"
-//        var numOfRows  = 100
-//        var page = 1
-//        Log.d(TAG, "getMeasure: 2")
-//        runBlocking {
-//            mainViewModel.getMeasure(searchDate,returnType,serviceKey,numOfRows,page)
-//        }
-////        Log.d(TAG, "getMeasure: 3")
-//    }
+
 }

@@ -5,6 +5,7 @@ import com.whitebear.travel.src.network.api.AreaApi
 import com.whitebear.travel.src.network.api.PlaceApi
 import com.whitebear.travel.src.network.api.UserApi
 import com.whitebear.travel.src.network.api.DataApi
+import com.whitebear.travel.src.network.api.*
 
 class RetrofitUtil {
     companion object {
@@ -12,5 +13,6 @@ class RetrofitUtil {
         val areaService = ApplicationClass.retrofit.create(AreaApi::class.java)
         val placeService = ApplicationClass.retrofit.create(PlaceApi::class.java)
         val dataService = ApplicationClass.retrofit.create(DataApi::class.java)
+        val routeService = ApplicationClass.retrofit.create(RouteApi::class.java)
     }
 }

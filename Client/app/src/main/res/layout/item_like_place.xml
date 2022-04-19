@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="place"
+            type="com.whitebear.travel.src.dto.Place" />
+    </data>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/likePlaceRouteItem_cl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/likePlaceRouteItem_cv"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            app:cardCornerRadius="20dp"
+            android:elevation="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/likePlaceRouteItem_tvAreaName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:rippleColor="@color/main">
+
+            <ImageView
+                android:id="@+id/likePlaceRouteItem_ivImg"
+                android:layout_width="154dp"
+                android:layout_height="154dp"
+                android:scaleType="fitXY"
+                app:imageUrlPlace="@{place.imgURL}"
+                tools:src="@drawable/ic_launcher_background" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/likePlaceRouteItem_tvAreaName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:layout_marginTop="10dp"
+            app:myLikePlaceName="@{place.address}"
+            app:layout_constraintTop_toBottomOf="@+id/likePlaceRouteItem_cv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+<!--            android:text="[대구]"-->
+
+        <TextView
+            android:id="@+id/likePlaceRouteItem_tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"
+            android:text="@{place.name.length() > 10 ? place.name.substring(0, 20) : place.name}"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/likePlaceRouteItem_tvAreaName"
+            app:layout_constraintStart_toStartOf="@+id/likePlaceRouteItem_tvAreaName"
+            app:layout_constraintTop_toBottomOf="@+id/likePlaceRouteItem_tvAreaName" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

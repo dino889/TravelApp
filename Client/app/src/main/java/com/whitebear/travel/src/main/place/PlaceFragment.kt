@@ -109,13 +109,13 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
         placeAdapter = PlaceAdapter()
 
         placeAdapter.list = mainViewModel.places.value!!
-        mainViewModel.placeLikes.observe(viewLifecycleOwner, {
+        mainViewModel.placeLikes.observe(viewLifecycleOwner) {
             placeAdapter.likeList = it
-        })
-        mainViewModel.places.observe(viewLifecycleOwner, {
+        }
+        mainViewModel.places.observe(viewLifecycleOwner) {
             Log.d(TAG, "initAdapter: $it")
             placeAdapter.list = it
-        })
+        }
         binding.fragmentPlaceRv.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
             adapter = placeAdapter

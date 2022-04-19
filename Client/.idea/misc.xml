@@ -56,6 +56,7 @@
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/fragment_place_review.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/fragment_recently_keyword.xml" value="0.35648148148148145" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/fragment_reset_password.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/fragment_route.xml" value="0.190625" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/fragment_setting.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/fragment_sign_in.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/fragment_sign_up.xml" value="0.33" />
@@ -65,8 +66,11 @@
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/item_faq_category.xml" value="0.9" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/item_like_place_route.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/item_place.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/item_place_nav.xml" value="0.190625" />
+        <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/item_place_review.xml" value="0.190625" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/item_recently_keyword.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/item_recently_view.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/item_route.xml" value="0.190625" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/itme_faq_category.xml" value="0.75" />
       </map>
     </option>

@@ -106,4 +106,19 @@
         android:name="com.whitebear.travel.src.main.home.AreaFragment"
         android:label="fragment_area"
         tools:layout="@layout/fragment_area" />
+
+    <fragment
+        android:id="@+id/likePlaceFragment"
+        android:name="com.whitebear.travel.src.main.my.LikePlaceFragment"
+        android:label="fragment_likePlace"
+        tools:layout="@layout/fragment_like_place">
+        <action
+            android:id="@+id/action_likePlaceFragment_to_placeDetailFragment"
+            app:destination="@id/placeDetailFragment" />
+        <argument
+            android:name="placeId"
+            android:defaultValue="0"
+            app:argType="integer"/>
+    </fragment>
+
 </navigation>

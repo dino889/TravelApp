@@ -3,18 +3,17 @@ package com.whitebear.travel.src.network.binding
 import android.annotation.SuppressLint
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.whitebear.travel.R
-import com.whitebear.travel.src.dto.Area
-import com.whitebear.travel.src.dto.Place
-import com.whitebear.travel.src.dto.PlaceReview
-import com.whitebear.travel.src.dto.Weather
+import com.whitebear.travel.src.dto.*
 import com.whitebear.travel.src.main.home.AreaAdapter
 import com.whitebear.travel.src.main.home.NavPlaceAdapter
 import com.whitebear.travel.src.main.place.PlaceAdapter
 import com.whitebear.travel.src.main.place.PlaceReviewAdapter
+import com.whitebear.travel.src.main.route.RouteAdapter
 
 @BindingAdapter("imageUrlArea")
 fun bindImageArea(imgView:ImageView, imgUrl:String?){
@@ -43,7 +42,10 @@ fun bindImagePlace(imgView:ImageView, imgUrl: String?){
         .load(imgUrl)
         .into(imgView)
 }
-
+@BindingAdapter("textViewRoutePlaceListSize")
+fun bindTextViewRoutePlaceListSize(textView: TextView, size:Int){
+    textView.text = "총 ${size}곳"
+}
 @SuppressLint("SetTextI18n")
 @BindingAdapter("textViewContent")
 fun bindTextViewContent(textView: TextView, content:String){
@@ -62,6 +64,7 @@ fun bindTextViewTitle(textView: TextView, title:String){
         textView.text = title
     }
 }
+@SuppressLint("NotifyDataSetChanged")
 @BindingAdapter("placeListData")
 fun bindPlaceRecyclerView(recyclerView: RecyclerView, data:List<Place>?){
     var adapter = recyclerView.adapter as PlaceAdapter
@@ -72,6 +75,19 @@ fun bindPlaceRecyclerView(recyclerView: RecyclerView, data:List<Place>?){
         adapter = recyclerView.adapter as PlaceAdapter
     }
     adapter.list = data as MutableList<Place>
+    adapter.notifyDataSetChanged()
+}
+@SuppressLint("NotifyDataSetChanged")
+@BindingAdapter("routeListData")
+fun bindRouteRecyclerView(recyclerView: RecyclerView, data:List<Route>?){
+    var adapter = recyclerView.adapter as RouteAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as RouteAdapter
+    }
+    adapter.list = data as MutableList<Route>
     adapter.notifyDataSetChanged()
 }
 @BindingAdapter("placeReviewListData")
@@ -141,3 +157,13 @@ fun bindPlaceNavRecyclerView(recyclerView: RecyclerView, data:List<Place>?) {
 //    }
 //
 //}
+
+@BindingAdapter("myLikePlaceName")
+fun bindLikePlaceName(textView: TextView, address: String) {
+    val tmp = address.split(" ")
+    if(tmp.size > 1) {
+        textView.text = "[${tmp[0]}]"
+    } else if(tmp.size == 0) {
+        textView.isVisible = false
+    }
+}
