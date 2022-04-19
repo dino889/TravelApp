@@ -1,8 +1,6 @@
 package com.whitebear.travel.src.main.home
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -10,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -21,14 +18,16 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
-import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentHomeBinding
 import com.whitebear.travel.src.dto.Weather
 import com.whitebear.travel.src.main.MainActivity
+import com.whitebear.travel.src.network.service.DataService
 import com.whitebear.travel.src.network.viewmodel.MainViewModel
 import kotlinx.coroutines.runBlocking
-import java.time.LocalDateTime
+import java.lang.Exception
+import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.*
 
 private const val TAG = "HomeFragment"
 class HomeFragment: Fragment(){
@@ -49,26 +48,22 @@ class HomeFragment: Fragment(){
     private lateinit var binding : FragmentHomeBinding
     val mainViewModel : MainViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-//        return super.onCreateView(inflater, container, savedInstanceState)
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
     }
-    @RequiresApi(Build.VERSION_CODES.O)
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
@@ -91,6 +86,8 @@ class HomeFragment: Fragment(){
             }
         }
         setListener()
+
+//        getCovidState()
     }
 
     fun setListener(){
@@ -226,11 +223,26 @@ class HomeFragment: Fragment(){
         myHandler.removeMessages(0)
     }
 
-    companion object {
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                }
+    /**
+     * 코로나 확진자 현황 받아오는 함수
+     */
+    private fun getCovidState() {
+        val todayDate = LocalDate.now()
+        val yesterdayDate = todayDate.minusDays(1)
+        val dateFormat = DateTimeFormatter.ofPattern("yyyyMMdd")
+        val today = dateFormat.format(todayDate)
+        val yesterday = dateFormat.format(yesterdayDate)
+
+
+        Log.d(TAG, "getCovidState: $yesterday / $today")
+        try {
+            runBlocking {
+//                var response = DataService().getCovidState(yesterday, today)
+                var response = DataService().getCovidState("20220417", "20220418")
+                Log.d(TAG, "getCovidState: $response")
             }
+        } catch (e : Exception) {
+            Log.e(TAG, "getCovidState: ${e.printStackTrace()} ${e.message}", )
+        }
     }
 }

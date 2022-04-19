@@ -26,7 +26,7 @@ interface PlaceApi {
     suspend fun placeLike(@Body placeLike: PlaceLike) : Response<Message>
 
     @GET("places/userlike/{id}")
-    suspend fun getLikePlacebyUser(@Path("id")userId:Int) : Response<Message2>
+    suspend fun getLikePlacebyUser(@Path("id") userId:Int) : Response<Message2>
 
     @GET("places")
     suspend fun getPlaceByAreaToSort(@Query("areaName") areaName : String, @Query("sort")sort:String) : Response<Message>
