@@ -98,8 +98,10 @@ class HomeFragment: Fragment(){
         initButton()
         initBanner()
         initAdapter()
-        initWeather()
-        initMeasure()
+        if(mainViewModel.userLoc.value != null){
+            initWeather()
+            initMeasure()
+        }
     }
 
     fun initButton(){
@@ -130,13 +132,8 @@ class HomeFragment: Fragment(){
     private fun initWeather(){
         mainViewModel.weathers.observe(viewLifecycleOwner) {
             var curWeather = it.response.body.items.item
-            Log.d(TAG, "initWeather: $curWeather")
-            var str = ""
-            var temperature = ""
             for (item in 0..curWeather.size - 1) {
-//                var str = ""
                 if (curWeather[item].category.equals("SKY")) {
-                    str += "현재 날씨는"
                     if (curWeather[item].fcstValue.equals("1")) {
                         Glide.with(this)
                             .load(R.drawable.weather1)
@@ -155,11 +152,7 @@ class HomeFragment: Fragment(){
                             .into(binding.fragmentHomeWeatherSKY)
                     }
                 }
-//                var temperature = ""
-                if (curWeather[item].category.equals("T3H") || curWeather[item].category.equals("T1H") || curWeather[item].category.equals(
-                        "TMP"
-                    )
-                ) {
+                if (curWeather[item].category.equals("T3H") || curWeather[item].category.equals("T1H") || curWeather[item].category.equals("TMP")) {
                     binding.fragmentHomeWeatherTMP.setText(curWeather[item].fcstValue + "℃")
                 }
             }

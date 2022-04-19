@@ -9,5 +9,5 @@ data class Route(
     val placeIdList: String,
     val rating: Int,
     val reivewCnt: Int,
-    val type: Any
+    val type: String
 )

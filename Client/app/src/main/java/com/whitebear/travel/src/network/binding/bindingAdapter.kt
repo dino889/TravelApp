@@ -34,18 +34,7 @@ fun bindAreaRecyclerView(recyclerView: RecyclerView, data:List<Area>?){
     adapter.list = data as MutableList<Area>
     adapter.notifyDataSetChanged()
 }
-@BindingAdapter("routeListData")
-fun bindRouteRecyclerView(recyclerView: RecyclerView, data:List<Route>?){
-    var adapter = recyclerView.adapter as RouteAdapter
-    if(recyclerView.adapter == null){
-        adapter.setHasStableIds(true)
-        recyclerView.adapter = adapter
-    }else{
-        adapter = recyclerView.adapter as RouteAdapter
-    }
-    adapter.list = data as MutableList<Route>
-    adapter.notifyDataSetChanged()
-}
+
 @BindingAdapter("imageUrlPlace")
 fun bindImagePlace(imgView:ImageView, imgUrl: String?){
     Glide.with(imgView.context)
@@ -74,6 +63,7 @@ fun bindTextViewTitle(textView: TextView, title:String){
         textView.text = title
     }
 }
+@SuppressLint("NotifyDataSetChanged")
 @BindingAdapter("placeListData")
 fun bindPlaceRecyclerView(recyclerView: RecyclerView, data:List<Place>?){
     var adapter = recyclerView.adapter as PlaceAdapter
@@ -84,6 +74,19 @@ fun bindPlaceRecyclerView(recyclerView: RecyclerView, data:List<Place>?){
         adapter = recyclerView.adapter as PlaceAdapter
     }
     adapter.list = data as MutableList<Place>
+    adapter.notifyDataSetChanged()
+}
+@SuppressLint("NotifyDataSetChanged")
+@BindingAdapter("routeListData")
+fun bindRouteRecyclerView(recyclerView: RecyclerView, data:List<Route>?){
+    var adapter = recyclerView.adapter as RouteAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as RouteAdapter
+    }
+    adapter.list = data as MutableList<Route>
     adapter.notifyDataSetChanged()
 }
 @BindingAdapter("placeReviewListData")

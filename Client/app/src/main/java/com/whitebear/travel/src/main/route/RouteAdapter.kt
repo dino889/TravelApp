@@ -15,18 +15,18 @@ class RouteAdapter : RecyclerView.Adapter<RouteAdapter.RouteViewHolder>(){
     var list = mutableListOf<Route>()
     var likeList = mutableListOf<Route>()
     var filteredList = list
+
     inner class RouteViewHolder(private val binding : ItemRouteBinding) : RecyclerView.ViewHolder(binding.root){
+
         fun bind(route : Route){
-            Log.d("TAG", "bind: $route")
+            Log.d("TAG2", "onBindViewHolder: ${filteredList}")
             for(i in likeList){
                 if(route.id == i.id){
                     binding.frragmentRouteRouteLike.progress = 0.5F
                     break
                 }
                 binding.frragmentRouteRouteLike.progress = 0F
-                //heart 안채우기
             }
-
             binding.route = route
             binding.executePendingBindings()
         }
@@ -37,6 +37,7 @@ class RouteAdapter : RecyclerView.Adapter<RouteAdapter.RouteViewHolder>(){
     }
 
     override fun onBindViewHolder(holder: RouteViewHolder, position: Int) {
+        Log.d("TAG1", "onBindViewHolder: ${list}")
         holder.apply {
             bind(filteredList[position])
             var heart = itemView.findViewById<LottieAnimationView>(R.id.frragment_route_routeLike)

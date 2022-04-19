@@ -517,6 +517,7 @@ class MainViewModel :ViewModel(){
                 if(res!=null){
                     var type = object : TypeToken<MutableList<Route>>() {}.type
                     var routeList = CommonUtils.parseDto<MutableList<Route>>(res.data,type)
+                    Log.d(TAG, "getRoutes: $routeList")
                     setRoutes(routeList)
                 }
             }

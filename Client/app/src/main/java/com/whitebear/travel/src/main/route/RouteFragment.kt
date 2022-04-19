@@ -38,14 +38,14 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
         runBlocking {
-            mainViewModel.getRoutes("대구")
+            mainViewModel.getRoutes(areaName)
             mainViewModel.getRoutesLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
         }
         setListener()
     }
-    fun setListener(){
-        initTabLayout()
+    private fun setListener(){
         initAdapter()
+        initTabLayout()
     }
     private fun initTabLayout(){
         var areas = mainViewModel.areas.value!!
@@ -77,13 +77,16 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     private fun initAdapter(){
         routeAdapter = RouteAdapter()
         routeAdapter.list = mainViewModel.routes.value!!
-        mainViewModel.routes.observe(viewLifecycleOwner, {
+
+        mainViewModel.routesLikes.observe(viewLifecycleOwner) {
+            routeAdapter.likeList = it
+        }
+
+        mainViewModel.routes.observe(viewLifecycleOwner) {
             Log.d(TAG, "initAdapter: $it")
             routeAdapter.list = it
-        })
-        mainViewModel.routesLikes.observe(viewLifecycleOwner, {
-            routeAdapter.likeList = it
-        })
+        }
+
         binding.fragmentRouteRv.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
             adapter = routeAdapter
