@@ -3,6 +3,7 @@ package com.whitebear.travel.src.network.binding
 import android.annotation.SuppressLint
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -156,3 +157,13 @@ fun bindPlaceNavRecyclerView(recyclerView: RecyclerView, data:List<Place>?) {
 //    }
 //
 //}
+
+@BindingAdapter("myLikePlaceName")
+fun bindLikePlaceName(textView: TextView, address: String) {
+    val tmp = address.split(" ")
+    if(tmp.size > 1) {
+        textView.text = "[${tmp[0]}]"
+    } else if(tmp.size == 0) {
+        textView.isVisible = false
+    }
+}

@@ -49,11 +49,6 @@ class HomeFragment: Fragment(){
     private lateinit var binding : FragmentHomeBinding
     val mainViewModel : MainViewModel by activityViewModels()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -226,11 +221,5 @@ class HomeFragment: Fragment(){
         myHandler.removeMessages(0)
     }
 
-    companion object {
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                }
-            }
-    }
+
 }
