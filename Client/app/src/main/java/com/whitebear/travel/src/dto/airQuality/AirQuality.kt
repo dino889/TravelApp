@@ -5,5 +5,5 @@ import com.whitebear.travel.src.dto.Responses
 
 data class AirQuality (
     @SerializedName("response")
-    val response: Responses
-    )
+    val response: Responses<Any?>
+)
