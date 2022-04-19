@@ -15,6 +15,7 @@ import com.whitebear.travel.src.dto.tm.TmCoordinatesResponse
 import com.whitebear.travel.src.network.service.*
 import com.whitebear.travel.util.CommonUtils
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.lang.reflect.Type
 import kotlin.collections.HashMap
 import kotlin.math.log
@@ -499,16 +500,31 @@ class MainViewModel :ViewModel(){
      * */
     private val _routes = MutableLiveData<MutableList<Route>>()
     private val _routesLikes = MutableLiveData<MutableList<Route>>()
+    private val _route = MutableLiveData<Route>()
+    private val _placeToRoutes = MutableLiveData<MutableList<Place>>()
+
     val routes : LiveData<MutableList<Route>>
         get() = _routes
     val routesLikes : LiveData<MutableList<Route>>
         get() = _routesLikes
+    val route : LiveData<Route>
+        get() = _route
+    val placesToRoutes : LiveData<MutableList<Place>>
+        get() = _placeToRoutes
+
     private fun setRoutes(routes: MutableList<Route>) = viewModelScope.launch {
         _routes.value = routes
     }
     private fun setRoutesLikes(routes:MutableList<Route>) = viewModelScope.launch {
         _routesLikes.value = routes
     }
+    private fun setRoute(route:Route) = viewModelScope.launch {
+        _route.value = route
+    }
+    private fun setPlaceToRoute(places:MutableList<Place>) = viewModelScope.launch {
+        _placeToRoutes.value = places
+    }
+
     suspend fun getRoutes(areaName:String){
         val response = RouteService().getRouteByArea(areaName)
         viewModelScope.launch {
@@ -537,39 +553,47 @@ class MainViewModel :ViewModel(){
             }
         }
     }
+
     suspend fun getRoutesLikes(userId: Int){
         val response = RouteService().getRouteLikeByUser(userId)
         Log.d(TAG, "getRoutesLikes: ${response.code()}")
         viewModelScope.launch {
             if(response.code() == 200 || response.code() == 500 || response.code() == 201){
                 val res = response.body()
-
                 if(res!=null){
                     if(res.isSuccess){
-//                        var routes = mutableListOf<Route>()
-                        Log.d(TAG, "getRoutesLikes: ${res.data}")
-//                        for(i in 0..res.data.size - 1){
-                            var type = object : TypeToken<MutableList<Route>>() {}.type
-                            var route:MutableList<Route> = CommonUtils.parseDto(res.data, type)
-//                            places.add(place)
-//                        }
-                        setRoutesLikes(route)
+                        Log.d(TAG, "getRoutesLikes: ${res.data[0].get("place_list")}")
+                        var routes = mutableListOf<Route>()
+                        for(i in 0..res.data.size - 1){
+                            var type = object : TypeToken<Route>() {}.type
+                            var route:Route = CommonUtils.parseDto(res.data[i].get("place_list")!!, type)
+                            routes.add(route)
+                        }
+                        setRoutesLikes(routes)
                     }
                 }
             }
         }
     }
-//    suspend fun getRoute(id:Int){
-//        val response = RouteService().getRoute(id)
-//        viewModelScope.launch {
-//            if(response.code()==200 || response.code() == 500){
-//                val res = response.body()
-//                if(res!=null){
-//                    var type = object : TypeToken<Place>() {}.type
-//                    var place = CommonUtils.parseDto<Place>(res.data, type)
-//                    setPlaceOne(place)
-//                }
-//            }
-//        }
-//    }
+    fun getRoute(id:Int){
+        var routes = routes.value!!
+        for(item in routes){
+            if(item.id == id){
+                setRoute(item)
+            }
+        }
+    }
+    fun getPlaceToRoute(){
+        var places = route.value!!.placeIdList
+        var placeArr = mutableListOf<Place>()
+        for(i in places){
+            runBlocking {
+//                getPlace(i)
+            }
+//            placeArr.add(place.value!!)
+        }
+//        setPlaceToRoute(placeArr)
+
+        setPlaceToRoute(placeArr)
+    }
 }

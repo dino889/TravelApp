@@ -45,7 +45,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/fragment_route_Name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/fragment_route_Name"
-            app:lottie_autoPlay="true"
+            app:lottie_autoPlay="false"
             app:lottie_fileName="heart.json"
             app:lottie_loop="false" />
 

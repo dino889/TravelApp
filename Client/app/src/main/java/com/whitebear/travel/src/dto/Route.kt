@@ -7,7 +7,7 @@ data class Route(
     val imgURL: String,
     val name: String,
     val placeIdList: String,
-    val rating: Int,
+    val rating: Float,
     val reivewCnt: Int,
     val type: String
 )
