@@ -12,14 +12,12 @@ import com.whitebear.travel.src.dto.airQuality.AirQuality
 import com.whitebear.travel.src.dto.airQuality.Measure
 import com.whitebear.travel.src.dto.stationResponse.StationResponse
 import com.whitebear.travel.src.dto.tm.TmCoordinatesResponse
-import com.whitebear.travel.src.network.service.AreaService
-import com.whitebear.travel.src.network.service.PlaceService
-import com.whitebear.travel.src.network.service.UserService
-import com.whitebear.travel.src.network.service.WeatherService
+import com.whitebear.travel.src.network.service.*
 import com.whitebear.travel.util.CommonUtils
 import kotlinx.coroutines.launch
 import java.lang.reflect.Type
 import kotlin.collections.HashMap
+import kotlin.math.log
 
 private const val TAG = "mainViewModel"
 class MainViewModel :ViewModel(){
@@ -495,4 +493,82 @@ class MainViewModel :ViewModel(){
 
         Log.d(TAG, "insertKeywords: $keywords")
     }
+
+    /**
+     * Route ViewModel
+     * */
+    private val _routes = MutableLiveData<MutableList<Route>>()
+    private val _routesLikes = MutableLiveData<MutableList<Route>>()
+    val routes : LiveData<MutableList<Route>>
+        get() = _routes
+    val routesLikes : LiveData<MutableList<Route>>
+        get() = _routesLikes
+    private fun setRoutes(routes: MutableList<Route>) = viewModelScope.launch {
+        _routes.value = routes
+    }
+    private fun setRoutesLikes(routes:MutableList<Route>) = viewModelScope.launch {
+        _routesLikes.value = routes
+    }
+    suspend fun getRoutes(areaName:String){
+        val response = RouteService().getRouteByArea(areaName)
+        viewModelScope.launch {
+            if(response.code() == 200 || response.code() == 500){
+                val res = response.body()
+                if(res!=null){
+                    var type = object : TypeToken<MutableList<Route>>() {}.type
+                    var routeList = CommonUtils.parseDto<MutableList<Route>>(res.data,type)
+                    setRoutes(routeList)
+                }
+            }
+        }
+    }
+    suspend fun getRoutesToSort(areaName: String, sort:String){
+        val response = RouteService().getRouteByAreaToSort(areaName,sort)
+        Log.d(TAG, "getPlacesToSort: SORT $sort")
+        viewModelScope.launch {
+            if(response.code() == 200 || response.code() == 500){
+                val res = response.body()
+                if(res!=null){
+                    var type = object : TypeToken<MutableList<Route>>() {}.type
+                    var routeList = CommonUtils.parseDto<MutableList<Route>>(res.data,type)
+                    setRoutes(routeList)
+                }
+            }
+        }
+    }
+    suspend fun getRoutesLikes(userId: Int){
+        val response = RouteService().getRouteLikeByUser(userId)
+        Log.d(TAG, "getRoutesLikes: ${response.code()}")
+        viewModelScope.launch {
+            if(response.code() == 200 || response.code() == 500 || response.code() == 201){
+                val res = response.body()
+
+                if(res!=null){
+                    if(res.isSuccess){
+//                        var routes = mutableListOf<Route>()
+                        Log.d(TAG, "getRoutesLikes: ${res.data}")
+//                        for(i in 0..res.data.size - 1){
+                            var type = object : TypeToken<MutableList<Route>>() {}.type
+                            var route:MutableList<Route> = CommonUtils.parseDto(res.data, type)
+//                            places.add(place)
+//                        }
+                        setRoutesLikes(route)
+                    }
+                }
+            }
+        }
+    }
+//    suspend fun getRoute(id:Int){
+//        val response = RouteService().getRoute(id)
+//        viewModelScope.launch {
+//            if(response.code()==200 || response.code() == 500){
+//                val res = response.body()
+//                if(res!=null){
+//                    var type = object : TypeToken<Place>() {}.type
+//                    var place = CommonUtils.parseDto<Place>(res.data, type)
+//                    setPlaceOne(place)
+//                }
+//            }
+//        }
+//    }
 }
