@@ -13,7 +13,7 @@ class LikePlaceRecyclerviewAdapter() : RecyclerView.Adapter<LikePlaceRecyclervie
     var list = mutableListOf<Place>()
 
     inner class MyScheduleViewHolder(private val binding: ItemLikePlaceBinding) : RecyclerView.ViewHolder(binding.root) {
-        val likePlace = binding.likePlaceRouteItemCv
+        val likePlace = binding.likePlaceRouteItemCl
         fun bind(place: Place) {
             binding.place = place
             binding.executePendingBindings()
