@@ -1,6 +1,7 @@
 package com.whitebear.travel.src.network.api
 
 import com.whitebear.travel.src.dto.Message
+import com.whitebear.travel.src.dto.Message2
 import com.whitebear.travel.src.dto.RouteLike
 import com.whitebear.travel.src.dto.RouteReview
 import retrofit2.Response
@@ -14,7 +15,7 @@ interface RouteApi {
     suspend fun getRouteByAreaToSort(@Query("areaName") areaName:String,@Query("sort") sorting:String) : Response<Message>
 
     @GET("place_list/userlike/{id}")
-    suspend fun getRouteLikeByUser(@Path("id")userId:Int) : Response<Message>
+    suspend fun getRouteLikeByUser(@Path("id")userId:Int) : Response<Message2>
 
     @POST("place_list/review")
     suspend fun insertRouteReview(@Body review: RouteReview) : Response<Message>

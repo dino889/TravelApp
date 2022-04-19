@@ -4,6 +4,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
@@ -11,7 +13,7 @@ import com.whitebear.travel.R
 import com.whitebear.travel.databinding.ItemRouteBinding
 import com.whitebear.travel.src.dto.Route
 
-class RouteAdapter : RecyclerView.Adapter<RouteAdapter.RouteViewHolder>(){
+class RouteAdapter : RecyclerView.Adapter<RouteAdapter.RouteViewHolder>(),Filterable{
     var list = mutableListOf<Route>()
     var likeList = mutableListOf<Route>()
     var filteredList = list
@@ -19,7 +21,6 @@ class RouteAdapter : RecyclerView.Adapter<RouteAdapter.RouteViewHolder>(){
     inner class RouteViewHolder(private val binding : ItemRouteBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(route : Route){
-            Log.d("TAG2", "onBindViewHolder: ${filteredList}")
             for(i in likeList){
                 if(route.id == i.id){
                     binding.frragmentRouteRouteLike.progress = 0.5F
@@ -37,7 +38,6 @@ class RouteAdapter : RecyclerView.Adapter<RouteAdapter.RouteViewHolder>(){
     }
 
     override fun onBindViewHolder(holder: RouteViewHolder, position: Int) {
-        Log.d("TAG1", "onBindViewHolder: ${list}")
         holder.apply {
             bind(filteredList[position])
             var heart = itemView.findViewById<LottieAnimationView>(R.id.frragment_route_routeLike)
@@ -61,6 +61,33 @@ class RouteAdapter : RecyclerView.Adapter<RouteAdapter.RouteViewHolder>(){
     private lateinit var itemClickListener : ItemClickListener
     fun setOnItemClickListener(itemClickListener: ItemClickListener){
         this.itemClickListener = itemClickListener
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                val charString = constraint.toString()
+                filteredList = if(charString.isEmpty()){
+                    list
+                }else{
+                    val filteringList = ArrayList<Route>()
+                    for(item in list){
+                        if(item.description.contains(charString)) filteringList.add(item)
+                        if(item.name.contains(charString)) filteringList.add(item)
+                    }
+                    filteringList
+                }
+                val filterResults = FilterResults()
+                filterResults.values = filteredList
+                return filterResults
+            }
+
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                filteredList = results?.values as MutableList<Route>
+                notifyDataSetChanged()
+            }
+
+        }
     }
 
 }

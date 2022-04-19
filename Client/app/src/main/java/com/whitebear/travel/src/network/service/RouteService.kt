@@ -1,6 +1,7 @@
 package com.whitebear.travel.src.network.service
 
 import com.whitebear.travel.src.dto.Message
+import com.whitebear.travel.src.dto.Message2
 import com.whitebear.travel.src.dto.RouteLike
 import com.whitebear.travel.src.dto.RouteReview
 import com.whitebear.travel.util.RetrofitUtil
@@ -13,7 +14,7 @@ class RouteService {
 
     suspend fun getRouteByAreaToSort(areaName:String, sort:String) : Response<Message> = RetrofitUtil.routeService.getRouteByAreaToSort(areaName,sort)
 
-    suspend fun getRouteLikeByUser(userId:Int) : Response<Message> = RetrofitUtil.routeService.getRouteLikeByUser(userId)
+    suspend fun getRouteLikeByUser(userId:Int) : Response<Message2> = RetrofitUtil.routeService.getRouteLikeByUser(userId)
 
     suspend fun insertRouteReview(review:RouteReview) : Response<Message> = RetrofitUtil.routeService.insertRouteReview(review)
 
