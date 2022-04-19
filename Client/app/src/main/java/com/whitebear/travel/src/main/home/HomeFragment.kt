@@ -1,8 +1,6 @@
 package com.whitebear.travel.src.main.home
 
-import android.annotation.SuppressLint
 import android.content.Context
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -10,7 +8,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -21,20 +18,14 @@ import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
-import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentHomeBinding
-import com.whitebear.travel.src.dto.Responses
 import com.whitebear.travel.src.dto.Weather
-import com.whitebear.travel.src.dto.covid.Covid
 import com.whitebear.travel.src.main.MainActivity
 import com.whitebear.travel.src.network.service.DataService
 import com.whitebear.travel.src.network.viewmodel.MainViewModel
 import kotlinx.coroutines.runBlocking
-import retrofit2.Response
 import java.lang.Exception
-import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 
@@ -101,7 +92,7 @@ class HomeFragment: Fragment(){
         })
         setListener()
 
-        getCovidState()
+//        getCovidState()
     }
 
     fun setListener(){
