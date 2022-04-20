@@ -1,6 +1,8 @@
 package com.whitebear.travel.src.main.home
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Message
@@ -8,17 +10,21 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.Glide
 import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.databinding.FragmentHomeBinding
+import com.whitebear.travel.src.dto.Place
+import com.whitebear.travel.src.dto.Route
 import com.whitebear.travel.src.dto.Weather
 import com.whitebear.travel.src.main.MainActivity
 import com.whitebear.travel.src.network.service.DataService
@@ -43,6 +49,8 @@ class HomeFragment: Fragment(){
 
     //adapter
     private lateinit var areaAdapter:AreaAdapter
+    private lateinit var bestRoutesAdapter: BestRoutesAdapter
+    private lateinit var bestPlaceAdapter: BestPlaceAdapter
 
     private lateinit var mainActivity:MainActivity
     private lateinit var binding : FragmentHomeBinding
@@ -70,6 +78,8 @@ class HomeFragment: Fragment(){
         runBlocking {
             mainViewModel.getUserInfo(ApplicationClass.sharedPreferencesUtil.getUser().id, true)
             mainViewModel.getAreas()
+            mainViewModel.getPlaces("")
+            mainViewModel.getRoutes("")
         }
 
         mainViewModel.userLoc.observe(viewLifecycleOwner) {
@@ -124,6 +134,33 @@ class HomeFragment: Fragment(){
             }
         })
 
+        bestRoutesAdapter = BestRoutesAdapter()
+        mainViewModel.routes.observe(viewLifecycleOwner) {
+            var arr = mutableListOf<Route>()
+            for(item in 0..5){
+                arr.add(it[item])
+            }
+            bestRoutesAdapter.list = arr
+        }
+        binding.fragmentHomeBestRouteRv.apply {
+            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+            adapter= bestRoutesAdapter
+            adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        }
+
+        bestPlaceAdapter = BestPlaceAdapter()
+        mainViewModel.places.observe(viewLifecycleOwner) {
+            var arr= mutableListOf<Place>()
+            for(item in 0..5){
+                arr.add(it[item])
+            }
+            bestPlaceAdapter.list = arr
+        }
+        binding.fragmentBestPlaceRv.apply {
+            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+            adapter= bestPlaceAdapter
+            adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        }
     }
 
     private fun initWeather(){
@@ -188,8 +225,9 @@ class HomeFragment: Fragment(){
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun initMeasure(){
-        mainViewModel.coordinates.observe(viewLifecycleOwner, {
+        mainViewModel.coordinates.observe(viewLifecycleOwner) {
 //            var tm = mainViewModel.coordinates.value!!
             var tm = it
             var tmX = tm.documents!![0]!!.x
@@ -197,9 +235,9 @@ class HomeFragment: Fragment(){
             runBlocking {
                 mainViewModel.getFindMyCenter(tmX!!, tmY!!)
             }
-        })
+        }
 
-        mainViewModel.stations.observe(viewLifecycleOwner, {
+        mainViewModel.stations.observe(viewLifecycleOwner) {
 //            var station = mainViewModel.stations.value!!
             var station = it
             var stationName = station.response!!.body!!.stations?.get(0)!!.stationName
@@ -207,15 +245,15 @@ class HomeFragment: Fragment(){
             runBlocking {
                 mainViewModel.getAirQuality(stationName!!)
             }
-        })
+        }
 
 
-        mainViewModel.air.observe(viewLifecycleOwner, {
+        mainViewModel.air.observe(viewLifecycleOwner) {
             var curAir = it.response!!.body!!.measuredValues?.get(0)
             Log.d(TAG, "initMeasure: $curAir")
             binding.fragmentHomePm10.text = "미세먼지 ${curAir!!.pm10Value}"
             binding.fragmentHomePm25.text = "초미세먼지 ${curAir!!.pm25Value} |"
-        })
+        }
     }
 
     private fun autoScrollStart(intervalTime:Long){
@@ -230,13 +268,13 @@ class HomeFragment: Fragment(){
     /**
      * 코로나 확진자 현황 받아오는 함수
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getCovidState() {
         val todayDate = LocalDate.now()
         val yesterdayDate = todayDate.minusDays(1)
         val dateFormat = DateTimeFormatter.ofPattern("yyyyMMdd")
         val today = dateFormat.format(todayDate)
         val yesterday = dateFormat.format(yesterdayDate)
-
 
         Log.d(TAG, "getCovidState: $yesterday / $today")
         try {

@@ -10,6 +10,8 @@ import com.bumptech.glide.Glide
 import com.whitebear.travel.R
 import com.whitebear.travel.src.dto.*
 import com.whitebear.travel.src.main.home.AreaAdapter
+import com.whitebear.travel.src.main.home.BestPlaceAdapter
+import com.whitebear.travel.src.main.home.BestRoutesAdapter
 import com.whitebear.travel.src.main.home.NavPlaceAdapter
 import com.whitebear.travel.src.main.place.PlaceAdapter
 import com.whitebear.travel.src.main.place.PlaceReviewAdapter
@@ -35,7 +37,30 @@ fun bindAreaRecyclerView(recyclerView: RecyclerView, data:List<Area>?){
     adapter.list = data as MutableList<Area>
     adapter.notifyDataSetChanged()
 }
-
+@BindingAdapter("bestRoutesListData")
+fun bindBestRouteRecyclerView(recyclerView: RecyclerView, data:List<Route>?){
+    var adapter = recyclerView.adapter as BestRoutesAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as BestRoutesAdapter
+    }
+    adapter.list = data as MutableList<Route>
+    adapter.notifyDataSetChanged()
+}
+@BindingAdapter("bestPlacesListData")
+fun bindBestPlaceRecyclerView(recyclerView: RecyclerView, data:List<Place>?){
+    var adapter = recyclerView.adapter as BestPlaceAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as BestPlaceAdapter
+    }
+    adapter.list = data as MutableList<Place>
+    adapter.notifyDataSetChanged()
+}
 @BindingAdapter("imageUrlPlace")
 fun bindImagePlace(imgView:ImageView, imgUrl: String?){
     Glide.with(imgView.context)
