@@ -561,20 +561,22 @@ class MainViewModel :ViewModel(){
 
     suspend fun getRoutesLikes(userId: Int){
         val response = RouteService().getRouteLikeByUser(userId)
-        Log.d(TAG, "getRoutesLikes: ${response.code()}")
         viewModelScope.launch {
             if(response.code() == 200 || response.code() == 500 || response.code() == 201){
                 val res = response.body()
                 if(res!=null){
                     if(res.isSuccess){
-                        Log.d(TAG, "getRoutesLikes: ${res.data[0].get("place_list")}")
-                        var routes = mutableListOf<Route>()
-                        for(i in 0..res.data.size - 1){
-                            var type = object : TypeToken<Route>() {}.type
-                            var route:Route = CommonUtils.parseDto(res.data[i].get("place_list")!!, type)
-                            routes.add(route)
+                        Log.d(TAG, "getRoutesLikes: ${res.data}")
+                        if(res.data.isNotEmpty()) {
+                            Log.d(TAG, "getRoutesLikes: ${res.data[0].get("place_list")}")
+                            var routes = mutableListOf<Route>()
+                            for(i in 0..res.data.size - 1){
+                                var type = object : TypeToken<Route>() {}.type
+                                var route:Route = CommonUtils.parseDto(res.data[i].get("place_list")!!, type)
+                                routes.add(route)
+                            }
+                            setRoutesLikes(routes)
                         }
-                        setRoutesLikes(routes)
                     }
                 }
             }
