@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.*
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
@@ -57,15 +58,18 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     private fun setListener(){
         initAdapter()
         initTabLayout()
+        initSpinner()
     }
     private fun initTabLayout(){
         var areas = mainViewModel.areas.value!!
         for(item in 0..areas.size-1){
             binding.fragmentRouteTabLayout.addTab(binding.fragmentRouteTabLayout.newTab().setText(areas[item].name))
         }
-        routeAdapter = RouteAdapter()
+        routeAdapter = RouteAdapter(mainViewModel)
         binding.fragmentRouteTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
+                binding.fragmentRouteFilterSpinner.setSelection(0)
+
                 if(tab != null){
                     areaName = tab?.text.toString()
                 }
@@ -86,7 +90,7 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
 
     }
     private fun initAdapter(){
-        routeAdapter = RouteAdapter()
+        routeAdapter = RouteAdapter(mainViewModel)
         routeAdapter.list = mainViewModel.routes.value!!
 
         mainViewModel.routesLikes.observe(viewLifecycleOwner) {
@@ -178,7 +182,9 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             .load(route.imgURL)
             .into(dialogView.findViewById<ImageView>(R.id.fragment_route_detailImg))
 
-        mainViewModel.getPlaceToRoute()
+       runBlocking {
+           mainViewModel.getRoutesInPlaceArr(route.placeIdList)
+       }
         var routeDetailAdapter = RouteDetailAdapter()
         mainViewModel.placesToRoutes.observe(viewLifecycleOwner) {
             routeDetailAdapter.list = it
@@ -187,6 +193,13 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
             adapter = routeDetailAdapter
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        }
+        dialogView.findViewById<ConstraintLayout>(R.id.fragment_routeDetail_addBucket).setOnClickListener {
+            var places = mainViewModel.placesToRoutes.value!!
+            for(item in places){
+                mainViewModel.insertPlaceShopList(item)
+            }
+            showCustomToast("추가되었습니다.")
         }
 
     }
@@ -214,6 +227,43 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
                     }
                 }
             }
+        }
+    }
+    private fun initSpinner(){
+        var  spinnerArr = arrayListOf<String>("별점순","리뷰 적은순","리뷰 많은순")
+        val adapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,spinnerArr)
+        binding.fragmentRouteFilterSpinner.adapter = adapter
+
+        binding.fragmentRouteFilterSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                if(position == 0){
+                    runBlocking {
+                        mainViewModel.getRoutes(areaName)
+                    }
+                }
+                if(position == 1){
+                    runBlocking {
+                        mainViewModel.getRoutesToSort(areaName,"review")
+                    }
+                }
+                if(position == 2){
+                    runBlocking {
+                        mainViewModel.getRoutesToSort(areaName,"review_asc")
+                    }
+                }
+
+                initAdapter()
+                routeAdapter.notifyDataSetChanged()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+
         }
     }
     companion object {

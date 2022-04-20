@@ -127,33 +127,37 @@ class HomeFragment: Fragment(){
     }
 
     private fun initWeather(){
-        mainViewModel.weathers.observe(viewLifecycleOwner) {
-            var curWeather = it.response.body.items.item
-            for (item in 0..curWeather.size - 1) {
-                if (curWeather[item].category.equals("SKY")) {
-                    if (curWeather[item].fcstValue.equals("1")) {
-                        Glide.with(this)
-                            .load(R.drawable.weather1)
-                            .into(binding.fragmentHomeWeatherSKY)
-                    } else if (curWeather[item].fcstValue.equals("2")) {
-                        Glide.with(this)
-                            .load(R.drawable.weather2)
-                            .into(binding.fragmentHomeWeatherSKY)
-                    } else if (curWeather[item].fcstValue.equals("3")) {
-                        Glide.with(this)
-                            .load(R.drawable.weather3)
-                            .into(binding.fragmentHomeWeatherSKY)
-                    } else if (curWeather[item].fcstValue.equals("4")) {
-                        Glide.with(this)
-                            .load(R.drawable.weather4)
-                            .into(binding.fragmentHomeWeatherSKY)
+        if(mainViewModel.userLoc.value!=null){
+            mainViewModel.weathers.observe(viewLifecycleOwner) {
+                Log.d(TAG, "initWeather: ${it.response.body.items.item}")
+                var curWeather = it.response.body.items.item
+                for (item in 0..curWeather.size - 1) {
+                    if (curWeather[item].category.equals("SKY")) {
+                        if (curWeather[item].fcstValue.equals("1")) {
+                            Glide.with(this)
+                                .load(R.drawable.weather1)
+                                .into(binding.fragmentHomeWeatherSKY)
+                        } else if (curWeather[item].fcstValue.equals("2")) {
+                            Glide.with(this)
+                                .load(R.drawable.weather2)
+                                .into(binding.fragmentHomeWeatherSKY)
+                        } else if (curWeather[item].fcstValue.equals("3")) {
+                            Glide.with(this)
+                                .load(R.drawable.weather3)
+                                .into(binding.fragmentHomeWeatherSKY)
+                        } else if (curWeather[item].fcstValue.equals("4")) {
+                            Glide.with(this)
+                                .load(R.drawable.weather4)
+                                .into(binding.fragmentHomeWeatherSKY)
+                        }
                     }
-                }
-                if (curWeather[item].category.equals("T3H") || curWeather[item].category.equals("T1H") || curWeather[item].category.equals("TMP")) {
-                    binding.fragmentHomeWeatherTMP.setText(curWeather[item].fcstValue + "℃")
+                    if (curWeather[item].category.equals("T3H") || curWeather[item].category.equals("T1H") || curWeather[item].category.equals("TMP")) {
+                        binding.fragmentHomeWeatherTMP.setText(curWeather[item].fcstValue + "℃")
+                    }
                 }
             }
         }
+
 
     }
     private fun initBanner(){

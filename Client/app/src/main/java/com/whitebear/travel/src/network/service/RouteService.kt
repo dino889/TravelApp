@@ -23,4 +23,6 @@ class RouteService {
     suspend fun deleteRouteReview(reviewId:Int) : Response<Message> = RetrofitUtil.routeService.deleteRouteReview(reviewId)
 
     suspend fun routeLike(routeLike: RouteLike) : Response<Message> = RetrofitUtil.routeService.routeLike(routeLike)
+
+    suspend fun getRoutesInPlaceArr(arr:String) : Response<Message> = RetrofitUtil.routeService.getRoutesInPlaceArr(arr)
 }

@@ -28,4 +28,8 @@ interface RouteApi {
 
     @POST("place_list/like")
     suspend fun routeLike(@Body routeLike: RouteLike) : Response<Message>
+
+    @GET("places/array/{arr}")
+    suspend fun getRoutesInPlaceArr(@Path("arr") placeList:String):Response<Message>
+
 }
