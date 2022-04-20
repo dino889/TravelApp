@@ -299,6 +299,33 @@ class MainViewModel :ViewModel(){
         }
     }
 
+    private val _placesByGps = MutableLiveData<MutableList<Place>>()
+
+    val placesByGps :  LiveData<MutableList<Place>>
+        get() = _placesByGps
+
+    private fun setPlacesByGps(placeList: MutableList<Place>) = viewModelScope.launch {
+        _placesByGps.value = placeList
+    }
+
+    suspend fun getPlacesByGps(lat: Double, long: Double, range: Double) {
+        val response = PlaceService().getPlacesByGps(lat, long, range)
+        viewModelScope.launch {
+            if(response.code() == 200 || response.code() == 500) {
+                val res = response.body()
+                if(res != null) {
+                    if(res["isSuccess"] == true && res["data"] != null) {
+                        val type = object : TypeToken<MutableList<Place>>() {}.type
+                        val placeList = CommonUtils.parseDto<MutableList<Place>>(res["data"]!!,type)
+                        setPlacesByGps(placeList)
+                    }
+                }
+            } else {
+                Log.e(TAG, "getPlacesByGps: ${response.message()}", )
+            }
+
+        }
+    }
 
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
@@ -607,4 +634,7 @@ class MainViewModel :ViewModel(){
             }
         }
     }
+
+
+
 }

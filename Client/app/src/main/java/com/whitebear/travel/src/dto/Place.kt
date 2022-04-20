@@ -14,5 +14,6 @@ data class Place(
     val rating:Float,
     val summary: String,
     val type: Any,
-    val updatedAt: String
+    val updatedAt: String,
+    val distance: Double
 )

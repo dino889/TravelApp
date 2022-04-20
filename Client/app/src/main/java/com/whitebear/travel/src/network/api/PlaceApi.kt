@@ -31,4 +31,6 @@ interface PlaceApi {
     @GET("places")
     suspend fun getPlaceByAreaToSort(@Query("areaName") areaName : String, @Query("sort")sort:String) : Response<Message>
 
+    @GET("places/gps")
+    suspend fun getPlaceByGps(@Query("lat") lat: Double, @Query("long") long: Double, @Query("range") range: Double) : Response<HashMap<String, Any>>
 }
