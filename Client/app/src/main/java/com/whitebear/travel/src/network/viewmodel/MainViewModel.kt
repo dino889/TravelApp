@@ -588,17 +588,21 @@ class MainViewModel :ViewModel(){
             }
         }
     }
-    fun getPlaceToRoute(){
-        var places = route.value!!.placeIdList
-        var placeArr = mutableListOf<Place>()
-        for(i in places){
-            runBlocking {
-//                getPlace(i)
+    suspend fun getRoutesInPlaceArr(arr:String){
+        val response = RouteService().getRoutesInPlaceArr(arr)
+        Log.d(TAG, "getRoutesLikes: ${response.code()}")
+        viewModelScope.launch {
+            if(response.code() == 200 || response.code() == 500 || response.code() == 201){
+                val res = response.body()
+                if(res!=null){
+                    if(res.isSuccess){
+                        var type = object : TypeToken<MutableList<Place>>() {}.type
+                        var route:MutableList<Place> = CommonUtils.parseDto(res.data, type)
+                        Log.d(TAG, "getRoutesInPlaceArr: ${res.data}")
+                        setPlaceToRoute(route)
+                    }
+                }
             }
-//            placeArr.add(place.value!!)
         }
-//        setPlaceToRoute(placeArr)
-
-        setPlaceToRoute(placeArr)
     }
 }

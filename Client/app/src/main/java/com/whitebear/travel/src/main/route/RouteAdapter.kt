@@ -11,13 +11,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.whitebear.travel.R
 import com.whitebear.travel.databinding.ItemRouteBinding
+import com.whitebear.travel.src.dto.Place
 import com.whitebear.travel.src.dto.Route
+import com.whitebear.travel.src.network.viewmodel.MainViewModel
 
-class RouteAdapter : RecyclerView.Adapter<RouteAdapter.RouteViewHolder>(),Filterable{
+class RouteAdapter(val mainViewModel: MainViewModel) : RecyclerView.Adapter<RouteAdapter.RouteViewHolder>(),Filterable{
     var list = mutableListOf<Route>()
     var likeList = mutableListOf<Route>()
     var filteredList = list
-
     inner class RouteViewHolder(private val binding : ItemRouteBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(route : Route){
@@ -28,6 +29,7 @@ class RouteAdapter : RecyclerView.Adapter<RouteAdapter.RouteViewHolder>(),Filter
                 }
                 binding.frragmentRouteRouteLike.progress = 0F
             }
+            binding.viewModel = mainViewModel
             binding.route = route
             binding.executePendingBindings()
         }
