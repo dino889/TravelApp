@@ -8,4 +8,7 @@ interface AreaApi {
 
     @GET("/areas")
     suspend fun getArea():Response<Message>
+
+    @GET("/places/category")
+    suspend fun getCategory() : Response<Message>
 }

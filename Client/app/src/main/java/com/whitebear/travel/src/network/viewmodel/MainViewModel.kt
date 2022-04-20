@@ -143,17 +143,26 @@ class MainViewModel :ViewModel(){
      * */
 
     private val _areas = MutableLiveData<MutableList<Area>>()
+    private val _categorys = MutableLiveData<MutableList<String>>()
     private val _area = MutableLiveData<Area>()
+
     val areas : LiveData<MutableList<Area>>
         get() = _areas
     val area : LiveData<Area>
         get() = _area
+    val categorys : LiveData<MutableList<String>>
+        get() = _categorys
+
     private fun setArea(areas : MutableList<Area>) = viewModelScope.launch { 
         _areas.value = areas
     }
     private fun setAreaOne(area:Area) = viewModelScope.launch {
         _area.value = area
     }
+    private fun setCategorys(categorys : MutableList<String>) = viewModelScope.launch {
+        _categorys.value = categorys
+    }
+
     suspend fun getAreas(){
         val response = AreaService().getArea()
         Log.d(TAG, "getAreas: ${response.code()}")
@@ -180,6 +189,23 @@ class MainViewModel :ViewModel(){
             if(areas.value!![item].id == areaId){
                 setAreaOne(areas.value!![item])
                 break;
+            }
+        }
+    }
+    suspend fun getCategorys(){
+        val response = AreaService().getCategory()
+        Log.d(TAG, "getAreas: ${response.code()}")
+
+        viewModelScope.launch {
+            if(response.code() == 200 || response.code() == 500){
+
+                val res = response.body()
+                if(res!=null){
+                    var type = object:TypeToken<MutableList<String>>() {}.type
+                    var categoryList = CommonUtils.parseDto<MutableList<String>>(res.data,type)
+                    setCategorys(categoryList)
+                }
+
             }
         }
     }

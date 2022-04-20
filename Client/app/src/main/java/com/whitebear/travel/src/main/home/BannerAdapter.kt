@@ -20,7 +20,8 @@ class BannerAdapter(var list:MutableList<Int>) : RecyclerView.Adapter<BannerAdap
 
     override fun onBindViewHolder(holder: BannerAdapter.BannerViewHolder, position: Int) {
         holder.apply {
-            list[position % list.size]
+            onBind(list[position % list.size])
+
         }
     }
 
