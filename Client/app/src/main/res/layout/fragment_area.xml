@@ -27,11 +27,11 @@
 
                 <ImageView
                     android:id="@+id/fragment_area_Img"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:scaleType="fitXY"
                     android:src="@drawable/banner"
-                    app:imageUrlArea="@{viewModel.area.imgURL}" />
+                    app:imageUrlPlace="@{viewModel.area.imgURL}" />
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -71,11 +71,12 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/frameLayout" >
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+                app:tabMode="scrollable">
                 <com.google.android.material.tabs.TabItem
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="HH"/>
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="전체"/>
             </com.google.android.material.tabs.TabLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -85,7 +86,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_area_catetabLayout"
-                app:placeListData="@{viewModel.places}"
+                app:placeTypeListData="@{viewModel.places}"
                 tools:listitem="@layout/item_place" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>

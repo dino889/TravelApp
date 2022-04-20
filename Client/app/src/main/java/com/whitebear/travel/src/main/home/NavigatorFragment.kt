@@ -100,15 +100,17 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
 
     }
     private fun initAdapter(){
-        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner, {
+        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
             navAdapter = NavPlaceAdapter()
             navAdapter.list = it
             binding.fragmentNavigatorPlaceRv.apply {
-                layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
+                layoutManager =
+                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
                 adapter = navAdapter
-                adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+                adapter!!.stateRestorationPolicy =
+                    RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
-        })
+        }
     }
     private fun addPing(){
         markerArr = arrayListOf()
