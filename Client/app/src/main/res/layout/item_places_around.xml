@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="place"
+            type="com.whitebear.travel.src.dto.Place" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/aroundPlaceItem_ivPlaceImg"
+            android:layout_width="130dp"
+            android:layout_height="130dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="24dp"
+            android:scaleType="fitXY"
+            app:imageUrlPlace="@{place.imgURL}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_launcher_background" />
+
+        <TextView
+            android:id="@+id/aroundPlaceItem_tvPlaceName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginTop="8dp"
+            app:textViewTitle="@{place.name}"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/aroundPlaceItem_ivPlaceImg"
+            app:layout_constraintTop_toTopOf="@+id/aroundPlaceItem_ivPlaceImg" />
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/aroundPlaceItem_lottiePlaceLike"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/aroundPlaceItem_tvPlaceName"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/aroundPlaceItem_tvPlaceName"
+            app:lottie_autoPlay="false"
+            app:lottie_fileName="heart.json"
+            app:lottie_loop="false" />
+
+        <TextView
+            android:id="@+id/aroundPlaceItem_tvPlaceContent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/black"
+            android:scrollbars="vertical"
+            android:scrollbarStyle="outsideInset"
+            android:scrollbarFadeDuration="0"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbarThumbVertical="@color/main"
+            android:scrollbarSize="2dp"
+            app:layout_constraintBottom_toTopOf="@+id/aroundPlaceItem_tvDistance"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/aroundPlaceItem_tvPlaceName"
+            app:layout_constraintTop_toBottomOf="@+id/aroundPlaceItem_tvPlaceName"
+            app:textViewContent="@{place.summary}" />
+
+        <TextView
+            android:id="@+id/aroundPlaceItem_tvDistance"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_marginEnd="32dp"
+            android:textSize="12sp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/aroundPlaceItem_rating"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/aroundPlaceItem_ivPlaceImg" />
+
+        <RatingBar
+            android:id="@+id/aroundPlaceItem_rating"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:rating="@{place.rating}"
+            app:layout_constraintBottom_toBottomOf="@+id/aroundPlaceItem_ivPlaceImg"
+            app:layout_constraintStart_toStartOf="@+id/aroundPlaceItem_tvDistance" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

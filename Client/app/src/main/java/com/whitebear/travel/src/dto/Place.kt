@@ -13,6 +13,7 @@ data class Place(
     val heartCount: Int,
     val rating:Float,
     val summary: String,
+    val distance: Double,
     val type: String,
     val updatedAt: String
 )

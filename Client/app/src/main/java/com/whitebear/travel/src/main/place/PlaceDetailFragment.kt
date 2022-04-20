@@ -47,9 +47,15 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
+
         runBlocking {
             mainViewModel.getPlace(placeId)
         }
+
+        mainViewModel.place.observe(viewLifecycleOwner, {
+            binding.place = it
+        })
+
         setListener()
     }
     fun setListener(){
@@ -62,7 +68,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
         initButtons()
     }
 
-    fun initButtons(){
+    fun initButtons() {
         binding.fragmentPlaceDetailAppBarBack.setOnClickListener {
             this@PlaceDetailFragment.findNavController().popBackStack()
         }
@@ -84,17 +90,19 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
             likePlace(placeLike)
         }
     }
+
     private fun likePlace(placeLike:PlaceLike){
         var response : Response<Message>
         runBlocking {
             response = PlaceService().placeLike(placeLike)
         }
         if(response.code() == 200 || response.code() == 500 || response.code() == 201){
-            Log.d(TAG, "likePlace: ${response.code()}")
             val res = response.body()
             if(res != null){
-                Log.d(TAG, "likePlace: ${res}")
                 if(res.isSuccess){
+                    runBlocking {
+                        mainViewModel.getPlace(placeId)
+                    }
                     if(!res.message.contains("취소")){
                         val animator = ValueAnimator.ofFloat(0f,0.4f).setDuration(500)
                         animator.addUpdateListener { animation ->
@@ -109,7 +117,6 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
                         }
                         animator.start()
                     }
-
                 }
             }
         }

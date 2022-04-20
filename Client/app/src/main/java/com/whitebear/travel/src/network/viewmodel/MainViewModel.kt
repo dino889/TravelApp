@@ -325,6 +325,33 @@ class MainViewModel :ViewModel(){
         }
     }
 
+    private val _placesByGps = MutableLiveData<MutableList<Place>>()
+
+    val placesByGps :  LiveData<MutableList<Place>>
+        get() = _placesByGps
+
+    private fun setPlacesByGps(placeList: MutableList<Place>) = viewModelScope.launch {
+        _placesByGps.value = placeList
+    }
+
+    suspend fun getPlacesByGps(lat: Double, long: Double, range: Double) {
+        val response = PlaceService().getPlacesByGps(lat, long, range)
+        viewModelScope.launch {
+            if(response.code() == 200 || response.code() == 500) {
+                val res = response.body()
+                if(res != null) {
+                    if(res["isSuccess"] == true && res["data"] != null) {
+                        val type = object : TypeToken<MutableList<Place>>() {}.type
+                        val placeList = CommonUtils.parseDto<MutableList<Place>>(res["data"]!!,type)
+                        setPlacesByGps(placeList)
+                    }
+                }
+            } else {
+                Log.e(TAG, "getPlacesByGps: ${response.message()}", )
+            }
+
+        }
+    }
 
     // ---------------------------------------------------------------------------------------------
     // ---------------------------------------------------------------------------------------------
@@ -587,20 +614,22 @@ class MainViewModel :ViewModel(){
 
     suspend fun getRoutesLikes(userId: Int){
         val response = RouteService().getRouteLikeByUser(userId)
-        Log.d(TAG, "getRoutesLikes: ${response.code()}")
         viewModelScope.launch {
             if(response.code() == 200 || response.code() == 500 || response.code() == 201){
                 val res = response.body()
                 if(res!=null){
                     if(res.isSuccess){
-                        Log.d(TAG, "getRoutesLikes: ${res.data[0].get("place_list")}")
-                        var routes = mutableListOf<Route>()
-                        for(i in 0..res.data.size - 1){
-                            var type = object : TypeToken<Route>() {}.type
-                            var route:Route = CommonUtils.parseDto(res.data[i].get("place_list")!!, type)
-                            routes.add(route)
+                        Log.d(TAG, "getRoutesLikes: ${res.data}")
+                        if(res.data.isNotEmpty()) {
+                            Log.d(TAG, "getRoutesLikes: ${res.data[0].get("place_list")}")
+                            var routes = mutableListOf<Route>()
+                            for(i in 0..res.data.size - 1){
+                                var type = object : TypeToken<Route>() {}.type
+                                var route:Route = CommonUtils.parseDto(res.data[i].get("place_list")!!, type)
+                                routes.add(route)
+                            }
+                            setRoutesLikes(routes)
                         }
-                        setRoutesLikes(routes)
                     }
                 }
             }
@@ -631,4 +660,7 @@ class MainViewModel :ViewModel(){
             }
         }
     }
+
+
+
 }

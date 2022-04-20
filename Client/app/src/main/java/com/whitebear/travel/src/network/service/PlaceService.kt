@@ -23,4 +23,6 @@ class PlaceService {
     suspend fun placeLike(placeLike: PlaceLike) : Response<Message> = RetrofitUtil.placeService.placeLike(placeLike)
 
     suspend fun getPlaceByAreaSorting(areaName:String, sorting:String) : Response<Message> = RetrofitUtil.placeService.getPlaceByAreaToSort(areaName,sorting)
+
+    suspend fun getPlacesByGps(lat: Double, long: Double, range: Double) = RetrofitUtil.placeService.getPlaceByGps(lat, long, range)
 }
