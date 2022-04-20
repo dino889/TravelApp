@@ -6,4 +6,6 @@ import retrofit2.Response
 
 class AreaService {
     suspend fun getArea() : Response<Message> = RetrofitUtil.areaService.getArea()
+
+    suspend fun getCategory() : Response<Message> = RetrofitUtil.areaService.getCategory()
 }

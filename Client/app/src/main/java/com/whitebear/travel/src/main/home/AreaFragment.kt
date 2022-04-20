@@ -10,6 +10,7 @@ import androidx.core.os.bundleOf
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.tabs.TabLayout
 import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseFragment
@@ -23,7 +24,7 @@ class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind
     var areaName = ""
     var areaId = 0
 
-    private lateinit var placeAdapter : PlaceAdapter
+    private lateinit var placeAdapter : PlaceTypeAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,6 +40,7 @@ class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
         runBlocking {
+            mainViewModel.getCategorys()
             mainViewModel.getAreaOne(areaId)
             mainViewModel.getPlaces(areaName)
             mainViewModel.getPlaceLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
@@ -47,6 +49,7 @@ class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind
     }
     fun setListener(){
         initButtons()
+        initTabLayout()
         initAdapter()
     }
     private fun initButtons(){
@@ -55,30 +58,56 @@ class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind
         }
     }
     private fun initAdapter(){
-        placeAdapter = PlaceAdapter()
+        placeAdapter = PlaceTypeAdapter()
         placeAdapter.list = mainViewModel.places.value!!
         placeAdapter.filter.filter("")
-        mainViewModel.places.observe(viewLifecycleOwner, {
+        mainViewModel.places.observe(viewLifecycleOwner) {
             Log.d(TAG, "initAdapter: $it")
             placeAdapter.list = it
-        })
-        mainViewModel.placeLikes.observe(viewLifecycleOwner, {
+        }
+        mainViewModel.placeLikes.observe(viewLifecycleOwner) {
             placeAdapter.likeList = it
-        })
+        }
 
         binding.fragmentAreaRv.apply {
             layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
             adapter = placeAdapter
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
-        placeAdapter.setOnItemClickListener(object : PlaceAdapter.ItemClickListener {
+        placeAdapter.setOnItemClickListener(object : PlaceTypeAdapter.ItemClickListener {
             override fun onClick(view: View, position: Int, placeId: Int, heartFlag: Boolean) {
                 var place = bundleOf("placeId" to placeId, "heartFlag" to heartFlag)
                 this@AreaFragment.findNavController().navigate(R.id.placeDetailFragment, place)
             }
         })
     }
+    private fun initTabLayout(){
+        var categorys = mainViewModel.categorys.value!!
+        for(item in 0..categorys.size-1){
+            binding.fragmentAreaCatetabLayout.addTab(binding.fragmentAreaCatetabLayout.newTab().setText(categorys[item]))
+        }
+        placeAdapter = PlaceTypeAdapter()
+        binding.fragmentAreaCatetabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                if(tab?.position == 0){
+                    placeAdapter.filter.filter("")
+                }
+                if(tab?.position!! > 0){
+                    placeAdapter.filter.filter(tab?.text.toString())
+                }
 
+//                initAdapter()
+                placeAdapter.notifyDataSetChanged()
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+
+        })
+    }
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

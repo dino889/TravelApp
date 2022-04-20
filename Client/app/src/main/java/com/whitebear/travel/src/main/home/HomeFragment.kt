@@ -42,7 +42,7 @@ class HomeFragment: Fragment(){
     private var currentPosition = 0
     private var myHandler = MyHandler()
     private var intervalTime = 1500.toLong()
-    private var list = mutableListOf(R.drawable.banner, R.drawable.banner1)
+    private var list = mutableListOf(R.drawable.banner, R.drawable.bannerses,R.drawable.banner1)
 
     //Weather
     lateinit var weather:Weather.Item

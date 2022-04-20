@@ -9,10 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.whitebear.travel.R
 import com.whitebear.travel.src.dto.*
-import com.whitebear.travel.src.main.home.AreaAdapter
-import com.whitebear.travel.src.main.home.BestPlaceAdapter
-import com.whitebear.travel.src.main.home.BestRoutesAdapter
-import com.whitebear.travel.src.main.home.NavPlaceAdapter
+import com.whitebear.travel.src.main.home.*
 import com.whitebear.travel.src.main.place.PlaceAdapter
 import com.whitebear.travel.src.main.place.PlaceReviewAdapter
 import com.whitebear.travel.src.main.route.RouteAdapter
@@ -102,6 +99,19 @@ fun bindPlaceRecyclerView(recyclerView: RecyclerView, data:List<Place>?){
     adapter.list = data as MutableList<Place>
     adapter.notifyDataSetChanged()
 }
+@BindingAdapter("placeTypeListData")
+fun bindPlaceTypeRecyclerView(recyclerView: RecyclerView, data:List<Place>?){
+    var adapter = recyclerView.adapter as PlaceTypeAdapter
+    if(recyclerView.adapter == null){
+        adapter.setHasStableIds(true)
+        recyclerView.adapter = adapter
+    }else{
+        adapter = recyclerView.adapter as PlaceTypeAdapter
+    }
+    adapter.list = data as MutableList<Place>
+    adapter.notifyDataSetChanged()
+}
+
 @SuppressLint("NotifyDataSetChanged")
 @BindingAdapter("routeListData")
 fun bindRouteRecyclerView(recyclerView: RecyclerView, data:List<Route>?){
