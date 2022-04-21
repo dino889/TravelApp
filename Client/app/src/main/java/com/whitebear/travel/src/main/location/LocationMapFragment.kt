@@ -158,9 +158,6 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
 
         mapView.currentLocationTrackingMode = MapView.CurrentLocationTrackingMode.TrackingModeOnWithHeading
 
-        val mapPoint = MapPoint.mapPointWithGeoCoord(currentLat, currentLng)
-        // 중심점 변경 + 줌 레벨 변경
-        Log.d(TAG, "initKakaoMap: $currentLat / /$currentLng")
         mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(currentLat, currentLng), 6, true);
         setCircleByRange(currentLat, currentLng)
 
@@ -168,10 +165,6 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
             if (it == null || it.isEmpty()) {
                 Snackbar.make(requireView(), "현재 위치 주변에 관광지가 없습니다.", Snackbar.LENGTH_LONG).show()
             } else {
-//                val first = it[0]
-//                val mapPoint = MapPoint.mapPointWithGeoCoord(first.lat, first.long)
-//                mapView.setMapCenterPoint(mapPoint, true)
-//                mapView.setZoomLevel(6, true)
                 addPing()
             }
         }
@@ -213,7 +206,7 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
             mapPoint,  // center
             (range * 1000).toInt(),  // radius
             Color.TRANSPARENT,  // strokeColor
-            Color.argb(230, 12, 49, 122) // fillColor
+            Color.argb(100, 12, 49, 122) // fillColor
         )
         circle1.tag = 1234
         mapView.addCircle(circle1)
