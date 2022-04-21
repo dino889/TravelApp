@@ -103,28 +103,28 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
                 mapView.setMapCenterPoint(mapPoint, true)
                 mapView.setZoomLevel(6, true)
                 initAdapter()
-                addPing()
             }
         }
     }
 
     private fun initAdapter(){
+        navAdapter = NavPlaceAdapter()
         mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
-            navAdapter = NavPlaceAdapter()
             navAdapter.list = it
-            binding.fragmentNavigatorPlaceRv.apply {
-                layoutManager =
-                    LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-                adapter = navAdapter
-                adapter!!.stateRestorationPolicy =
-                    RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-            }
-            navAdapter.setOnItemClickListenenr(object: NavPlaceAdapter.ItemClickListener {
-                override fun onClick(view: View, position: Int, placeId: Int) {
-                    mainViewModel.removePlaceShopList(placeId)
-                }
-            })
         }
+        binding.fragmentNavigatorPlaceRv.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = navAdapter
+            adapter!!.stateRestorationPolicy =
+                RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        }
+        navAdapter.setOnItemClickListenenr(object: NavPlaceAdapter.ItemClickListener {
+            override fun onClick(view: View, position: Int, placeId: Int) {
+                mainViewModel.removePlaceShopList(placeId)
+            }
+        })
+        addPing()
     }
     private fun addPing(){
         markerArr = arrayListOf()
