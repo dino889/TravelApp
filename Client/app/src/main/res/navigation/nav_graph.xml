@@ -66,7 +66,16 @@
         android:id="@+id/routeFragment"
         android:name="com.whitebear.travel.src.main.route.RouteFragment"
         android:label="fragment_route"
-        tools:layout="@layout/fragment_route" />
+        tools:layout="@layout/fragment_route" >
+        <argument
+            android:name="routeId"
+            android:defaultValue="0"
+            app:argType="integer"/>
+        <argument
+            android:name = "heartFlag"
+            android:defaultValue="false"
+            app:argType="boolean"/>
+    </fragment>
 
     <fragment
         android:id="@+id/settingFragment"
@@ -95,7 +104,16 @@
         android:id="@+id/placeDetailFragment"
         android:name="com.whitebear.travel.src.main.place.PlaceDetailFragment"
         android:label="fragment_place_detail"
-        tools:layout="@layout/fragment_place_detail" />
+        tools:layout="@layout/fragment_place_detail">
+        <argument
+            android:name="placeId"
+            app:argType="integer"
+            android:defaultValue="0"/>
+        <argument
+            android:name="heartFlag"
+            app:argType="boolean"
+            android:defaultValue="false"/>
+    </fragment>
     <fragment
         android:id="@+id/navigatorFragment"
         android:name="com.whitebear.travel.src.main.home.NavigatorFragment"

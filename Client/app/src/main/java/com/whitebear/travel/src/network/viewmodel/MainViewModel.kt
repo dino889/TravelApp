@@ -165,8 +165,6 @@ class MainViewModel :ViewModel(){
 
     suspend fun getAreas(){
         val response = AreaService().getArea()
-        Log.d(TAG, "getAreas: ${response.code()}")
-
         viewModelScope.launch { 
             if(response.code() == 200 || response.code() == 500){
 
@@ -194,8 +192,6 @@ class MainViewModel :ViewModel(){
     }
     suspend fun getCategorys(){
         val response = AreaService().getCategory()
-        Log.d(TAG, "getAreas: ${response.code()}")
-
         viewModelScope.launch {
             if(response.code() == 200 || response.code() == 500){
 
@@ -253,11 +249,9 @@ class MainViewModel :ViewModel(){
     }
     suspend fun getPlacesToSort(areaName: String, sort:String){
         val response = PlaceService().getPlaceByAreaSorting(areaName,sort)
-        Log.d(TAG, "getPlacesToSort: SORT $sort")
         viewModelScope.launch {
             if(response.code() == 200 || response.code() == 500){
                 val res = response.body()
-                Log.d(TAG, "getPlacesToSort: $res")
                 if(res!=null){
                     var type = object : TypeToken<MutableList<Place>>() {}.type
                     var placeList = CommonUtils.parseDto<MutableList<Place>>(res.data,type)
@@ -312,7 +306,7 @@ class MainViewModel :ViewModel(){
                 if(res!=null){
                     if(res.isSuccess){
                         var places = mutableListOf<Place>()
-
+                        Log.d(TAG, "getPlaceLikes: $res")
                         for(i in 0..res.data.size-1){
                             var type = object : TypeToken<Place>() {}.type
                             var place:Place = CommonUtils.parseDto(res.data[i].get("place")!!, type)

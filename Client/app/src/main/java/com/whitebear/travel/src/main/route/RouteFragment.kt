@@ -35,9 +35,13 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     private lateinit var mainActivity:MainActivity
     private lateinit var routeAdapter: RouteAdapter
     private var areaName = "대구"
+    private var routeId = 0
+    private var heartFlag = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
+            routeId = it.getInt("routeId")
+            heartFlag = it.getBoolean("heartFlag")
        }
     }
 
@@ -52,6 +56,14 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         runBlocking {
             mainViewModel.getRoutes(areaName)
             mainViewModel.getRoutesLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
+        }
+        if(routeId > 0){
+            if(heartFlag){
+                showDialogDetailRoute(routeId, true)
+            }else{
+                showDialogDetailRoute(routeId, false)
+            }
+
         }
         setListener()
     }

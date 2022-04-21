@@ -200,6 +200,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         return address
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getToday() : String {
         var current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
