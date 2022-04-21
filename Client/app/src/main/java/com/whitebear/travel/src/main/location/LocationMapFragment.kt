@@ -2,7 +2,6 @@ package com.whitebear.travel.src.main.location
 
 import android.content.Context
 import android.graphics.Color
-import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -12,19 +11,13 @@ import android.widget.ArrayAdapter
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentLocationMapBinding
 import com.whitebear.travel.src.main.MainActivity
-
-import android.widget.TextView
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.whitebear.travel.R
-import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.src.dto.Place
 import kotlinx.coroutines.runBlocking
 import net.daum.mf.map.api.*
-
 import net.daum.mf.map.api.MapPoint.GeoCoordinate
-import net.daum.mf.map.api.MapView.CurrentLocationEventListener
-import java.lang.String
 
 
 class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLocationMapBinding::bind, R.layout.fragment_location_map), MapView.CurrentLocationEventListener {
