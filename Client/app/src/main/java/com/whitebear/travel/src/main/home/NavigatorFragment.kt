@@ -114,14 +114,14 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
     }
     private fun addPing(){
         markerArr = arrayListOf()
-        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner, {
-            for(item in 0..it.size-1){
+        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
+            for (item in 0..it.size - 1) {
                 val mapPoint = MapPoint.mapPointWithGeoCoord(it[item].lat, it[item].long)
                 markerArr.add(mapPoint)
             }
             setPing(markerArr)
             addPolyLine(markerArr)
-        })
+        }
     }
     private fun setPing(markerArr : ArrayList<MapPoint>) {
         removePing()
