@@ -208,10 +208,14 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         }
         dialogView.findViewById<ConstraintLayout>(R.id.fragment_routeDetail_addBucket).setOnClickListener {
             var places = mainViewModel.placesToRoutes.value!!
-            for(item in places){
-                mainViewModel.insertPlaceShopList(item)
+            if(mainViewModel.liveNavBucketList.value!!.size > 4){
+                showCustomToast("더이상 추가하실 수 없습니다.")
+            }else{
+                for(item in places){
+                    mainViewModel.insertPlaceShopList(item)
+                }
+                showCustomToast("추가되었습니다.")
             }
-            showCustomToast("추가되었습니다.")
         }
 
     }

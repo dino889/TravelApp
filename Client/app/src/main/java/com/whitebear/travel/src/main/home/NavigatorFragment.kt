@@ -60,7 +60,6 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
     }
     fun setListener(){
         initButtons()
-
         initMapView()
     }
     fun initButtons(){
