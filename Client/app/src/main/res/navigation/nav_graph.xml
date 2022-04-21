@@ -113,6 +113,10 @@
             android:name="heartFlag"
             app:argType="boolean"
             android:defaultValue="false"/>
+        <argument
+            android:name="areaName"
+            app:argType="string"
+            android:defaultValue=""/>
     </fragment>
     <fragment
         android:id="@+id/navigatorFragment"

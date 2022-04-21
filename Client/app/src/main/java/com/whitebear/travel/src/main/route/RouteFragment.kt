@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
 import com.bumptech.glide.Glide
 import com.google.android.material.tabs.TabLayout
+import com.jakewharton.rxbinding3.material.selections
 import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseFragment
@@ -42,6 +43,7 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         arguments?.let {
             routeId = it.getInt("routeId")
             heartFlag = it.getBoolean("heartFlag")
+            areaName = it.getString("areaName").toString()
        }
     }
 
@@ -57,15 +59,11 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             mainViewModel.getRoutes(areaName)
             mainViewModel.getRoutesLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
         }
-        if(routeId > 0){
-            if(heartFlag){
-                showDialogDetailRoute(routeId, true)
-            }else{
-                showDialogDetailRoute(routeId, false)
-            }
-
-        }
         setListener()
+
+        if(routeId > 0){
+            showDialogDetailRoute(routeId, heartFlag)
+        }
     }
     private fun setListener(){
         initAdapter()
@@ -77,11 +75,11 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         for(item in 0..areas.size-1){
             binding.fragmentRouteTabLayout.addTab(binding.fragmentRouteTabLayout.newTab().setText(areas[item].name))
         }
+
         routeAdapter = RouteAdapter(mainViewModel)
         binding.fragmentRouteTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 binding.fragmentRouteFilterSpinner.setSelection(0)
-
                 if(tab != null){
                     areaName = tab?.text.toString()
                 }
@@ -156,6 +154,7 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         })
     }
     private fun showDialogDetailRoute(id:Int,heartFlag:Boolean){
+        Log.d(TAG, "onViewCreated: $id  $heartFlag")
         mainViewModel.getRoute(id)
         var dialog = Dialog(requireContext())
         var dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_route_detail,null)
@@ -166,7 +165,6 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         params?.height = WindowManager.LayoutParams.MATCH_PARENT
         dialog.window?.attributes = params
         dialog.show()
-
         dialogView.findViewById<ImageButton>(R.id.fragment_route_detailBack).setOnClickListener {
             dialog.dismiss()
         }
@@ -184,7 +182,9 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             )
             likeRoute(routeLike,heart)
         }
+
         var route = mainViewModel.route.value!!
+
         dialogView.findViewById<TextView>(R.id.fragment_route_detailName).text = route.name
         dialogView.findViewById<TextView>(R.id.fragment_route_detailContent).text = route.description
         dialogView.findViewById<TextView>(R.id.fragment_route_detailReview).text = route.rating.toFloat().toString()
