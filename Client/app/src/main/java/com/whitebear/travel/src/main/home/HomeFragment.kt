@@ -82,7 +82,7 @@ class HomeFragment: Fragment(){
             mainViewModel.getPlaces("")
             mainViewModel.getRoutes("")
             mainViewModel.getRoutesLikes(user)
-//            mainViewModel.getPlaceLikes(user)
+            mainViewModel.getPlaceLikes(user)
         }
 
         mainViewModel.userLoc.observe(viewLifecycleOwner) {
@@ -156,6 +156,7 @@ class HomeFragment: Fragment(){
         bestRoutesAdapter.setOnItemClickListenenr(object: BestRoutesAdapter.ItemClickListener {
             override fun onClick(view: View, position: Int, routeId: Int, heartFlag:Boolean) {
                 var route = bundleOf("routeId" to routeId, "heartFlag" to heartFlag)
+                Log.d(TAG, "onClick: $routeId / $heartFlag")
                 this@HomeFragment.findNavController().navigate(R.id.routeFragment, route)
             }
 
@@ -169,6 +170,11 @@ class HomeFragment: Fragment(){
             }
             bestPlaceAdapter.list = arr
         }
+
+        mainViewModel.placeLikes.observe(viewLifecycleOwner){
+            bestPlaceAdapter.likelist = it
+        }
+
         binding.fragmentBestPlaceRv.apply {
             layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.HORIZONTAL,false)
             adapter= bestPlaceAdapter
@@ -177,6 +183,7 @@ class HomeFragment: Fragment(){
         bestPlaceAdapter.setOnItemClickListenenr(object : BestPlaceAdapter.ItemClickListener {
             override fun onClick(view: View, position: Int, placeId: Int, heartFlag: Boolean) {
                 var place = bundleOf("placeId" to placeId, "heartFlag" to heartFlag)
+                Log.d(TAG, "onClick: $placeId / $heartFlag")
                 this@HomeFragment.findNavController().navigate(R.id.placeDetailFragment,place)
             }
 
