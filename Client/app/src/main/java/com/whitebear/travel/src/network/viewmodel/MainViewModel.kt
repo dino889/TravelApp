@@ -10,6 +10,7 @@ import com.google.firebase.crashlytics.buildtools.reloc.com.google.common.reflec
 import com.whitebear.travel.src.dto.*
 import com.whitebear.travel.src.dto.airQuality.AirQuality
 import com.whitebear.travel.src.dto.airQuality.Measure
+import com.whitebear.travel.src.dto.camping.Item
 import com.whitebear.travel.src.dto.stationResponse.StationResponse
 import com.whitebear.travel.src.dto.tm.TmCoordinatesResponse
 import com.whitebear.travel.src.network.service.AreaService
@@ -668,6 +669,37 @@ class MainViewModel :ViewModel(){
         }
     }
 
+    /**
+     * api - camping 정보
+     */
+    private val _campingList = MutableLiveData<MutableList<Item>>()
+
+    val campingList :  LiveData<MutableList<Item>>
+        get() = _campingList
+
+    private fun setCampingList(list: MutableList<Item>) = viewModelScope.launch {
+        _campingList.value = list
+    }
+
+    suspend fun getCampingList(lat: Double, long: Double, radius: Int) {   // mapX - Longitude, mapY - Latitude
+        val response = DataService().getCamping(long, lat, radius)
+        Log.d(TAG, "getCampingList: $response")
+        viewModelScope.launch {
+            if(response.code() == 200 || response.code() == 500) {
+                val res = response.body()
+                if(res != null) {
+                    if(res.response.header.resultMsg == "OK") {
+                        Log.d(TAG, "getCampingList: ${res.response.body.totalCount}")
+//                        val item = res.response.body.items.item.item
+//                        Log.d(TAG, "getCampingList: ${item[item.size - 1]}")
+                    }
+                }
+            } else {
+                Log.e(TAG, "getPlacesByGps: ${response.message()}", )
+            }
+
+        }
+    }
 
 
 }

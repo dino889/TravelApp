@@ -15,11 +15,18 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.whitebear.travel.R
 import com.whitebear.travel.src.dto.Place
+import com.whitebear.travel.src.dto.Responses
+import com.whitebear.travel.src.dto.camping.Camping
+import com.whitebear.travel.src.network.service.DataService
 import kotlinx.coroutines.runBlocking
 import net.daum.mf.map.api.*
 import net.daum.mf.map.api.MapPoint.GeoCoordinate
+import retrofit2.Response
 
-
+/**
+ * @since 04/22/22
+ * @author Jiwoo Choi
+ */
 class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLocationMapBinding::bind, R.layout.fragment_location_map), MapView.CurrentLocationEventListener {
     private val TAG = "LocationMapFragment"
     private lateinit var mainActivity : MainActivity
@@ -49,6 +56,7 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
             if(it != null) {
                 runBlocking {
                     mainViewModel.getPlacesByGps(it.latitude, it.longitude, range)
+                    mainViewModel.getCampingList(it.latitude, it.longitude, (range * 1000).toInt())
                     currentLat = it.latitude
                     currentLng = it.longitude
 
@@ -56,6 +64,8 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
                 }
             }
         })
+
+//        getCampingList()
 
         initListener()
     }
@@ -228,6 +238,39 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
             this@LocationMapFragment.findNavController().popBackStack()
         }
     }
+
+    /**
+     * 내 위치 주변 캠핑장 정보 call
+     */
+    private fun getCampingList() {
+        var response : Response<Camping>
+        runBlocking {
+//            response = DataService().getCamping(currentLat, currentLng, (range * 1000).toInt())
+            response = DataService().getCamping(currentLng, currentLat, 100000)
+        }
+
+        Log.d(TAG, "getCampingList: ${response}")
+        if(response.code() == 200) {
+            val res = response.body()
+            if(res != null) {
+                if(res.response.header.resultMsg == "OK") {
+                    Log.d(TAG, "getCampingList: ${res.response.body.totalCount}")
+//                    val item = res.response.body.items.item!!
+//                    Log.d(TAG, "getCampingList: ${item.item[item.size - 1]}")
+                }
+            }
+        }
+    }
+
+    /**
+     * floating Button 클릭 이벤트(내 주변 캠핑장 정보)
+     */
+    private fun floatingBtnClickEvent() {
+        binding.mapFragmentFabGetCamping.setOnClickListener {
+
+        }
+    }
+
 
 
 //    단말의 현위치 좌표값을 통보받을 수 있다.

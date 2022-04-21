@@ -4,6 +4,7 @@ import androidx.annotation.XmlRes
 import com.tickaroo.tikxml.annotation.Xml
 import com.whitebear.travel.src.dto.airQuality.AirQuality
 import com.whitebear.travel.src.dto.Weather
+import com.whitebear.travel.src.dto.camping.Camping
 import com.whitebear.travel.src.dto.covid.Covid
 import com.whitebear.travel.src.dto.stationResponse.StationResponse
 import com.whitebear.travel.src.dto.tm.TmCoordinatesResponse
@@ -39,4 +40,6 @@ interface DataApi {
     @GET("http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson?serviceKey=mp%2Bwyp26riz6pcVoD5kh8hTaDST8RtkblivAF1iro%2FIGvP950xdhKViJgSnBnGGu0kDp5m%2BKUG5L6xC1nI%2BL1w%3D%3D")
     suspend fun getCovidState(@Query("startCreateDt") startCreateDt: String, @Query("endCreateDt") endCreateDt: String) : Response<Array<Covid>>
 
+    @GET("http://api.visitkorea.or.kr/openapi/service/rest/GoCamping/locationBasedList?serviceKey=mp%2Bwyp26riz6pcVoD5kh8hTaDST8RtkblivAF1iro%2FIGvP950xdhKViJgSnBnGGu0kDp5m%2BKUG5L6xC1nI%2BL1w%3D%3D&MobileOS=AND&MobileApp=TravelApplication")
+    suspend fun getCamping(@Query("mapX") mapX: Double, @Query("mapY") mapY: Double, @Query("radius") radius: Int, @Query("_type") _type: String) : Response<Camping>
 }
