@@ -103,6 +103,7 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
                 mapView.setMapCenterPoint(mapPoint, true)
                 mapView.setZoomLevel(6, true)
                 initAdapter()
+                addPing()
             }
         }
     }
@@ -122,9 +123,10 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
         navAdapter.setOnItemClickListenenr(object: NavPlaceAdapter.ItemClickListener {
             override fun onClick(view: View, position: Int, placeId: Int) {
                 mainViewModel.removePlaceShopList(placeId)
+                removePing()
+                addPing()
             }
         })
-        addPing()
     }
     private fun addPing(){
         markerArr = arrayListOf()
@@ -137,6 +139,7 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
             addPolyLine(markerArr)
         }
     }
+
     private fun setPing(markerArr : ArrayList<MapPoint>) {
         removePing()
         val list = arrayListOf<MapPOIItem>()
