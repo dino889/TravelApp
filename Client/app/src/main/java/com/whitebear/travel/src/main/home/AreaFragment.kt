@@ -1,5 +1,6 @@
 package com.whitebear.travel.src.main.home
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentAreaBinding
 import com.whitebear.travel.src.dto.Place
+import com.whitebear.travel.src.main.MainActivity
 import com.whitebear.travel.src.main.place.PlaceAdapter
 import kotlinx.coroutines.runBlocking
 
@@ -25,7 +27,7 @@ class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind
     var areaId = 0
 
     private lateinit var placeAdapter : PlaceTypeAdapter
-
+    private lateinit var mainActivity:MainActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.apply {
@@ -36,6 +38,10 @@ class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind
         }
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
@@ -45,6 +51,7 @@ class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind
             mainViewModel.getPlaces(areaName)
             mainViewModel.getPlaceLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
         }
+        mainActivity.hideBottomNav(true)
         setListener()
     }
     fun setListener(){

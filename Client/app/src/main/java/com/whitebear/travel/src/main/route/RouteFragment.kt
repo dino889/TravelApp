@@ -56,6 +56,9 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
         runBlocking {
+            if(areaName.equals("") || areaName == null || areaName.equals("null")){
+                areaName = "대구"
+            }
             mainViewModel.getRoutes(areaName)
             mainViewModel.getRoutesLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
         }

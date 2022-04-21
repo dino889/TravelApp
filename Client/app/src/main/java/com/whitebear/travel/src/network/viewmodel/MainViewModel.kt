@@ -513,7 +513,15 @@ class MainViewModel :ViewModel(){
             placeShopResponse.add(place)
             liveNavBucketList.value = placeShopResponse
         }
-
+    }
+    fun removePlaceShopList(placeId:Int){
+        for(i in 0..placeShopResponse.size -1 ){
+            if(placeShopResponse.get(i).id == placeId){
+                placeShopResponse.removeAt(i)
+                break
+            }
+        }
+        liveNavBucketList.value = placeShopResponse
     }
     /**
      * searchHistory ViewModel

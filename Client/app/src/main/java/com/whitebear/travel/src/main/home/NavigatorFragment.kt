@@ -85,27 +85,27 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
         mapViewContainer.addView(mapView)
         Log.d(TAG, "initMapView: ${mainViewModel.liveNavBucketList.value}")
 
-        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner, {
-            if(it == null || it.isEmpty()) {
+        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
+            if (it == null || it.isEmpty()) {
                 mainViewModel.userLoc.observe(viewLifecycleOwner) { user -> // 유저 현재 위치만 마커에 표시
-                    if(user != null) {
+                    if (user != null) {
                         var mapPoint = MapPoint.mapPointWithGeoCoord(user.latitude, user.longitude)
                         mapView.setMapCenterPoint(mapPoint, true)
                         mapView.setZoomLevel(6, true)
                     } else {
                         showCustomToast("현재 위치를 찾을 수 없습니다.")
-                        Log.e(TAG, "initMapView: $it", )
+                        Log.e(TAG, "initMapView: $it",)
                     }
                 }
             } else {
                 var first = it[0]
                 var mapPoint = MapPoint.mapPointWithGeoCoord(first.lat, first.long)
                 mapView.setMapCenterPoint(mapPoint, true)
-                mapView.setZoomLevel(6,true)
+                mapView.setZoomLevel(6, true)
                 initAdapter()
                 addPing()
             }
-        })
+        }
     }
 
     private fun initAdapter(){
@@ -119,18 +119,23 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
                 adapter!!.stateRestorationPolicy =
                     RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
             }
+            navAdapter.setOnItemClickListenenr(object: NavPlaceAdapter.ItemClickListener {
+                override fun onClick(view: View, position: Int, placeId: Int) {
+                    mainViewModel.removePlaceShopList(placeId)
+                }
+            })
         }
     }
     private fun addPing(){
         markerArr = arrayListOf()
-        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner, {
-            for(item in 0..it.size-1){
+        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
+            for (item in 0..it.size - 1) {
                 val mapPoint = MapPoint.mapPointWithGeoCoord(it[item].lat, it[item].long)
                 markerArr.add(mapPoint)
             }
             setPing(markerArr)
             addPolyLine(markerArr)
-        })
+        }
     }
     private fun setPing(markerArr : ArrayList<MapPoint>) {
         removePing()
