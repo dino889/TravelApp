@@ -509,8 +509,11 @@ class MainViewModel :ViewModel(){
         value = placeShopResponse
     }
     fun insertPlaceShopList(place:Place){
-        placeShopResponse.add(place)
-        liveNavBucketList.value = placeShopResponse
+        if(liveNavBucketList.value!!.size < 4){
+            placeShopResponse.add(place)
+            liveNavBucketList.value = placeShopResponse
+        }
+
     }
     /**
      * searchHistory ViewModel

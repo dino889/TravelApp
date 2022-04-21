@@ -218,17 +218,6 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
-                        <TextView
-                            android:id="@+id/fragment_home_bestRouteMore"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="15dp"
-                            android:text="Show All"
-                            android:textSize="12sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/textView7"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/textView7" />
-
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/fragment_home_bestRouteRv"
                             android:layout_width="match_parent"
@@ -258,17 +247,6 @@
                             android:textSize="16sp"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
-
-                        <TextView
-                            android:id="@+id/fragment_bestPlace_more"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="15dp"
-                            android:text="Show All"
-                            android:textSize="12sp"
-                            app:layout_constraintBottom_toBottomOf="@+id/textView5"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/textView5" />
 
                         <androidx.recyclerview.widget.RecyclerView
                             android:id="@+id/fragment_bestPlace_Rv"
