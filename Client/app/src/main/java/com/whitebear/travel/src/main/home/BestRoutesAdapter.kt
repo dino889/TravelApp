@@ -1,5 +1,6 @@
 package com.whitebear.travel.src.main.home
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,17 +29,21 @@ class BestRoutesAdapter : RecyclerView.Adapter<BestRoutesAdapter.BestViewHolder>
     override fun onBindViewHolder(holder: BestViewHolder, position: Int) {
         holder.apply {
             bind(list[position])
-            for(i in 0..likelist.size-1){
-                if(likelist[i].id == list[position].id){
-                    itemView.setOnClickListener{
-                        itemClickListener.onClick(it,position,list[position].id,true)
-                    }
-                }else{
-                    itemView.setOnClickListener{
-                        itemClickListener.onClick(it,position,list[position].id,false)
+            var heart = false
+            var areaName = list[position].name.substring(0,4)
+            itemView.setOnClickListener {
+                Log.d("TAG", "onBindViewHolder: CLick?")
+                for(i in 0..likelist.size-1){
+                    if(likelist[i].id == list[position].id){
+                        Log.d("TAG", "onBindViewHolder: true")
+                        heart = true
                     }
                 }
+                Log.d("TAG", "onBindViewHolder: $heart")
+
+                itemClickListener.onClick(it,position,list[position].id,heart, areaName)
             }
+
         }
     }
 
@@ -46,7 +51,7 @@ class BestRoutesAdapter : RecyclerView.Adapter<BestRoutesAdapter.BestViewHolder>
         return 5
     }
     interface ItemClickListener {
-        fun onClick(view: View, position: Int, routeId:Int, heartFlag:Boolean)
+        fun onClick(view: View, position: Int, routeId:Int, heartFlag:Boolean, areaName:String)
     }
     private lateinit var itemClickListener : ItemClickListener
     fun setOnItemClickListenenr(itemClickListener : ItemClickListener){

@@ -72,6 +72,7 @@ class HomeFragment: Fragment(){
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
@@ -154,9 +155,8 @@ class HomeFragment: Fragment(){
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
         bestRoutesAdapter.setOnItemClickListenenr(object: BestRoutesAdapter.ItemClickListener {
-            override fun onClick(view: View, position: Int, routeId: Int, heartFlag:Boolean) {
-                var route = bundleOf("routeId" to routeId, "heartFlag" to heartFlag)
-                Log.d(TAG, "onClick: $routeId / $heartFlag")
+            override fun onClick(view: View, position: Int, routeId: Int, heartFlag:Boolean, areaName : String) {
+                var route = bundleOf("routeId" to routeId, "heartFlag" to heartFlag, "areaName" to areaName)
                 this@HomeFragment.findNavController().navigate(R.id.routeFragment, route)
             }
 
