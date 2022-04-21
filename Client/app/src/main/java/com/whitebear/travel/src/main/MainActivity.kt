@@ -27,6 +27,16 @@ import kotlinx.coroutines.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
+import android.location.LocationManager
+import android.widget.Toast
+import android.content.DialogInterface
+
+import androidx.core.app.ActivityCompat.startActivityForResult
+
+import android.content.Intent
+import android.provider.Settings
+import androidx.appcompat.app.AlertDialog
+
 
 private const val TAG = "MainActivity"
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate){
@@ -44,6 +54,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private var hour = ""
     private var addr = ""
     private var today2Type = ""
+
+    private val GPS_ENABLE_REQUEST_CODE = 2001
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -200,7 +212,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         return address
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getToday() : String {
         var current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
@@ -213,6 +224,83 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         today2Type = formatted2
         mainViewModel.setToday(today.toInt())
         return today
+    }
+
+    fun checkRunTimePermission() {
+        //런타임 퍼미션 처리
+        // 1. 위치 퍼미션을 가지고 있는지 체크합니다.
+        val hasFineLocationPermission = ContextCompat.checkSelfPermission(
+            this@MainActivity,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+        if (hasFineLocationPermission == PackageManager.PERMISSION_GRANTED) {
+            // 2. 이미 퍼미션을 가지고 있다면
+            // ( 안드로이드 6.0 이하 버전은 런타임 퍼미션이 필요없기 때문에 이미 허용된 걸로 인식합니다.)
+            // 3.  위치 값을 가져올 수 있음
+        } else {  //2. 퍼미션 요청을 허용한 적이 없다면 퍼미션 요청이 필요합니다. 2가지 경우(3-1, 4-1)가 있습니다.
+            // 3-1. 사용자가 퍼미션 거부를 한 적이 있는 경우에는
+            if (ActivityCompat.shouldShowRequestPermissionRationale(
+                    this@MainActivity,
+                    LOCATION.get(0)
+                )
+            ) {
+                // 3-2. 요청을 진행하기 전에 사용자가에게 퍼미션이 필요한 이유를 설명해줄 필요가 있습니다.
+                Toast.makeText(this@MainActivity, "이 앱을 실행하려면 위치 접근 권한이 필요합니다.", Toast.LENGTH_LONG)
+                    .show()
+                // 3-3. 사용자게에 퍼미션 요청을 합니다. 요청 결과는 onRequestPermissionResult에서 수신됩니다.
+                ActivityCompat.requestPermissions(
+                    this@MainActivity, LOCATION,
+                    LOCATION_CODE
+                )
+            } else {
+                // 4-1. 사용자가 퍼미션 거부를 한 적이 없는 경우에는 퍼미션 요청을 바로 합니다.
+                // 요청 결과는 onRequestPermissionResult에서 수신됩니다.
+                ActivityCompat.requestPermissions(
+                    this@MainActivity, LOCATION,
+                    LOCATION_CODE
+                )
+            }
+        }
+    }
+
+    //여기부터는 GPS 활성화를 위한 메소드들
+    fun showDialogForLocationServiceSetting() {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this@MainActivity)
+        builder.setTitle("위치 서비스 비활성화")
+        builder.setMessage(
+            """
+            앱을 사용하기 위해서는 위치 서비스가 필요합니다.
+            위치 설정을 수정하시겠습니까?
+            """.trimIndent()
+        )
+        builder.setCancelable(true)
+        builder.setPositiveButton("설정", DialogInterface.OnClickListener { dialog, id ->
+            val callGPSSettingIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivityForResult(callGPSSettingIntent, GPS_ENABLE_REQUEST_CODE)
+        })
+        builder.setNegativeButton("취소",
+            DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+        builder.create().show()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when (requestCode) {
+            GPS_ENABLE_REQUEST_CODE ->                 //사용자가 GPS 활성 시켰는지 검사
+                if (checkLocationServicesStatus()) {
+                    if (checkLocationServicesStatus()) {
+                        Log.d("@@@", "onActivityResult : GPS 활성화 되있음")
+                        checkRunTimePermission()
+                        return
+                    }
+                }
+        }
+    }
+
+    fun checkLocationServicesStatus(): Boolean {
+        val locationManager = getSystemService(LOCATION_SERVICE) as LocationManager
+        return (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+                || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
     }
 
 }
