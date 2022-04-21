@@ -84,22 +84,31 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
 
         var mapViewContainer = binding.fragmentNavigatorKakaoMap as ViewGroup
         mapViewContainer.addView(mapView)
-        if(mainViewModel.liveNavBucketList.value!!.isEmpty() || mainViewModel.liveNavBucketList.value!!.size == 0){
-            mainViewModel.userLoc.observe(viewLifecycleOwner) {
-                var mapPoint = MapPoint.mapPointWithGeoCoord(it.latitude, it.longitude)
-                mapView.setMapCenterPoint(mapPoint, true)
-                mapView.setZoomLevel(6, true)
-            }
-        }else{
-            var first = mainViewModel.liveNavBucketList.value!![0]
-            var mapPoint = MapPoint.mapPointWithGeoCoord(first.lat, first.long)
-            mapView.setMapCenterPoint(mapPoint, true)
-            mapView.setZoomLevel(6,true)
-            initAdapter()
-            addPing()
-        }
+        Log.d(TAG, "initMapView: ${mainViewModel.liveNavBucketList.value}")
 
+        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner, {
+            if(it == null || it.isEmpty()) {
+                mainViewModel.userLoc.observe(viewLifecycleOwner) { user -> // 유저 현재 위치만 마커에 표시
+                    if(user != null) {
+                        var mapPoint = MapPoint.mapPointWithGeoCoord(user.latitude, user.longitude)
+                        mapView.setMapCenterPoint(mapPoint, true)
+                        mapView.setZoomLevel(6, true)
+                    } else {
+                        showCustomToast("현재 위치를 찾을 수 없습니다.")
+                        Log.e(TAG, "initMapView: $it", )
+                    }
+                }
+            } else {
+                var first = it[0]
+                var mapPoint = MapPoint.mapPointWithGeoCoord(first.lat, first.long)
+                mapView.setMapCenterPoint(mapPoint, true)
+                mapView.setZoomLevel(6,true)
+                initAdapter()
+                addPing()
+            }
+        })
     }
+
     private fun initAdapter(){
         mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
             navAdapter = NavPlaceAdapter()
