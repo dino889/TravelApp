@@ -202,3 +202,8 @@ fun bindLikePlaceName(textView: TextView, address: String) {
         textView.isVisible = false
     }
 }
+
+@BindingAdapter("distancePlace")
+fun bindPlaceDistance(textView: TextView, dist: Double) {
+    textView.text = "${String.format("%.2f", dist)} km"
+}

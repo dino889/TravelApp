@@ -58,7 +58,6 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(FragmentLocationB
         }
 
         mainViewModel.placesByGps.observe(viewLifecycleOwner) {
-            Log.d(TAG, "initRecyclerAdapter: $it")
             aroundPlaceAdapter.list = it
         }
 
@@ -71,7 +70,6 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(FragmentLocationB
         aroundPlaceAdapter.setOnItemClickListener(object: AroundPlaceAdapter.ItemClickListener {
             override fun onClick(view: View, position: Int, placeId: Int, heartFlag : Boolean) {
                 val place = bundleOf("placeId" to placeId, "heartFlag" to heartFlag)
-
                 this@LocationFragment.findNavController().navigate(R.id.placeDetailFragment, place)
             }
         })
