@@ -44,6 +44,8 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(FragmentLocationB
             binding.locationFragmentMyLoc.text = addr
             initRecyclerAdapter()
         }
+
+        mapBtnClickEvent()
     }
 
     private fun initRecyclerAdapter() {
@@ -73,7 +75,12 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(FragmentLocationB
                 this@LocationFragment.findNavController().navigate(R.id.placeDetailFragment, place)
             }
         })
+    }
 
+    private fun mapBtnClickEvent() {
+        binding.locationFragmentMap.setOnClickListener {
+            this@LocationFragment.findNavController().navigate(R.id.action_locationFragment_to_mapFragment)
+        }
     }
 
 }

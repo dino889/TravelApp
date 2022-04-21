@@ -187,8 +187,6 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
 
                     KakaoNaviService.navigate(requireContext(), params)
                 }
-
-
             } else {
                 val intent = Intent(
                     Intent.ACTION_VIEW,

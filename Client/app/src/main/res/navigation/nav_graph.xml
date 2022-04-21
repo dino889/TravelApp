@@ -23,11 +23,25 @@
                 android:defaultValue="0"/>
         </action>
     </fragment>
+
+
     <fragment
         android:id="@+id/locationFragment"
         android:name="com.whitebear.travel.src.main.location.LocationFragment"
         android:label="fragment_location"
-        tools:layout="@layout/fragment_location" />
+        tools:layout="@layout/fragment_location" >
+
+        <action
+            android:id="@+id/action_locationFragment_to_mapFragment"
+            app:destination="@id/mapFragment"/>
+    </fragment>
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.whitebear.travel.src.main.location.LocationMapFragment"
+        android:label="fragment_locationMap"
+        tools:layout="@layout/fragment_location_map" />
+
     <fragment
         android:id="@+id/myFragment"
         android:name="com.whitebear.travel.src.main.my.MyFragment"
