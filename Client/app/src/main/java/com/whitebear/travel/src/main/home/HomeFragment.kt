@@ -76,10 +76,13 @@ class HomeFragment: Fragment(){
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
         runBlocking {
-            mainViewModel.getUserInfo(ApplicationClass.sharedPreferencesUtil.getUser().id, true)
+            var user = ApplicationClass.sharedPreferencesUtil.getUser().id
+            mainViewModel.getUserInfo(user, true)
             mainViewModel.getAreas()
             mainViewModel.getPlaces("")
             mainViewModel.getRoutes("")
+            mainViewModel.getRoutesLikes(user)
+//            mainViewModel.getPlaceLikes(user)
         }
 
         mainViewModel.userLoc.observe(viewLifecycleOwner) {
@@ -135,6 +138,9 @@ class HomeFragment: Fragment(){
         })
 
         bestRoutesAdapter = BestRoutesAdapter()
+        mainViewModel.routesLikes.observe(viewLifecycleOwner){
+            bestRoutesAdapter.likelist = it
+        }
         mainViewModel.routes.observe(viewLifecycleOwner) {
             var arr = mutableListOf<Route>()
             for(item in 0..5){
@@ -147,6 +153,13 @@ class HomeFragment: Fragment(){
             adapter= bestRoutesAdapter
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
+        bestRoutesAdapter.setOnItemClickListenenr(object: BestRoutesAdapter.ItemClickListener {
+            override fun onClick(view: View, position: Int, routeId: Int, heartFlag:Boolean) {
+                var route = bundleOf("routeId" to routeId, "heartFlag" to heartFlag)
+                this@HomeFragment.findNavController().navigate(R.id.routeFragment, route)
+            }
+
+        })
 
         bestPlaceAdapter = BestPlaceAdapter()
         mainViewModel.places.observe(viewLifecycleOwner) {
@@ -161,6 +174,13 @@ class HomeFragment: Fragment(){
             adapter= bestPlaceAdapter
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
+        bestPlaceAdapter.setOnItemClickListenenr(object : BestPlaceAdapter.ItemClickListener {
+            override fun onClick(view: View, position: Int, placeId: Int, heartFlag: Boolean) {
+                var place = bundleOf("placeId" to placeId, "heartFlag" to heartFlag)
+                this@HomeFragment.findNavController().navigate(R.id.placeDetailFragment,place)
+            }
+
+        })
     }
 
     private fun initWeather(){
