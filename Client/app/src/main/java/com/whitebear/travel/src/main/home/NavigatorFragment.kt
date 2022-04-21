@@ -130,14 +130,15 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
     }
     private fun addPing(){
         markerArr = arrayListOf()
-        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
+        val it = mainViewModel.liveNavBucketList.value!!
+//        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
             for (item in 0..it.size - 1) {
                 val mapPoint = MapPoint.mapPointWithGeoCoord(it[item].lat, it[item].long)
                 markerArr.add(mapPoint)
             }
             setPing(markerArr)
             addPolyLine(markerArr)
-        }
+//        }
     }
 
     private fun setPing(markerArr : ArrayList<MapPoint>) {
@@ -152,10 +153,12 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
         }
         mapView.addPOIItems(list.toArray(arrayOfNulls(list.size)))
     }
+
     private fun removePing(){
         mapView.removeAllPOIItems()
         mapView.removeAllPolylines()
     }
+
     private fun addPolyLine(markerArr:ArrayList<MapPoint>) {
         val polyLine = MapPolyline()
         polyLine.tag = 1000
@@ -163,6 +166,7 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
         polyLine.addPoints(markerArr.toArray(arrayOfNulls(markerArr.size)))
         mapView.addPolyline(polyLine)
     }
+
     fun goNavi(markerArr:ArrayList<MapPoint>, flag:Int){
         markerArr[0].mapPointGeoCoord.latitude
         try {
@@ -209,6 +213,7 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
             Log.e("네비연동 에러", e.toString() + "")
         }
     }
+    
     fun showSelectType(){
         var dialog = Dialog(requireContext())
         var dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_nav_type,null)
@@ -235,6 +240,8 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
         }
 
     }
+
+
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
