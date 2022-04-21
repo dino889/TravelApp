@@ -37,7 +37,6 @@ class AroundPlaceAdapter : RecyclerView.Adapter<AroundPlaceAdapter.PlaceViewHold
             }
 
             binding.aroundPlaceItemTvDistance.movementMethod = ScrollingMovementMethod()
-            binding.aroundPlaceItemTvDistance.text = "${String.format("%.2f", place.distance)} km"
 
             binding.place = place
             binding.executePendingBindings()
