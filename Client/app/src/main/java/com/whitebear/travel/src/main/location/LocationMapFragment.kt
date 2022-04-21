@@ -14,6 +14,7 @@ import com.whitebear.travel.databinding.FragmentLocationMapBinding
 import com.whitebear.travel.src.main.MainActivity
 
 import android.widget.TextView
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
@@ -69,6 +70,7 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
     private fun initListener(){
         initKakaoMap()
         initSpinner()
+        backBtnClickEvent()
         // 캠핑장 마커 on / off
     }
 
@@ -147,9 +149,6 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
         mapViewContainer = binding.mapFragmentPlaceMapView as ViewGroup
         mapViewContainer.addView(mapView)
 
-
-//        mapView.setCurrentLocationRadius(2000)
-
         if (!mainActivity.checkLocationServicesStatus()) {
             mainActivity.showDialogForLocationServiceSetting()
         } else {
@@ -168,8 +167,6 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
                 addPing()
             }
         }
-
-//        addPing()
     }
 
     private fun addPing(){
@@ -231,6 +228,12 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
     private fun removePing() {
         mapView.removeAllPOIItems()
         mapView.removeAllCircles()
+    }
+
+    private fun backBtnClickEvent() {
+        binding.mapFragmentIvBack.setOnClickListener {
+            this@LocationMapFragment.findNavController().popBackStack()
+        }
     }
 
 
