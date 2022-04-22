@@ -59,9 +59,7 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(FragmentLocationB
             initRecyclerAdapter()
             initSpinner()
         }
-
         mapBtnClickEvent()
-
     }
 
     private fun initRecyclerAdapter() {
@@ -76,6 +74,13 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(FragmentLocationB
         }
 
         mainViewModel.placesByGps.observe(viewLifecycleOwner) {
+            if(it == null || it.size == 0 || it.isEmpty()) {
+                binding.locationFragmentRv.visibility = View.INVISIBLE
+                binding.locationFragmentTvEmptyPlaces.visibility = View.VISIBLE
+            } else {
+                binding.locationFragmentRv.visibility = View.VISIBLE
+                binding.locationFragmentTvEmptyPlaces.visibility = View.GONE
+            }
             aroundPlaceAdapter.list = it
         }
 
