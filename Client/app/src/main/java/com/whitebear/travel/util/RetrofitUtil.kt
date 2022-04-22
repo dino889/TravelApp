@@ -14,5 +14,7 @@ class RetrofitUtil {
         val placeService = ApplicationClass.retrofit.create(PlaceApi::class.java)
         val dataService = ApplicationClass.retrofit.create(DataApi::class.java)
         val routeService = ApplicationClass.retrofit.create(RouteApi::class.java)
+        val fcmService = ApplicationClass.retrofit.create(FCMApi::class.java)
+        val notificationService = ApplicationClass.retrofit.create(NotificationApi::class.java)
     }
 }
