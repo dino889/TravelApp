@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/drawable_dialog_backgroud">
+
+    <FrameLayout
+        android:id="@+id/placeInfoDialog_fl"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/placeInfoDialog_ivPlaceImg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_launcher_background"/>
+<!--                android:src="@drawable/ic_tent_black_512px"/>-->
+
+            <ImageView
+                android:id="@+id/placeInfoDialog_ivPlacePhone"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="7dp"
+                android:src="@drawable/ic_phone"
+                android:padding="3dp"
+                app:tint="@color/white"
+                android:background="@drawable/bg_btn"
+                app:layout_constraintBottom_toBottomOf="@+id/placeInfoDialog_ivPlaceHomePage"
+                app:layout_constraintEnd_toStartOf="@+id/placeInfoDialog_ivPlaceHomePage"
+                app:layout_constraintTop_toTopOf="@+id/placeInfoDialog_ivPlaceHomePage" />
+
+            <ImageView
+                android:id="@+id/placeInfoDialog_ivPlaceHomePage"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                app:tint="@color/white"
+                android:background="@drawable/bg_btn"
+                android:src="@drawable/ic_external_homepage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/placeInfoDialog_tvPlaceInduty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:text="[업종]"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/placeInfoDialog_fl" />
+
+    <TextView
+        android:id="@+id/placeInfoDialog_tvPlaceName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="장소 이름"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="@+id/placeInfoDialog_tvPlaceInduty"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/placeInfoDialog_tvPlaceInduty"
+        app:layout_constraintTop_toTopOf="@+id/placeInfoDialog_tvPlaceInduty" />
+
+    <TextView
+        android:id="@+id/placeInfoDialog_tvPlaceAddr"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="주소"
+        android:layout_marginEnd="10dp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/placeInfoDialog_tvPlaceInduty"
+        app:layout_constraintTop_toBottomOf="@+id/placeInfoDialog_tvPlaceInduty" />
+
+    <TextView
+        android:id="@+id/placeInfoDialog_tvPlaceAddrDetail"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="주소 상세"
+        android:textSize="12sp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/placeInfoDialog_tvPlaceAddr"
+        app:layout_constraintTop_toBottomOf="@+id/placeInfoDialog_tvPlaceAddr" />
+
+
+    <TextView
+        android:id="@+id/placeInfoDialog_tvPlaceLineIntro"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="한 줄 소개"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="20dp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/placeInfoDialog_btnClose"
+        app:layout_constraintStart_toStartOf="@+id/placeInfoDialog_tvPlaceAddrDetail"
+        app:layout_constraintTop_toBottomOf="@+id/placeInfoDialog_tvPlaceAddrDetail" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/placeInfoDialog_btnClose"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="닫기"
+        android:textColor="@color/main"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/placeInfoDialog_tvPlaceLineIntro" />
+</androidx.constraintlayout.widget.ConstraintLayout>
