@@ -36,14 +36,20 @@ class MainViewModel :ViewModel(){
         get() = _userAddr
     val today : Int?
         get() = _today
+    val hour : String?
+        get() = _hour
 
     private var _userLoc = MutableLiveData<Location>()
     private var _userAddr : String? = null
     private var _today : Int? = null
+    private var _hour : String? = null
 
     fun setUserLoc(location : Location, addr: String) {
         _userLoc.value = location
         _userAddr = addr
+    }
+    fun setHour(hour:String){
+        _hour = hour
     }
 
     fun setToday(today: Int){

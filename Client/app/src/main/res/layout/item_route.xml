@@ -29,14 +29,19 @@
 
         <TextView
             android:id="@+id/fragment_route_Name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:autoText="true"
             android:text="@{route.name}"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold"
+            app:autoSizeMinTextSize="13dp"
+            app:autoSizeTextType="uniform"
+            app:layout_constraintEnd_toStartOf="@+id/frragment_route_routeLike"
             app:layout_constraintStart_toEndOf="@+id/fragment_route_routeImg"
             app:layout_constraintTop_toTopOf="@+id/fragment_route_routeImg" />
 

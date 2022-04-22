@@ -72,6 +72,7 @@ class HomeFragment: Fragment(){
     }
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
@@ -84,11 +85,11 @@ class HomeFragment: Fragment(){
             mainViewModel.getRoutesLikes(user)
             mainViewModel.getPlaceLikes(user)
         }
-
+        Log.d(TAG, "onViewCreated: ${mainViewModel.hour.toString()}")
         mainViewModel.userLoc.observe(viewLifecycleOwner) {
             if (it != null) {
                 runBlocking {
-                    mainViewModel.getWeather("JSON",10,1, mainActivity.getToday().toInt(),"0200","${it.latitude.toInt()}","${it.longitude.toInt()}")
+                    mainViewModel.getWeather("JSON",10,1, mainActivity.getToday().toInt(),mainViewModel.hour.toString(),"${it.latitude.toInt()}","${it.longitude.toInt()}")
                     mainViewModel.getNearbyCenter(it.latitude, it.longitude)
                     binding.homeFragmentTvFailLoc.visibility = View.INVISIBLE
                     binding.fragmentHomeWeatherSKY.visibility = View.VISIBLE
@@ -108,7 +109,7 @@ class HomeFragment: Fragment(){
         initButton()
         initBanner()
         initAdapter()
-//        initWeather()
+        initWeather()
         initMeasure()
 //        if(mainViewModel.userLoc.value != null){
 //        }

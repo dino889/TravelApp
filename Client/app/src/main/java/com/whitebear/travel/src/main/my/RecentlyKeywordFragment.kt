@@ -33,7 +33,13 @@ class RecentlyKeywordFragment : BaseFragment<FragmentRecentlyKeywordBinding>(Fra
     private fun initRecyclerviewAdapter() {
         recentlyKeywordAdapter = RecentlyKeywordAdapter()
         mainViewModel.liveKeywords.observe(viewLifecycleOwner) {
-            recentlyKeywordAdapter.list = it.toList() as MutableList<Keyword>
+            if(!it.isEmpty()){
+                recentlyKeywordAdapter.list = it.toList() as MutableList<Keyword>
+            }else{
+                var arr = mutableListOf<Keyword>()
+                recentlyKeywordAdapter.list = arr
+            }
+
         }
 
         binding.myPostFragmentRv.apply {

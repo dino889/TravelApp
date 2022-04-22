@@ -58,8 +58,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private val LOCATION = arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)
     private val LOCATION_CODE = 100
     private var today = ""
-    private var hour = ""
-    private var addr = ""
+    var hour = ""
+    var addr = ""
     private var today2Type = ""
 
     private val GPS_ENABLE_REQUEST_CODE = 2001
@@ -191,6 +191,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     // 시스템으로 부터 위치 정보를 콜백으로 받음
 
     private val mLocationCallback = object : LocationCallback() {
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onLocationResult(locationResult: LocationResult) {
             locationResult.lastLocation
             onLocationChanged(locationResult.lastLocation)
@@ -200,6 +201,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     // 시스템으로 부터 받은 위치정보를 화면에 갱신해주는 메소드
+    @RequiresApi(Build.VERSION_CODES.O)
     fun onLocationChanged(location: Location) {
         mLastLocation = location
         mainViewModel.setUserLoc(location, getAddress(location))
@@ -207,7 +209,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         getToday()
         //lat=35.8988, long=128.599
         runBlocking {
-            mainViewModel.getWeather("JSON",10,1,today.toInt(),"0200","${location.latitude.toInt()}","${location.longitude.toInt()}")
+            mainViewModel.getWeather("JSON",10,1,today.toInt(),hour,"${location.latitude.toInt()}","${location.longitude.toInt()}")
         }
     }
 
@@ -220,6 +222,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         return address
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun getToday() : String {
         var current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
@@ -227,9 +230,30 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         val hourFormatt = DateTimeFormatter.ofPattern("HH")
         val formatted = current.format(formatter)
         val formatted2 = current.format(formattering)
-//        val formatted2 = current.format(hourFormatt)
+        val formatted3 = current.format(hourFormatt).toInt()
         today = formatted
         today2Type = formatted2
+        if(formatted3.toInt() < 2){
+            today = formatter.format(current.minusDays(1))
+            hour = "2300"
+        }else if(formatted3 < 5){
+            hour = "0200"
+        }else if(formatted3 < 8){
+            hour = "0500"
+        }else if(formatted3 < 11){
+            hour = "0800"
+        }else if(formatted3 < 14){
+            hour = "1100"
+        }else if(formatted3 < 17){
+            hour = "1400"
+        }else if(formatted3 < 20){
+            hour = "1700"
+        }else if(formatted3 < 23){
+            hour = "2000"
+        }else{
+            hour = "2300"
+        }
+        mainViewModel.setHour(hour)
         mainViewModel.setToday(today.toInt())
         return today
     }
@@ -334,6 +358,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     /**
      * Fcm Notification 수신을 위한 채널 추가
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(id: String, name: String) {
         val importance = NotificationManager.IMPORTANCE_DEFAULT // or IMPORTANCE_HIGH
         val channel = NotificationChannel(id, name, importance)
