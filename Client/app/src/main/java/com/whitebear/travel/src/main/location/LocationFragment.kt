@@ -33,6 +33,13 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(FragmentLocationB
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        if (!mainActivity.checkLocationServicesStatus()) {
+            mainActivity.showDialogForLocationServiceSetting()
+        } else {
+            mainActivity.checkRunTimePermission()
+        }
+        mainActivity.startLocationUpdates()
+
         mainViewModel.userLoc.observe(viewLifecycleOwner, {
             if(it != null) {
                 runBlocking {
