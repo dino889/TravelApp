@@ -115,7 +115,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text=""
+                                android:text="+82) 070-2411-8542"
                                 android:textColor="@color/dark_grey"
                                 app:layout_constraintBottom_toBottomOf="@+id/textView13"
                                 app:layout_constraintStart_toEndOf="@+id/textView13"
@@ -161,7 +161,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="TextView"
+                                android:text="AM 09:00 부터 PM 08:00까지"
                                 app:layout_constraintBottom_toBottomOf="@+id/textView16"
                                 app:layout_constraintStart_toEndOf="@+id/textView16"
                                 app:layout_constraintTop_toTopOf="@+id/textView16" />
@@ -180,7 +180,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
-                                android:text="TextView"
+                                android:text="월요일 휴무, 공휴일 휴무"
                                 app:layout_constraintBottom_toBottomOf="@+id/textView18"
                                 app:layout_constraintStart_toEndOf="@+id/textView18"
                                 app:layout_constraintTop_toTopOf="@+id/textView18" />
@@ -201,7 +201,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginTop="8dp"
-                                android:text="TextView"
+                                android:text="무료 주차 가능"
                                 app:layout_constraintStart_toStartOf="@+id/textView20"
                                 app:layout_constraintTop_toBottomOf="@+id/textView20" />
                         </androidx.constraintlayout.widget.ConstraintLayout>

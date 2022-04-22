@@ -70,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="16dp"
-                    android:text="@{review.updatedAt}"
+                    app:textViewDate="@{review.updatedAt}"
                     android:textSize="10sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/fragment_placeReview_content"

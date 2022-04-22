@@ -77,7 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            app:textViewRoutePlaceListSize="@{viewModel.placesToRoutes.size()}"
+            android:text="총 4곳"
             app:layout_constraintBottom_toBottomOf="@+id/textView10"
             app:layout_constraintStart_toEndOf="@+id/textView10"
             app:layout_constraintTop_toTopOf="@+id/textView10" />

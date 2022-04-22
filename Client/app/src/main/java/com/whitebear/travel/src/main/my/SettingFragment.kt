@@ -53,6 +53,7 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         initSnsInstance()
         initListener()
     }
@@ -256,6 +257,14 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
         super.onDestroyView()
         mainActivity.hideBottomNav(false)
     }
+    override fun onPause() {
+        super.onPause()
+        mainActivity.hideBottomNav(true)
+    }
 
+    override fun onResume() {
+        super.onResume()
+        mainActivity.hideBottomNav(true)
+    }
 
 }

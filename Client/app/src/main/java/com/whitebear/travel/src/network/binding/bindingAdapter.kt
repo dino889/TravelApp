@@ -13,6 +13,7 @@ import com.whitebear.travel.src.main.home.*
 import com.whitebear.travel.src.main.place.PlaceAdapter
 import com.whitebear.travel.src.main.place.PlaceReviewAdapter
 import com.whitebear.travel.src.main.route.RouteAdapter
+import java.text.SimpleDateFormat
 
 @BindingAdapter("imageUrlArea")
 fun bindImageArea(imgView:ImageView, imgUrl:String?){
@@ -66,6 +67,9 @@ fun bindImagePlace(imgView:ImageView, imgUrl: String?){
 }
 @BindingAdapter("textViewRoutePlaceListSize")
 fun bindTextViewRoutePlaceListSize(textView: TextView, size:Int){
+    if(size == 0){
+        textView.text = "총 4곳"
+    }
     textView.text = "총 ${size}곳"
 }
 @SuppressLint("SetTextI18n")
@@ -206,4 +210,10 @@ fun bindLikePlaceName(textView: TextView, address: String) {
 @BindingAdapter("distancePlace")
 fun bindPlaceDistance(textView: TextView, dist: Double) {
     textView.text = "${String.format("%.2f", dist)} km"
+}
+
+@BindingAdapter("textViewDate")
+fun bindTextViewDate(textView: TextView, date:String) {
+    var formatter = SimpleDateFormat("yyyy-MM-dd HH:ss")
+    textView.text = formatter.format(date)
 }
