@@ -37,14 +37,20 @@ class MainViewModel :ViewModel(){
         get() = _userAddr
     val today : Int?
         get() = _today
+    val hour : String?
+        get() = _hour
 
     private var _userLoc = MutableLiveData<Location>()
     private var _userAddr : String? = null
     private var _today : Int? = null
+    private var _hour : String? = null
 
     fun setUserLoc(location : Location, addr: String) {
         _userLoc.value = location
         _userAddr = addr
+    }
+    fun setHour(hour:String){
+        _hour = hour
     }
 
     fun setToday(today: Int){
@@ -532,36 +538,15 @@ class MainViewModel :ViewModel(){
     /**
      * searchHistory ViewModel
      * */
-    private val keywords = mutableListOf<Keyword>()
-    var hashs = HashMap<String,String>()
-    val liveKeywords = MutableLiveData<MutableList<Keyword>>().apply {
+    private val keywords = mutableSetOf<Keyword>()
+    var sets = mutableSetOf<Keyword>()
+//    var hashs = <String,String>()
+    val liveKeywords = MutableLiveData<MutableSet<Keyword>>().apply {
         value = keywords
     }
     fun insertKeywords(keyword:Keyword){
-
-        hashs.put(keyword.keyword, keyword.curDate)
-        Log.d(TAG, "insertKeywords: $hashs")
-        var it = hashs.iterator()
-        Log.d(TAG, "insertKeywords: ${hashs.get(keyword.keyword)}")
-        while(it.hasNext()){
-            var value = it.next()
-
-            var keys = Keyword(value.key, keyword.location,value.value)
-            keywords.add(keys)
-        }
-//        var keys =
-//            hashs[keyword.keyword]?.let {
-//                Keyword(
-//                    keyword.keyword,
-//                    keyword.location,
-//                    it
-//                )
-//            }
-
-//        keywords.add(keys!!)
+        keywords.add(keyword)
         liveKeywords.value = keywords
-
-        Log.d(TAG, "insertKeywords: $keywords")
     }
 
     /**

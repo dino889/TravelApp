@@ -21,13 +21,22 @@ import com.kakao.kakaonavi.options.CoordType
 import com.kakao.kakaonavi.options.RpOption
 import com.kakao.kakaonavi.options.VehicleType
 import com.whitebear.travel.R
+import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentNavigatorBinding
+import com.whitebear.travel.src.dto.NavDao
+import com.whitebear.travel.src.dto.Navigator
+import com.whitebear.travel.src.dto.Place
 import com.whitebear.travel.src.main.MainActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapPolyline
 import net.daum.mf.map.api.MapView
+import java.lang.Appendable
 import java.lang.Exception
 import java.util.*
 import kotlin.collections.ArrayList
@@ -38,6 +47,8 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
     var markerArr = arrayListOf<MapPoint>()
     private lateinit var mainActivity:MainActivity
     private lateinit var navAdapter : NavPlaceAdapter
+    lateinit var navDao: NavDao
+    var placeList = mutableListOf<Navigator>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +66,7 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
         super.onViewCreated(view, savedInstanceState)
         mainActivity.hideBottomNav(true)
         binding.viewModel = mainViewModel
-
+        navDao = mainActivity.navDB?.navDao()!!
         setListener()
     }
     fun setListener(){
@@ -83,36 +94,65 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
 
         var mapViewContainer = binding.fragmentNavigatorKakaoMap as ViewGroup
         mapViewContainer.addView(mapView)
-        Log.d(TAG, "initMapView: ${mainViewModel.liveNavBucketList.value}")
-
-        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
-            if (it == null || it.isEmpty()) {
-                mainViewModel.userLoc.observe(viewLifecycleOwner) { user -> // 유저 현재 위치만 마커에 표시
-                    if (user != null) {
-                        var mapPoint = MapPoint.mapPointWithGeoCoord(user.latitude, user.longitude)
-                        mapView.setMapCenterPoint(mapPoint, true)
-                        mapView.setZoomLevel(6, true)
-                    } else {
-                        showCustomToast("현재 위치를 찾을 수 없습니다.")
-                        Log.e(TAG, "initMapView: $it",)
-                    }
-                }
-            } else {
-                var first = it[0]
-                var mapPoint = MapPoint.mapPointWithGeoCoord(first.lat, first.long)
-                mapView.setMapCenterPoint(mapPoint, true)
-                mapView.setZoomLevel(6, true)
-                initAdapter()
-                addPing()
-            }
+        var userId = ApplicationClass.sharedPreferencesUtil.getUser().id
+        val job = CoroutineScope(Dispatchers.IO).launch {
+            placeList = navDao.getNav(userId) as MutableList<Navigator>
         }
+        runBlocking {
+            job.join()
+        }
+        if(placeList.isEmpty()){
+            mainViewModel.userLoc.observe(viewLifecycleOwner) { user -> // 유저 현재 위치만 마커에 표시
+                if (user != null) {
+                    var mapPoint = MapPoint.mapPointWithGeoCoord(user.latitude, user.longitude)
+                    mapView.setMapCenterPoint(mapPoint, true)
+                    mapView.setZoomLevel(6, true)
+                } else {
+                    showCustomToast("현재 위치를 찾을 수 없습니다.")
+                }
+            }
+        }else{
+            var first = placeList[0]
+            var mapPoint = MapPoint.mapPointWithGeoCoord(first.placeLat, first.placeLng)
+            mapView.setMapCenterPoint(mapPoint, true)
+            mapView.setZoomLevel(6, true)
+            initAdapter()
+            addPing()
+        }
+
+//        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
+//            if (it == null || it.isEmpty()) {
+//                mainViewModel.userLoc.observe(viewLifecycleOwner) { user -> // 유저 현재 위치만 마커에 표시
+//                    if (user != null) {
+//                        var mapPoint = MapPoint.mapPointWithGeoCoord(user.latitude, user.longitude)
+//                        mapView.setMapCenterPoint(mapPoint, true)
+//                        mapView.setZoomLevel(6, true)
+//                    } else {
+//                        showCustomToast("현재 위치를 찾을 수 없습니다.")
+//                        Log.e(TAG, "initMapView: $it",)
+//                    }
+//                }
+//            } else {
+//                var first = it[0]
+//                var mapPoint = MapPoint.mapPointWithGeoCoord(first.lat, first.long)
+//                mapView.setMapCenterPoint(mapPoint, true)
+//                mapView.setZoomLevel(6, true)
+//                initAdapter()
+//                addPing()
+//            }
+//        }
     }
 
     private fun initAdapter(){
         navAdapter = NavPlaceAdapter()
-        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
-            navAdapter.list = it
-        }
+//        var places = mutableListOf<Place>()
+//        for(item in placeList){
+//            places.add(Place(item.placeAddr,item.placeId,item.placeImg,item.placeLat,item.placeLng,item.placeName,item.placeContent))
+//        }
+        navAdapter.list = placeList
+//        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
+//            navAdapter.list = it
+//        }
         binding.fragmentNavigatorPlaceRv.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -122,7 +162,18 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
         }
         navAdapter.setOnItemClickListenenr(object: NavPlaceAdapter.ItemClickListener {
             override fun onClick(view: View, position: Int, placeId: Int) {
-                mainViewModel.removePlaceShopList(placeId)
+                val job = CoroutineScope(Dispatchers.IO).launch {
+                    navDao.removeNav(placeId)
+                }
+                runBlocking {
+                    job.join()
+                }
+                showCustomToast("삭제되었습니다.")
+                val job2 = CoroutineScope(Dispatchers.IO).launch {
+                    navDao.getNav(ApplicationClass.sharedPreferencesUtil.getUser().id)
+                }
+                runBlocking { job2.join() }
+//                mainViewModel.removePlaceShopList(placeId)
                 removePing()
                 addPing()
             }
@@ -130,10 +181,10 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
     }
     private fun addPing(){
         markerArr = arrayListOf()
-        val it = mainViewModel.liveNavBucketList.value!!
+        val it = placeList
 //        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
             for (item in 0..it.size - 1) {
-                val mapPoint = MapPoint.mapPointWithGeoCoord(it[item].lat, it[item].long)
+                val mapPoint = MapPoint.mapPointWithGeoCoord(it[item].placeLat, it[item].placeLng)
                 markerArr.add(mapPoint)
             }
             setPing(markerArr)
@@ -146,7 +197,7 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
         val list = arrayListOf<MapPOIItem>()
         for(i in 0..markerArr.size-1){
             val marker = MapPOIItem()
-            marker.itemName = mainViewModel.liveNavBucketList.value!![i].name
+            marker.itemName =placeList[i].placeName
             marker.mapPoint = markerArr[i]
             marker.markerType = MapPOIItem.MarkerType.BluePin
             list.add(marker)

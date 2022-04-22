@@ -53,7 +53,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind,R.lay
      */
     private fun editProfileBtnClickEvent() {
         binding.myPageFragmentTvEditProfile.setOnClickListener {
-            this@MyFragment.findNavController().navigate(R.id.action_myFragment_to_editProfileFragment)
+            this@MyFragment.findNavController().navigate(R.id.editProfileFragment)
         }
     }
 
@@ -62,7 +62,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind,R.lay
      */
     private fun settingBtnClickEvent() {
         binding.myPageFragmentBtnSetting.setOnClickListener {
-            this@MyFragment.findNavController().navigate(R.id.action_myFragment_to_settingFragment)
+            this@MyFragment.findNavController().navigate(R.id.settingFragment)
         }
     }
 

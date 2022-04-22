@@ -55,29 +55,14 @@
             app:tabGravity="fill"
             app:tabMode="fixed" />
 
-        <SearchView
-            android:id="@+id/fragment_search_sv"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="@drawable/search_view_background"
-            android:iconifiedByDefault="false"
-            android:queryHint="장소명, 설명, 주소명으로 찾아보세요"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_search_tabLayout" />
-
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/fragment_search_viewPager"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_search_sv" />
+            app:layout_constraintTop_toBottomOf="@+id/fragment_search_tabLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

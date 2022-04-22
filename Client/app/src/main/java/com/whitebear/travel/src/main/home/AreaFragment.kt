@@ -33,7 +33,6 @@ class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind
         arguments?.apply {
             areaName = getString("areaName")!!
             areaId = getInt("areaId")
-
             Log.d(TAG, "onCreate: $areaName $areaId")
         }
     }
@@ -45,6 +44,12 @@ class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
+
+        Log.d(TAG, "onViewCreated: $areaName")
+        if(areaName.length < 4){
+            areaName = areaName.toString().substring(0,2)
+        }
+        Log.d(TAG, "onViewCreated: $areaName")
         runBlocking {
             mainViewModel.getCategorys()
             mainViewModel.getAreaOne(areaId)

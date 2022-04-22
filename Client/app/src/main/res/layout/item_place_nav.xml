@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
     <data>
         <variable
-            name="place"
-            type="com.whitebear.travel.src.dto.Place" />
+            name="navi"
+            type="com.whitebear.travel.src.dto.Navigator" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -48,7 +48,7 @@
                     android:layout_height="100dp"
                     android:layout_marginStart="20dp"
                     android:scaleType="fitXY"
-                    app:imageUrlPlace="@{place.imgURL}"
+                    app:imageUrlPlace="@{navi.placeImg}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -60,7 +60,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_marginEnd="8dp"
-                    android:text="@{place.name}"
+                    android:text="@{navi.placeName}"
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     app:layout_constraintEnd_toStartOf="@+id/fragment_nav_delete"
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="15dp"
-                    android:text="@{place.summary}"
+                    android:text="@{navi.placeContent}"
                     android:textColor="@color/black"
                     android:textSize="12sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -85,7 +85,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="15dp"
-                    android:text="@{place.address}"
+                    android:text="@{navi.placeAddr}"
                     android:textSize="10sp"
                     app:layout_constraintBottom_toBottomOf="@+id/fragment_nav_placeImg"
                     app:layout_constraintEnd_toEndOf="parent"

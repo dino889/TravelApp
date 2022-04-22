@@ -57,7 +57,6 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
     }
 
     fun setListener(){
-        initButtonClick()
         initAdapter()
         initSpinner()
         initTabLayout()
@@ -104,8 +103,8 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
     fun initAdapter(){
 
         placeAdapter = PlaceAdapter()
-
         placeAdapter.list = mainViewModel.places.value!!
+        placeAdapter.filter.filter("")
         mainViewModel.placeLikes.observe(viewLifecycleOwner) {
             placeAdapter.likeList = it
         }
@@ -125,43 +124,6 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
                 this@PlaceFragment.findNavController().navigate(R.id.placeDetailFragment, place)
             }
         })
-        placeAdapter.filter.filter("")
-        binding.fragmentPlaceSv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            @RequiresApi(Build.VERSION_CODES.O)
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                var curTime = System.currentTimeMillis()
-                var formatter = SimpleDateFormat("yyyy-MM-dd HH:ss")
-                var nows = formatter.format(curTime)
-                if(query!=null){
-                    var keywords = Keyword(
-                        query,
-                        "장소",
-                        nows
-                    )
-                    mainViewModel.insertKeywords(keywords)
-
-                    return false
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if(TextUtils.isEmpty(newText)){
-                    placeAdapter.filter.filter("")
-                }else{
-                    placeAdapter.filter.filter(newText.toString())
-                    placeAdapter.notifyDataSetChanged()
-                }
-
-                return false
-            }
-
-        })
-    }
-    fun initButtonClick(){
-        binding.fragmentPlaceAppBarBack.setOnClickListener {
-            this@PlaceFragment.findNavController().popBackStack()
-        }
     }
     fun initTabLayout(){
         var areas = mainViewModel.areas.value!!
@@ -172,11 +134,17 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
         binding.fragmentPlaceTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 binding.fragmentPlaceFilterSpinner.setSelection(0)
+                var tabName = ""
+                if(tabName.length < 4){
+                    tabName = tab?.text.toString().substring(0,2)
+                }else{
+                    tabName = tab?.text.toString().substring(0,4)
+                }
                 if (tab != null) {
-                    areaName = tab?.text.toString()
+                    areaName = tabName
                 }
                 runBlocking {
-                    mainViewModel.getPlaces(tab?.text.toString())
+                    mainViewModel.getPlaces(tabName)
                 }
                 initAdapter()
                 placeAdapter.notifyDataSetChanged()

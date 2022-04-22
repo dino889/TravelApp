@@ -1,8 +1,10 @@
 package com.whitebear.travel.src.network.binding
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +15,10 @@ import com.whitebear.travel.src.main.home.*
 import com.whitebear.travel.src.main.place.PlaceAdapter
 import com.whitebear.travel.src.main.place.PlaceReviewAdapter
 import com.whitebear.travel.src.main.route.RouteAdapter
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.OffsetDateTime
+import java.time.format.DateTimeFormatter
 
 @BindingAdapter("imageUrlArea")
 fun bindImageArea(imgView:ImageView, imgUrl:String?){
@@ -66,6 +72,9 @@ fun bindImagePlace(imgView:ImageView, imgUrl: String?){
 }
 @BindingAdapter("textViewRoutePlaceListSize")
 fun bindTextViewRoutePlaceListSize(textView: TextView, size:Int){
+    if(size == 0){
+        textView.text = "총 4곳"
+    }
     textView.text = "총 ${size}곳"
 }
 @SuppressLint("SetTextI18n")
@@ -144,7 +153,7 @@ fun bindTextViweReviewTotal(textView: TextView, size:Int){
 }
 
 @BindingAdapter("placeNavListData")
-fun bindPlaceNavRecyclerView(recyclerView: RecyclerView, data:List<Place>?) {
+fun bindPlaceNavRecyclerView(recyclerView: RecyclerView, data:List<Navigator>?) {
     var adapter = recyclerView.adapter as NavPlaceAdapter
     if(recyclerView.adapter == null){
         adapter.setHasStableIds(true)
@@ -152,7 +161,7 @@ fun bindPlaceNavRecyclerView(recyclerView: RecyclerView, data:List<Place>?) {
     }else{
         adapter = recyclerView.adapter as NavPlaceAdapter
     }
-    adapter.list = data as MutableList<Place>
+    adapter.list = data as MutableList<Navigator>
     adapter.notifyDataSetChanged()
 }
 //@BindingAdapter("weatherImageUrl")
@@ -206,4 +215,12 @@ fun bindLikePlaceName(textView: TextView, address: String) {
 @BindingAdapter("distancePlace")
 fun bindPlaceDistance(textView: TextView, dist: Double) {
     textView.text = "${String.format("%.2f", dist)} km"
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@BindingAdapter("textViewDate")
+fun bindTextViewDate(textView: TextView, date:String) {
+    var modStr = date.replace("T"," ")
+    var result = modStr.substring(0,19)
+    textView.text = result
 }

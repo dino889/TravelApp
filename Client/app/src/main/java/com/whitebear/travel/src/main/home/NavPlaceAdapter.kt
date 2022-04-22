@@ -8,13 +8,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.whitebear.travel.R
 import com.whitebear.travel.databinding.ItemPlaceNavBinding
+import com.whitebear.travel.src.dto.Navigator
 import com.whitebear.travel.src.dto.Place
 
 class NavPlaceAdapter() : RecyclerView.Adapter<NavPlaceAdapter.NavViewHolder>(){
-    var list = mutableListOf<Place>()
+    var list = mutableListOf<Navigator>()
     inner class NavViewHolder(private val binding:ItemPlaceNavBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(place:Place){
-            binding.place = place
+        fun bind(navi:Navigator){
+            binding.navi = navi
             binding.executePendingBindings()
         }
     }
@@ -28,7 +29,7 @@ class NavPlaceAdapter() : RecyclerView.Adapter<NavPlaceAdapter.NavViewHolder>(){
         holder.apply {
             bind(list[position])
             itemView.findViewById<ImageButton>(R.id.fragment_nav_delete).setOnClickListener {
-                itemClickListener.onClick(it,position,list[position].id)
+                itemClickListener.onClick(it,position,list[position].idx)
             }
         }
     }

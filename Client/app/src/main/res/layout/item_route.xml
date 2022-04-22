@@ -33,10 +33,14 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:autoText="true"
             android:text="@{route.name}"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
+            app:autoSizeMinTextSize="13dp"
+            app:autoSizeTextType="uniform"
             app:layout_constraintEnd_toStartOf="@+id/frragment_route_routeLike"
             app:layout_constraintStart_toEndOf="@+id/fragment_route_routeImg"
             app:layout_constraintTop_toTopOf="@+id/fragment_route_routeImg" />
@@ -78,7 +82,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            app:textViewRoutePlaceListSize="@{viewModel.placesToRoutes.size()}"
+            android:text="총 4곳"
             app:layout_constraintBottom_toBottomOf="@+id/textView10"
             app:layout_constraintStart_toEndOf="@+id/textView10"
             app:layout_constraintTop_toTopOf="@+id/textView10" />

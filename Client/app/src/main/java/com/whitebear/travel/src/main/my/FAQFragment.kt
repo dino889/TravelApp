@@ -21,24 +21,21 @@ class FAQFragment : BaseFragment<FragmentFAQBinding>(FragmentFAQBinding::bind, R
     private lateinit var faqCategoryRecyclerviewAdapter: FAQCategoryRecyclerviewAdapter
     private lateinit var faqRecyclerviewAdapter: FAQRecyclerviewAdapter
 
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        mainActivity = context as MainActivity
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainActivity.hideBottomNav(true)
     }
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        mainActivity.hideBottomNav(true)
 
         setList()
-
         initFaqCategoryAdapter()
         initFaqAdapter()
-
         backBtnClickEvent()
     }
 
@@ -115,5 +112,15 @@ class FAQFragment : BaseFragment<FragmentFAQBinding>(FragmentFAQBinding::bind, R
     override fun onDestroyView() {
         super.onDestroyView()
         mainActivity.hideBottomNav(false)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        mainActivity.hideBottomNav(true)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainActivity.hideBottomNav(true)
     }
 }

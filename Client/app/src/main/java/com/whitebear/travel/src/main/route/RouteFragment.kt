@@ -23,11 +23,12 @@ import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentRouteBinding
-import com.whitebear.travel.src.dto.Keyword
-import com.whitebear.travel.src.dto.Message
-import com.whitebear.travel.src.dto.RouteLike
+import com.whitebear.travel.src.dto.*
 import com.whitebear.travel.src.main.MainActivity
 import com.whitebear.travel.src.network.service.RouteService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 import java.text.SimpleDateFormat
@@ -50,6 +51,9 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     private var areaName = "대구"
     private var routeId = 0
     private var heartFlag = false
+    lateinit var navDao: NavDao
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -74,6 +78,7 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             mainViewModel.getRoutes(areaName)
             mainViewModel.getRoutesLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
         }
+        navDao = mainActivity.navDB?.navDao()!!
         setListener()
 
         if(routeId > 0){
@@ -83,7 +88,6 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     private fun setListener(){
         initAdapter()
         initTabLayout()
-        initSpinner()
     }
     private fun initTabLayout(){
         var areas = mainViewModel.areas.value!!
@@ -94,12 +98,18 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         routeAdapter = RouteAdapter(mainViewModel)
         binding.fragmentRouteTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                binding.fragmentRouteFilterSpinner.setSelection(0)
-                if(tab != null){
-                    areaName = tab?.text.toString()
+                var tabName = ""
+                if(tabName.length < 4){
+                    tabName = tab?.text.toString().substring(0,2)
+                }else{
+                    tabName = tab?.text.toString().substring(0,4)
                 }
+                if (tab != null) {
+                    areaName = tabName
+                }
+
                 runBlocking {
-                    mainViewModel.getRoutes(tab?.text.toString())
+                    mainViewModel.getRoutes(tabName)
                 }
                 initAdapter()
                 routeAdapter.notifyDataSetChanged()
@@ -117,7 +127,7 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     private fun initAdapter(){
         routeAdapter = RouteAdapter(mainViewModel)
         routeAdapter.list = mainViewModel.routes.value!!
-
+        routeAdapter.filter.filter("")
         mainViewModel.routesLikes.observe(viewLifecycleOwner) {
             routeAdapter.likeList = it
         }
@@ -132,39 +142,9 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
         routeAdapter.setOnItemClickListener(object: RouteAdapter.ItemClickListener{
-            override fun onClick(view: View, position: Int, routeId: Int, heartFlag: Boolean) {
+            override fun onClick(view: View, position: Int, routeId: Int, heartFlag: Boolean, areaName:String) {
                 showDialogDetailRoute(routeId,heartFlag)
             }
-
-        })
-        routeAdapter.filter.filter("")
-        binding.fragmentRouteSv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                var curTime = System.currentTimeMillis()
-                var formatter = SimpleDateFormat("yyyy-MM-dd HH:ss")
-                var nows = formatter.format(curTime)
-                if(query!=null){
-                    var keywords = Keyword(
-                        query,
-                        "경로",
-                        nows
-                    )
-                    mainViewModel.insertKeywords(keywords)
-                    return false
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if(TextUtils.isEmpty(newText)){
-                    routeAdapter.filter.filter("")
-                }else{
-                    routeAdapter.filter.filter(newText.toString())
-                    routeAdapter.notifyDataSetChanged()
-                }
-                return false
-            }
-
         })
     }
     private fun showDialogDetailRoute(id:Int,heartFlag:Boolean) {
@@ -234,16 +214,57 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             adapter = routeDetailAdapter
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
+        
         binding.fragmentRouteDetailAddBucket.setOnClickListener {
-            val places = mainViewModel.placesToRoutes.value!!
-            if(mainViewModel.liveNavBucketList.value!!.size > 4){
-                showCustomToast("더이상 추가하실 수 없습니다.")
-            }else{
-                for(item in places){
-                    mainViewModel.insertPlaceShopList(item)
-                }
-                showCustomToast("추가되었습니다.")
+            var places = mainViewModel.placesToRoutes.value!!
+            var placeList = mutableListOf<Navigator>()
+            var userId = ApplicationClass.sharedPreferencesUtil.getUser().id
+            val job1 = CoroutineScope(Dispatchers.IO).launch {
+                placeList = navDao.getNav(userId) as MutableList<Navigator>
             }
+            runBlocking {
+                job1.join()
+            }
+            if(placeList.size == 0){
+                for(item in places){
+                    val job = CoroutineScope(Dispatchers.IO).launch {
+                        navDao.insertNav(Navigator(0,userId, item.id,item.name,item.lat,item.long,item.address,item.summary,item.imgURL))
+                    }
+                    runBlocking {
+                        job.join()
+                    }
+                    showCustomToast("추가되었습니다.")
+                }
+            }else if(placeList.size > 0 && placeList.size < 4){
+                var size1 = places.size
+                var size2 = placeList.size
+                var resultSize = size1 - size2
+                for(item in 0..resultSize){
+                    val job = CoroutineScope(Dispatchers.IO).launch {
+                        navDao.insertNav(Navigator(0,userId, places[item].id,places[item].name,places[item].lat,places[item].long,places[item].address,places[item].summary,places[item].imgURL))
+                    }
+                    runBlocking {
+                        job.join()
+                    }
+                    showCustomToast("추가되었습니다.")
+                }
+            }else{
+                showCustomToast("더이상 추가하실 수 없습니다.")
+            }
+
+
+
+
+
+//
+//            if(mainViewModel.liveNavBucketList.value!!.size > 4){
+//                showCustomToast("더이상 추가하실 수 없습니다.")
+//            }else{
+//                for(item in places){
+//                    mainViewModel.insertPlaceShopList(item)
+//                }
+//                showCustomToast("추가되었습니다.")
+//            }
         }
     }
 
