@@ -71,6 +71,8 @@
         android:clickable="true"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="20dp"
+        android:backgroundTint="@color/main_300"
+        app:tint="@color/white"
         android:src="@drawable/ic_camping_tent_black_512px"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
