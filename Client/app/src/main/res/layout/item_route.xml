@@ -22,21 +22,22 @@
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="24dp"
-            app:imageUrlPlace = "@{route.imgURL}"
+            app:imageUrlPlace="@{route.imgURL}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/fragment_route_Name"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="14dp"
             android:layout_marginTop="8dp"
             android:text="@{route.name}"
             android:textColor="@color/black"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/frragment_route_routeLike"
             app:layout_constraintStart_toEndOf="@+id/fragment_route_routeImg"
             app:layout_constraintTop_toTopOf="@+id/fragment_route_routeImg" />
 

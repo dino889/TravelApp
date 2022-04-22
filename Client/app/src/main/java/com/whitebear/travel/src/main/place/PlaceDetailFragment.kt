@@ -37,9 +37,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
         super.onCreate(savedInstanceState)
         arguments?.apply {
             placeId = getInt("placeId")
-            Log.d(TAG, "onCreate: $placeId")
             heartFlag = getBoolean("heartFlag")
-            Log.d(TAG, "onCreate: $heartFlag")
         }
         mainActivity.hideBottomNav(true)
     }

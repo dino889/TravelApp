@@ -12,6 +12,7 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.*
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
@@ -30,6 +31,17 @@ import com.whitebear.travel.src.network.service.RouteService
 import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 import java.text.SimpleDateFormat
+import android.view.ViewGroup
+
+import android.view.LayoutInflater
+import androidx.annotation.NonNull
+import androidx.annotation.Nullable
+import androidx.databinding.DataBindingUtil.setContentView
+
+import androidx.databinding.ViewDataBinding
+import com.whitebear.travel.databinding.DialogRouteDetailBinding
+import okhttp3.internal.notify
+
 
 private const val TAG = "RouteFragment"
 class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::bind,R.layout.fragment_route) {
@@ -107,7 +119,6 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         routeAdapter.list = mainViewModel.routes.value!!
 
         mainViewModel.routesLikes.observe(viewLifecycleOwner) {
-            Log.d(TAG, "initAdapter: $it")
             routeAdapter.likeList = it
         }
 
@@ -156,22 +167,36 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
 
         })
     }
-    private fun showDialogDetailRoute(id:Int,heartFlag:Boolean){
-        Log.d(TAG, "onViewCreated: $id  $heartFlag")
+    private fun showDialogDetailRoute(id:Int,heartFlag:Boolean) {
         mainViewModel.getRoute(id)
-        var dialog = Dialog(requireContext())
-        var dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_route_detail,null)
-        dialog.setContentView(dialogView)
+        val dialog = Dialog(requireContext())
+        val binding: DialogRouteDetailBinding = DataBindingUtil.inflate(LayoutInflater.from(requireContext()), R.layout.dialog_route_detail, null, false)
+        dialog.setContentView(binding.root)
+        val route = mainViewModel.route.value!!
+
+        mainViewModel.route.observe(viewLifecycleOwner, {
+            binding.route = it
+            dialog.onContentChanged()
+        })
+
+//        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_route_detail,null)
+//        dialog.setContentView(dialogView)
+
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        var params = dialog.window?.attributes
+        val params = dialog.window?.attributes
         params?.width = WindowManager.LayoutParams.MATCH_PARENT
         params?.height = WindowManager.LayoutParams.MATCH_PARENT
         dialog.window?.attributes = params
         dialog.show()
-        dialogView.findViewById<ImageButton>(R.id.fragment_route_detailBack).setOnClickListener {
+
+
+
+
+        binding.fragmentRouteDetailBack.setOnClickListener {
             dialog.dismiss()
         }
-        var heart = dialogView.findViewById<LottieAnimationView>(R.id.fragment_route_detailLike)
+
+        val heart = binding.fragmentRouteDetailLike
         if(heartFlag){
             heart.progress = 0.4f
         }else{
@@ -179,38 +204,33 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         }
         heart.setOnClickListener {
             //좋아요 해라
-            var routeLike = RouteLike(
+            val routeLike = RouteLike(
                 ApplicationClass.sharedPreferencesUtil.getUser().id,
                 id
             )
-            likeRoute(routeLike,heart)
+            likeRoute(id, routeLike,heart)
         }
 
-        var route = mainViewModel.route.value!!
-
-        dialogView.findViewById<TextView>(R.id.fragment_route_detailName).text = route.name
-        dialogView.findViewById<TextView>(R.id.fragment_route_detailContent).text = route.description
-        dialogView.findViewById<TextView>(R.id.fragment_route_detailReview).text = route.rating.toFloat().toString()
-        dialogView.findViewById<TextView>(R.id.fragment_route_detailLikeCnt).text = route.heartCount.toString()
-
-        Glide.with(dialogView)
+        Glide.with(binding.root)
             .load(route.imgURL)
-            .into(dialogView.findViewById<ImageView>(R.id.fragment_route_detailImg))
+            .into(binding.fragmentRouteDetailImg)
 
        runBlocking {
            mainViewModel.getRoutesInPlaceArr(route.placeIdList)
        }
-        var routeDetailAdapter = RouteDetailAdapter()
+
+        val routeDetailAdapter = RouteDetailAdapter()
         mainViewModel.placesToRoutes.observe(viewLifecycleOwner) {
             routeDetailAdapter.list = it
         }
-        dialogView.findViewById<RecyclerView>(R.id.fragment_route_detailPlaceRv).apply {
+
+        binding.fragmentRouteDetailPlaceRv.apply {
             layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
             adapter = routeDetailAdapter
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
-        dialogView.findViewById<ConstraintLayout>(R.id.fragment_routeDetail_addBucket).setOnClickListener {
-            var places = mainViewModel.placesToRoutes.value!!
+        binding.fragmentRouteDetailAddBucket.setOnClickListener {
+            val places = mainViewModel.placesToRoutes.value!!
             if(mainViewModel.liveNavBucketList.value!!.size > 4){
                 showCustomToast("더이상 추가하실 수 없습니다.")
             }else{
@@ -220,9 +240,9 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
                 showCustomToast("추가되었습니다.")
             }
         }
-
     }
-    private fun likeRoute(routeLike:RouteLike,heart : LottieAnimationView){
+
+    private fun likeRoute(id: Int, routeLike:RouteLike,heart : LottieAnimationView){
         var response : Response<Message>
         runBlocking {
             response = RouteService().routeLike(routeLike)
@@ -231,6 +251,10 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             val res = response.body()
             if(res!=null){
                 if(res.isSuccess){
+                    runBlocking {
+                        mainViewModel.getRoutes(areaName)
+                    }
+                    mainViewModel.getRoute(id)
                     if(!res.message.contains("취소")){
                         val animator = ValueAnimator.ofFloat(0f,0.4f).setDuration(500)
                         animator.addUpdateListener { animation ->
@@ -248,6 +272,7 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             }
         }
     }
+    
     private fun initSpinner(){
         var  spinnerArr = arrayListOf<String>("별점순","리뷰 적은순","리뷰 많은순")
         val adapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,spinnerArr)
@@ -285,12 +310,5 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
 
         }
     }
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            RouteFragment().apply {
-                arguments = Bundle().apply {
-                }
-            }
-    }
+
 }

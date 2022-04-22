@@ -55,6 +55,7 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
         }
         setListener()
     }
+
     fun setListener(){
         initButtonClick()
         initAdapter()
@@ -75,23 +76,19 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
                 id: Long
             ) {
                 if(position == 0){
-                    Log.d(TAG, "onItemSelected: $areaName")
                     runBlocking {
                         mainViewModel.getPlaces(areaName)
                     }
                 }
                 if(position == 1){
                     runBlocking {
-                        Log.d(TAG, "onItemSelected: $areaName")
                         mainViewModel.getPlacesToSort(areaName,"review")
                     }
-                    Log.d(TAG, "onItemSelected: 1")
                 }
                 if(position == 2){
                     runBlocking {
                         mainViewModel.getPlacesToSort(areaName,"review_asc")
                     }
-                    Log.d(TAG, "onItemSelected: 2")
                 }
 
                 initAdapter()
@@ -113,7 +110,6 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
             placeAdapter.likeList = it
         }
         mainViewModel.places.observe(viewLifecycleOwner) {
-            Log.d(TAG, "initAdapter: $it")
             placeAdapter.list = it
         }
         binding.fragmentPlaceRv.apply {
