@@ -8,6 +8,7 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.src.main.MainActivity
 
@@ -34,7 +35,7 @@ class FirebaseMessageService : FirebaseMessagingService() {
             val mainPendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, mainIntent, 0)
 
             val builder1 = NotificationCompat.Builder(this, MainActivity.channel_id)
-//                .setSmallIcon(R.drawable.ic_alert_bell_notification_alert_bell)
+                .setSmallIcon(R.drawable.ic_send_noti_512px)
                 .setContentTitle(messageTitle)
                 .setContentText(messageContent)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(messageContent))
