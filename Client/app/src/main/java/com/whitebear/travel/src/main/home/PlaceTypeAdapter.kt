@@ -22,7 +22,6 @@ class PlaceTypeAdapter : RecyclerView.Adapter<PlaceTypeAdapter.PlaceViewHolder>(
         fun bind(place: Place){
             for(i in likeList){
                 if(place.id == i.id){
-                    Log.d("TAG", "bind: ${place.id}")
                     binding.frragmentPlacePlaceLike.progress = 0.5F
                     break
                 }
