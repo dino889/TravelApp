@@ -23,4 +23,6 @@ class UserService {
 
     suspend fun selectUserByEmailUsername(email: String, username: String) = RetrofitUtil.userService.selectUserByEmailUsername(email, username)
 
+    suspend fun updateUserToken(userId: Int, token: String) = RetrofitUtil.userService.updateUserToken(userId, token)
+
 }

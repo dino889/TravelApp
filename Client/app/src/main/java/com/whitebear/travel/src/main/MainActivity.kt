@@ -44,6 +44,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.whitebear.travel.src.dto.Noti
 import com.whitebear.travel.src.network.api.FCMApi
+import com.whitebear.travel.src.network.service.UserService
 import com.whitebear.travel.util.NavDB
 import com.whitebear.travel.util.NotiDB
 import retrofit2.Response
@@ -215,7 +216,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     // 시스템으로 부터 받은 위치정보를 화면에 갱신해주는 메소드
-    @RequiresApi(Build.VERSION_CODES.O)
     fun onLocationChanged(location: Location) {
         mLastLocation = location
         mainViewModel.setUserLoc(location, getAddress(location))
@@ -236,7 +236,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         return address
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getToday() : String {
         var current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
@@ -372,7 +371,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     /**
      * Fcm Notification 수신을 위한 채널 추가
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(id: String, name: String) {
         val importance = NotificationManager.IMPORTANCE_DEFAULT // or IMPORTANCE_HIGH
         val channel = NotificationChannel(id, name, importance)
@@ -385,24 +383,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     companion object {
         const val channel_id = "whitebear_channel"
         fun uploadToken(token:String, userId: Int) {
-            val storeService = ApplicationClass.retrofit.create(FCMApi::class.java)
 
             var response : Response<HashMap<String, Any>>
             runBlocking {
-                response = storeService.uploadToken(token, ApplicationClass.sharedPreferencesUtil.getUser().id)
+                response = UserService().updateUserToken(ApplicationClass.sharedPreferencesUtil.getUser().id, token)
             }
-            val res = response.body()
-//            if(response.code() == 200) {
-//                if(res != null) {
-//                    if(res.data["isSuccess"] == true && res.message == "토큰 등록 성공") {
-//                        Log.d(TAG, "uploadToken: $token")
-//                    } else {
-//                        Log.d(TAG, "uploadToken: ${res.message}")
-//                    }
-//                }
-//            } else {
-//                Log.e(TAG, "uploadToken: 토큰 정보 등록 중 통신 오류")
-//            }
+            if(response.code() == 200) {
+                val res = response.body()
+                if(res != null) {
+                    if(res["isSuccess"] == true) {
+                        Log.d(TAG, "uploadToken: $token")
+                    } else {
+                        Log.d(TAG, "uploadToken: ${res["message"]}")
+                    }
+                }
+            } else {
+                Log.e(TAG, "uploadToken: 토큰 정보 등록 중 통신 오류")
+            }
         }
     }
 }

@@ -5,8 +5,8 @@ import retrofit2.http.*
 
 interface FCMApi {
 
-    // Token 정보 서버로 전송
-    @POST("/fcm/token")
-    suspend fun uploadToken(@Query("token") token: String, @Query("userId") userId: Int): Response<HashMap<String, Any>>
+    @FormUrlEncoded
+    @POST("notification/{userId}")
+    suspend fun sendMsgToUser(@Path("userId") userId: Int, @Field("title") title: String, @Field("body") body: String, @Field("type") type: String) : Response<HashMap<String, Any>>
 
 }

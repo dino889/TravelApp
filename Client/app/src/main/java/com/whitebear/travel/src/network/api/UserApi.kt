@@ -63,4 +63,11 @@ interface UserApi {
      */
     @GET("users/find")
     suspend fun selectUserByEmailUsername(@Query("email") email: String, @Query("username") username: String) : Response<HashMap<String, Any>>
+
+    /**
+     * 사용자 token 정보 update
+     */
+    @FormUrlEncoded
+    @PUT("users/{id}")
+    suspend fun updateUserToken(@Path("id") id: Int, @Field("token") token: String) : Response<HashMap<String, Any>>
 }
