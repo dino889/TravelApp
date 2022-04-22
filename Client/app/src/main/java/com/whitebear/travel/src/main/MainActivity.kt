@@ -44,6 +44,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.whitebear.travel.src.dto.Noti
 import com.whitebear.travel.src.network.api.FCMApi
+import com.whitebear.travel.util.NavDB
 import com.whitebear.travel.util.NotiDB
 import retrofit2.Response
 import kotlin.collections.HashMap
@@ -68,10 +69,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     private val GPS_ENABLE_REQUEST_CODE = 2001
     //Room DB
     var notiDB : NotiDB ?= null
+    var navDB: NavDB?= null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //db저장
         notiDB = NotiDB.getInstance(this)
+        navDB = NavDB.getInstance(this)
+
         var notiDao = notiDB?.fcmDao()
         val r = java.lang.Runnable {
             if(notiDao?.getFcmCheck(ApplicationClass.sharedPreferencesUtil.getUser().id) == null){

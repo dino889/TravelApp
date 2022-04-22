@@ -14,12 +14,12 @@ import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentPlaceDetailBinding
-import com.whitebear.travel.src.dto.Message
-import com.whitebear.travel.src.dto.PlaceLike
+import com.whitebear.travel.src.dto.*
 import com.whitebear.travel.src.main.MainActivity
 import com.whitebear.travel.src.network.service.PlaceService
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import retrofit2.Response
+import java.lang.Runnable
 
 private const val TAG = "PlaceDetailFragment"
 class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPlaceDetailBinding::bind,R.layout.fragment_place_detail) {
@@ -27,6 +27,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
 
     private var placeId = 0
     private var heartFlag = false
+    lateinit var navDao:NavDao
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -51,6 +52,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
         runBlocking {
             mainViewModel.getPlace(placeId)
         }
+        navDao = mainActivity.navDB?.navDao()!!
 
         mainViewModel.place.observe(viewLifecycleOwner, {
             binding.place = it
@@ -73,14 +75,38 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
             this@PlaceDetailFragment.findNavController().popBackStack()
         }
         binding.fragmentPlaceDetailAddBucket.setOnClickListener {
-            if(mainViewModel.liveNavBucketList.value!!.size < 4){
-                var place = mainViewModel.place.value!!
-                mainViewModel.insertPlaceShopList(place)
+            var place = mainViewModel.place.value!!
+            var size = 0
+            var placeList = mutableListOf<Place>()
+            val job1 = CoroutineScope(Dispatchers.IO).launch {
+                placeList = navDao.getNav(ApplicationClass.sharedPreferencesUtil.getUser().id) as MutableList<Place>
+            }
+            runBlocking {
+                job1.join()
+            }
+
+            if(placeList.size < 4){
+                val job = CoroutineScope(Dispatchers.IO).launch {
+                    navDao.insertNav(Navigator(0,ApplicationClass.sharedPreferencesUtil.getUser().id,place.id,place.name,place.lat,place.long,place.address,place.summary,place.imgURL))
+                }
+                runBlocking {
+                    job.join()
+                }
                 showCustomToast("추가되었습니다.")
-                binding.fragmentPlaceDetailLottie.playAnimation()
             }else{
                 showCustomToast("더이상 추가하실 수 없습니다.")
             }
+
+
+
+//            if(mainViewModel.liveNavBucketList.value!!.size < 4){
+//                var place = mainViewModel.place.value!!
+//                mainViewModel.insertPlaceShopList(place)
+//                showCustomToast("추가되었습니다.")
+//                binding.fragmentPlaceDetailLottie.playAnimation()
+//            }else{
+//                showCustomToast("더이상 추가하실 수 없습니다.")
+//            }
         }
         binding.fragmentPlaceDetailHeart.setOnClickListener {
             var placeLike = PlaceLike(

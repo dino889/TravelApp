@@ -22,11 +22,12 @@ import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentRouteBinding
-import com.whitebear.travel.src.dto.Keyword
-import com.whitebear.travel.src.dto.Message
-import com.whitebear.travel.src.dto.RouteLike
+import com.whitebear.travel.src.dto.*
 import com.whitebear.travel.src.main.MainActivity
 import com.whitebear.travel.src.network.service.RouteService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 import java.text.SimpleDateFormat
@@ -38,6 +39,9 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     private var areaName = "대구"
     private var routeId = 0
     private var heartFlag = false
+    lateinit var navDao: NavDao
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
@@ -62,6 +66,7 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             mainViewModel.getRoutes(areaName)
             mainViewModel.getRoutesLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
         }
+        navDao = mainActivity.navDB?.navDao()!!
         setListener()
 
         if(routeId > 0){
@@ -186,14 +191,54 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         }
         dialogView.findViewById<ConstraintLayout>(R.id.fragment_routeDetail_addBucket).setOnClickListener {
             var places = mainViewModel.placesToRoutes.value!!
-            if(mainViewModel.liveNavBucketList.value!!.size > 4){
-                showCustomToast("더이상 추가하실 수 없습니다.")
-            }else{
-                for(item in places){
-                    mainViewModel.insertPlaceShopList(item)
-                }
-                showCustomToast("추가되었습니다.")
+            var placeList = mutableListOf<Navigator>()
+            var userId = ApplicationClass.sharedPreferencesUtil.getUser().id
+            val job1 = CoroutineScope(Dispatchers.IO).launch {
+                placeList = navDao.getNav(userId) as MutableList<Navigator>
             }
+            runBlocking {
+                job1.join()
+            }
+            if(placeList.size == 0){
+                for(item in places){
+                    val job = CoroutineScope(Dispatchers.IO).launch {
+                        navDao.insertNav(Navigator(0,userId, item.id,item.name,item.lat,item.long,item.address,item.summary,item.imgURL))
+                    }
+                    runBlocking {
+                        job.join()
+                    }
+                    showCustomToast("추가되었습니다.")
+                }
+            }else if(placeList.size > 0 && placeList.size < 4){
+                var size1 = places.size
+                var size2 = placeList.size
+                var resultSize = size1 - size2
+                for(item in 0..resultSize){
+                    val job = CoroutineScope(Dispatchers.IO).launch {
+                        navDao.insertNav(Navigator(0,userId, places[item].id,places[item].name,places[item].lat,places[item].long,places[item].address,places[item].summary,places[item].imgURL))
+                    }
+                    runBlocking {
+                        job.join()
+                    }
+                    showCustomToast("추가되었습니다.")
+                }
+            }else{
+                showCustomToast("더이상 추가하실 수 없습니다.")
+            }
+
+
+
+
+
+//
+//            if(mainViewModel.liveNavBucketList.value!!.size > 4){
+//                showCustomToast("더이상 추가하실 수 없습니다.")
+//            }else{
+//                for(item in places){
+//                    mainViewModel.insertPlaceShopList(item)
+//                }
+//                showCustomToast("추가되었습니다.")
+//            }
         }
 
     }

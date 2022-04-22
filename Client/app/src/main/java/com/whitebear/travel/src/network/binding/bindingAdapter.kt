@@ -153,7 +153,7 @@ fun bindTextViweReviewTotal(textView: TextView, size:Int){
 }
 
 @BindingAdapter("placeNavListData")
-fun bindPlaceNavRecyclerView(recyclerView: RecyclerView, data:List<Place>?) {
+fun bindPlaceNavRecyclerView(recyclerView: RecyclerView, data:List<Navigator>?) {
     var adapter = recyclerView.adapter as NavPlaceAdapter
     if(recyclerView.adapter == null){
         adapter.setHasStableIds(true)
@@ -161,7 +161,7 @@ fun bindPlaceNavRecyclerView(recyclerView: RecyclerView, data:List<Place>?) {
     }else{
         adapter = recyclerView.adapter as NavPlaceAdapter
     }
-    adapter.list = data as MutableList<Place>
+    adapter.list = data as MutableList<Navigator>
     adapter.notifyDataSetChanged()
 }
 //@BindingAdapter("weatherImageUrl")
