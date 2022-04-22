@@ -71,7 +71,6 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     private fun setListener(){
         initAdapter()
         initTabLayout()
-        initSpinner()
     }
     private fun initTabLayout(){
         var areas = mainViewModel.areas.value!!
@@ -82,7 +81,6 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         routeAdapter = RouteAdapter(mainViewModel)
         binding.fragmentRouteTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                binding.fragmentRouteFilterSpinner.setSelection(0)
                 if(tab != null){
                     areaName = tab?.text.toString()
                 }
@@ -105,7 +103,7 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
     private fun initAdapter(){
         routeAdapter = RouteAdapter(mainViewModel)
         routeAdapter.list = mainViewModel.routes.value!!
-
+        routeAdapter.filter.filter("")
         mainViewModel.routesLikes.observe(viewLifecycleOwner) {
             Log.d(TAG, "initAdapter: $it")
             routeAdapter.likeList = it
@@ -121,39 +119,9 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             adapter!!.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         }
         routeAdapter.setOnItemClickListener(object: RouteAdapter.ItemClickListener{
-            override fun onClick(view: View, position: Int, routeId: Int, heartFlag: Boolean) {
+            override fun onClick(view: View, position: Int, routeId: Int, heartFlag: Boolean, areaName:String) {
                 showDialogDetailRoute(routeId,heartFlag)
             }
-
-        })
-        routeAdapter.filter.filter("")
-        binding.fragmentRouteSv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                var curTime = System.currentTimeMillis()
-                var formatter = SimpleDateFormat("yyyy-MM-dd HH:ss")
-                var nows = formatter.format(curTime)
-                if(query!=null){
-                    var keywords = Keyword(
-                        query,
-                        "경로",
-                        nows
-                    )
-                    mainViewModel.insertKeywords(keywords)
-                    return false
-                }
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                if(TextUtils.isEmpty(newText)){
-                    routeAdapter.filter.filter("")
-                }else{
-                    routeAdapter.filter.filter(newText.toString())
-                    routeAdapter.notifyDataSetChanged()
-                }
-                return false
-            }
-
         })
     }
     private fun showDialogDetailRoute(id:Int,heartFlag:Boolean){
@@ -248,43 +216,7 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             }
         }
     }
-    private fun initSpinner(){
-        var  spinnerArr = arrayListOf<String>("별점순","리뷰 적은순","리뷰 많은순")
-        val adapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,spinnerArr)
-        binding.fragmentRouteFilterSpinner.adapter = adapter
 
-        binding.fragmentRouteFilterSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if(position == 0){
-                    runBlocking {
-                        mainViewModel.getRoutes(areaName)
-                    }
-                }
-                if(position == 1){
-                    runBlocking {
-                        mainViewModel.getRoutesToSort(areaName,"review")
-                    }
-                }
-                if(position == 2){
-                    runBlocking {
-                        mainViewModel.getRoutesToSort(areaName,"review_asc")
-                    }
-                }
-
-                initAdapter()
-                routeAdapter.notifyDataSetChanged()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-        }
-    }
     companion object {
         @JvmStatic
         fun newInstance(param1: String, param2: String) =

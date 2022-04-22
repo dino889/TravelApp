@@ -108,7 +108,7 @@ class HomeFragment: Fragment(){
         initButton()
         initBanner()
         initAdapter()
-        initWeather()
+//        initWeather()
         initMeasure()
 //        if(mainViewModel.userLoc.value != null){
 //        }
@@ -194,7 +194,6 @@ class HomeFragment: Fragment(){
 
     private fun initWeather(){
         mainViewModel.weathers.observe(viewLifecycleOwner) {
-            Log.d(TAG, "initWeather: ${it.response.body.items.item}")
             var curWeather = it.response.body.items.item
             for (item in 0..curWeather.size - 1) {
                 if (curWeather[item].category.equals("SKY")) {

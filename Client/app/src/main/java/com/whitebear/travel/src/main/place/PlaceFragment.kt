@@ -106,8 +106,8 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
     fun initAdapter(){
 
         placeAdapter = PlaceAdapter()
-
         placeAdapter.list = mainViewModel.places.value!!
+        placeAdapter.filter.filter("")
         mainViewModel.placeLikes.observe(viewLifecycleOwner) {
             placeAdapter.likeList = it
         }

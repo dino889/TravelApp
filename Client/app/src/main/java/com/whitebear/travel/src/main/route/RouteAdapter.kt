@@ -42,12 +42,13 @@ class RouteAdapter(val mainViewModel: MainViewModel) : RecyclerView.Adapter<Rout
     override fun onBindViewHolder(holder: RouteViewHolder, position: Int) {
         holder.apply {
             bind(filteredList[position])
+            var areaName = list[position].name.substring(0,4)
             var heart = itemView.findViewById<LottieAnimationView>(R.id.frragment_route_routeLike)
             itemView.setOnClickListener {
                 if(heart.progress > 0.3f){
-                    itemClickListener.onClick(it,position,filteredList[position].id, true)
+                    itemClickListener.onClick(it,position,filteredList[position].id, true, areaName)
                 }else{
-                    itemClickListener.onClick(it,position,filteredList[position].id, false)
+                    itemClickListener.onClick(it,position,filteredList[position].id, false, areaName)
                 }
             }
         }
@@ -58,7 +59,7 @@ class RouteAdapter(val mainViewModel: MainViewModel) : RecyclerView.Adapter<Rout
     }
 
     interface ItemClickListener {
-        fun onClick(view: View, position: Int, routeId:Int, heartFlag : Boolean)
+        fun onClick(view: View, position: Int, routeId:Int, heartFlag : Boolean, areaName:String)
     }
     private lateinit var itemClickListener : ItemClickListener
     fun setOnItemClickListener(itemClickListener: ItemClickListener){

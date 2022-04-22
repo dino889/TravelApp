@@ -35,11 +35,26 @@ class SearchPlaceFragment : BaseFragment<FragmentSearchPlaceBinding>(FragmentSea
             mainViewModel.getPlaceLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
         }
         initAdapter()
-        initSearch()
     }
-    private fun initSearch(){
+    private fun initAdapter(){
         placeAdapter = PlaceAdapter()
-//        placeAdapter.filter.filter("")
+        placeAdapter.list = mainViewModel.places.value!!
+        mainViewModel.placeLikes.observe(viewLifecycleOwner){
+            placeAdapter.likeList = it
+        }
+        mainViewModel.places.observe(viewLifecycleOwner){
+            placeAdapter.list = it
+        }
+        binding.fragmentSearchPlaceRv.apply {
+            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
+            adapter = placeAdapter
+        }
+        placeAdapter.setOnItemClickListener(object : PlaceAdapter.ItemClickListener {
+            override fun onClick(view: View, position: Int, placeId: Int, heartFlag: Boolean) {
+                var place = bundleOf("placeId" to placeId, "heartFlag" to heartFlag)
+                this@SearchPlaceFragment.findNavController().navigate(R.id.placeDetailFragment,place)
+            }
+        })
         binding.fragmentSearchPlaceSv.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 var curTime = System.currentTimeMillis()
@@ -69,25 +84,6 @@ class SearchPlaceFragment : BaseFragment<FragmentSearchPlaceBinding>(FragmentSea
                 return false
             }
 
-        })
-    }
-    private fun initAdapter(){
-        placeAdapter = PlaceAdapter()
-        mainViewModel.places.observe(viewLifecycleOwner){
-            placeAdapter.list = it
-        }
-        mainViewModel.placeLikes.observe(viewLifecycleOwner){
-            placeAdapter.likeList = it
-        }
-        binding.fragmentSearchPlaceRv.apply {
-            layoutManager = LinearLayoutManager(requireContext(),LinearLayoutManager.VERTICAL,false)
-            adapter = placeAdapter
-        }
-        placeAdapter.setOnItemClickListener(object : PlaceAdapter.ItemClickListener {
-            override fun onClick(view: View, position: Int, placeId: Int, heartFlag: Boolean) {
-                var place = bundleOf("placeId" to placeId, "heartFlag" to heartFlag)
-                this@SearchPlaceFragment.findNavController().navigate(R.id.placeDetailFragment,place)
-            }
         })
     }
 
