@@ -138,11 +138,17 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
         binding.fragmentPlaceTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 binding.fragmentPlaceFilterSpinner.setSelection(0)
+                var tabName = ""
+                if(tabName.length < 4){
+                    tabName = tab?.text.toString().substring(0,2)
+                }else{
+                    tabName = tab?.text.toString().substring(0,4)
+                }
                 if (tab != null) {
-                    areaName = tab?.text.toString()
+                    areaName = tabName
                 }
                 runBlocking {
-                    mainViewModel.getPlaces(tab?.text.toString())
+                    mainViewModel.getPlaces(tabName)
                 }
                 initAdapter()
                 placeAdapter.notifyDataSetChanged()

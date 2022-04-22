@@ -81,11 +81,18 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         routeAdapter = RouteAdapter(mainViewModel)
         binding.fragmentRouteTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                if(tab != null){
-                    areaName = tab?.text.toString()
+                var tabName = ""
+                if(tabName.length < 4){
+                    tabName = tab?.text.toString().substring(0,2)
+                }else{
+                    tabName = tab?.text.toString().substring(0,4)
                 }
+                if (tab != null) {
+                    areaName = tabName
+                }
+
                 runBlocking {
-                    mainViewModel.getRoutes(tab?.text.toString())
+                    mainViewModel.getRoutes(tabName)
                 }
                 initAdapter()
                 routeAdapter.notifyDataSetChanged()
