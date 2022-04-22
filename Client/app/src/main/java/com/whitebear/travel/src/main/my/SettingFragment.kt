@@ -7,11 +7,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.CompoundButton
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import com.kakao.sdk.user.UserApiClient
 import com.kakao.sdk.user.rx
 import com.navercorp.nid.NaverIdLoginSDK
@@ -60,11 +62,32 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
 
     private fun initListener() {
         faqBtnClickEvent()
+        fcmBtnClickEvent()
         backBtnClickEvent()
         logoutBtnClickEvent()
         withdrawalBtnClickEvent()
     }
+    private fun fcmBtnClickEvent(){
+        binding.fragmentSettingEventSwitch.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
+            override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
+                if(p1){
+                    FirebaseMessaging.getInstance().subscribeToTopic("notice")
+                }else{
 
+                }
+            }
+        })
+        binding.fragmentSettingInfoSwitch.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
+            override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
+                if(p1){
+
+                }else{
+
+                }
+            }
+
+        })
+    }
     private fun faqBtnClickEvent() {
         binding.settingFragmentTvFAQ.setOnClickListener {
             this@SettingFragment.findNavController().navigate(R.id.action_settingFragment_to_faqFragment)

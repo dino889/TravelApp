@@ -12,65 +12,69 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
-            android:id="@+id/fragment_place_placeImg"
-            android:layout_width="130dp"
-            android:layout_height="130dp"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="24dp"
-            android:scaleType="fitXY"
-            app:imageUrlPlace="@{place.imgURL}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_launcher_background" />
 
-        <TextView
-            android:id="@+id/fragment_place_placeName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="14dp"
-            android:layout_marginTop="8dp"
-            app:textViewTitle="@{place.name}"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/fragment_place_placeImg"
-            app:layout_constraintTop_toTopOf="@+id/fragment_place_placeImg" />
+            <ImageView
+                android:id="@+id/fragment_place_placeImg"
+                android:layout_width="130dp"
+                android:layout_height="130dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="24dp"
+                android:scaleType="fitXY"
+                app:imageUrlPlace="@{place.imgURL}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_launcher_background" />
 
-        <com.airbnb.lottie.LottieAnimationView
-            android:id="@+id/frragment_place_placeLike"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/fragment_place_placeName"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/fragment_place_placeName"
-            app:lottie_autoPlay="false"
-            app:lottie_fileName="heart.json"
-            app:lottie_loop="false" />
+            <TextView
+                android:id="@+id/fragment_place_placeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="14dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/fragment_place_placeImg"
+                app:layout_constraintTop_toTopOf="@+id/fragment_place_placeImg"
+                app:textViewTitle="@{place.name}" />
 
-        <TextView
-            android:id="@+id/fragment_place_placeContent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="32dp"
-            android:textColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/fragment_place_placeName"
-            app:layout_constraintTop_toBottomOf="@+id/fragment_place_placeName"
-            app:textViewContent="@{place.summary}" />
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/frragment_place_placeLike"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="24dp"
+                app:layout_constraintBottom_toBottomOf="@+id/fragment_place_placeName"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/fragment_place_placeName"
+                app:lottie_autoPlay="false"
+                app:lottie_fileName="heart.json"
+                app:lottie_loop="false" />
 
-        <RatingBar
-            android:id="@+id/ratingBar"
-            style="@style/Widget.AppCompat.RatingBar.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:rating="@{place.rating}"
-            app:layout_constraintBottom_toBottomOf="@+id/fragment_place_placeImg"
-            app:layout_constraintStart_toStartOf="@+id/fragment_place_placeContent" />
+            <TextView
+                android:id="@+id/fragment_place_placeContent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="32dp"
+                android:textColor="@color/black"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/fragment_place_placeName"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_place_placeName"
+                app:textViewContent="@{place.summary}" />
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="@style/Widget.AppCompat.RatingBar.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:rating="@{place.rating}"
+                app:layout_constraintBottom_toBottomOf="@+id/fragment_place_placeImg"
+                app:layout_constraintStart_toStartOf="@+id/fragment_place_placeContent" />
+
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

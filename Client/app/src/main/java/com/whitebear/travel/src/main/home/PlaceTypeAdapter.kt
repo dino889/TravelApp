@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.airbnb.lottie.LottieAnimationView
@@ -27,6 +29,7 @@ class PlaceTypeAdapter : RecyclerView.Adapter<PlaceTypeAdapter.PlaceViewHolder>(
                 }
                 binding.frragmentPlacePlaceLike.progress = 0.0F
             }
+
             binding.place = place
             binding.executePendingBindings()
         }
@@ -39,6 +42,7 @@ class PlaceTypeAdapter : RecyclerView.Adapter<PlaceTypeAdapter.PlaceViewHolder>(
     override fun onBindViewHolder(holder: PlaceViewHolder, position: Int) {
         holder.apply {
             bind(filteredList[position])
+
             var heart = itemView.findViewById<LottieAnimationView>(R.id.frragment_place_placeLike)
             itemView.setOnClickListener {
                 if( heart.progress > 0.3f){
@@ -53,7 +57,7 @@ class PlaceTypeAdapter : RecyclerView.Adapter<PlaceTypeAdapter.PlaceViewHolder>(
     }
 
     override fun getItemCount(): Int {
-        return filteredList.size
+        return filteredList.size+1
     }
     interface ItemClickListener {
         fun onClick(view: View, position: Int, placeId:Int, heartFlag : Boolean)
