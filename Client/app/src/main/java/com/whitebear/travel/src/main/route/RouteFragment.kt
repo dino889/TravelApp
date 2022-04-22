@@ -189,7 +189,12 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         dialog.window?.attributes = params
         dialog.show()
 
-
+        dialog.setOnDismissListener {
+            runBlocking {
+                mainViewModel.getRoutesLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
+            }
+            routeAdapter.notifyDataSetChanged()
+        }
 
 
         binding.fragmentRouteDetailBack.setOnClickListener {
