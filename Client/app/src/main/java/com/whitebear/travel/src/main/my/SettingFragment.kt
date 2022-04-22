@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.widget.CompoundButton
@@ -23,6 +24,9 @@ import com.whitebear.travel.R
 import com.whitebear.travel.config.ApplicationClass
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentSettingBinding
+import com.whitebear.travel.src.dto.FcmDao
+import com.whitebear.travel.src.dto.Noti
+
 import com.whitebear.travel.src.login.LoginActivity
 import com.whitebear.travel.src.main.MainActivity
 import com.whitebear.travel.src.network.service.UserService
@@ -30,8 +34,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import retrofit2.Response
+import kotlin.properties.Delegates
 
 /**
  * @author Jiwoo Choi
@@ -40,9 +48,11 @@ import retrofit2.Response
 class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBinding::bind, R.layout.fragment_setting) {
     private val TAG = "SettingFragment"
     private lateinit var mainActivity : MainActivity
+//    val db = Room.databaseBuilder(requireContext(), AppDatabase::class.java, "fcm").build()
+//    val notiDao = db.fcmDao()
     // firebase authenticationg
     var mGoogleSignInClient: GoogleSignInClient? = null
-
+    lateinit var notiDao:FcmDao
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mainActivity = context as MainActivity
@@ -56,6 +66,22 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        notiDao = mainActivity.notiDB?.fcmDao()!!
+        var eventCheck = false
+        var infoCheck = false
+        var job = CoroutineScope(Dispatchers.IO).launch {
+            var fcm = notiDao.getFcmCheck(ApplicationClass.sharedPreferencesUtil.getUser().id)
+            eventCheck = fcm.eventChecked
+            infoCheck = fcm.infoChecked
+        }
+        runBlocking {
+            job.join()
+        }
+
+        Log.d(TAG, "onViewCreated: $eventCheck  $infoCheck")
+        binding.fragmentSettingInfoSwitch.setChecked(infoCheck)
+        binding.fragmentSettingEventSwitch.setChecked(eventCheck)
+
         initSnsInstance()
         initListener()
     }
@@ -68,21 +94,48 @@ class SettingFragment : BaseFragment<FragmentSettingBinding>(FragmentSettingBind
         withdrawalBtnClickEvent()
     }
     private fun fcmBtnClickEvent(){
-        binding.fragmentSettingEventSwitch.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
-            override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
-                if(p1){
-                    FirebaseMessaging.getInstance().subscribeToTopic("notice")
-                }else{
-
+        binding.fragmentSettingEventSwitch.setOnCheckedChangeListener { p0, p1 ->
+            if (p1) {
+                FirebaseMessaging.getInstance().subscribeToTopic("event")
+                val r = Runnable {
+                    notiDao?.updateEventChecked(
+                        true,
+                        ApplicationClass.sharedPreferencesUtil.getUser().id
+                    )
                 }
+                val thread = Thread(r)
+                thread.start()
+
+            } else {
+                FirebaseMessaging.getInstance().unsubscribeFromTopic("event")
+                val r = Runnable {
+                    notiDao?.updateEventChecked(
+                        false,
+                        ApplicationClass.sharedPreferencesUtil.getUser().id
+                    )
+                }
+                val thread = Thread(r)
+                thread.start()
             }
-        })
+        }
         binding.fragmentSettingInfoSwitch.setOnCheckedChangeListener(object : CompoundButton.OnCheckedChangeListener {
             override fun onCheckedChanged(p0: CompoundButton?, p1: Boolean) {
                 if(p1){
+                    val r = Runnable {
+                        notiDao?.updateInfoChecked(true, ApplicationClass.sharedPreferencesUtil.getUser().id)
+                    }
+                    val thread = Thread(r)
+                    thread.start()
 
+                    FirebaseMessaging.getInstance().subscribeToTopic("info")
                 }else{
+                    val r = Runnable {
+                        notiDao?.updateInfoChecked(false, ApplicationClass.sharedPreferencesUtil.getUser().id)
+                    }
+                    val thread = Thread(r)
+                    thread.start()
 
+                    FirebaseMessaging.getInstance().unsubscribeFromTopic("info")
                 }
             }
 

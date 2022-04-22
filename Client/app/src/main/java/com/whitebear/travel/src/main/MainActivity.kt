@@ -38,9 +38,13 @@ import androidx.core.app.ActivityCompat.startActivityForResult
 import android.content.Intent
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
+import androidx.room.Room
+import androidx.room.RoomDatabase
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import com.whitebear.travel.src.dto.Noti
 import com.whitebear.travel.src.network.api.FCMApi
+import com.whitebear.travel.util.NotiDB
 import retrofit2.Response
 import kotlin.collections.HashMap
 
@@ -61,12 +65,22 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     var hour = ""
     var addr = ""
     private var today2Type = ""
-
     private val GPS_ENABLE_REQUEST_CODE = 2001
-
+    //Room DB
+    var notiDB : NotiDB ?= null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        //db저장
+        notiDB = NotiDB.getInstance(this)
+        var notiDao = notiDB?.fcmDao()
+        val r = java.lang.Runnable {
+            if(notiDao?.getFcmCheck(ApplicationClass.sharedPreferencesUtil.getUser().id) == null){
+                notiDao?.insertChecked(Noti(ApplicationClass.sharedPreferencesUtil.getUser().id,false,false))
+            }
+        }
+        val thread = Thread(r)
+        thread.start()
+        
         initNavigation()
         setInstance()
 //        if(mainViewModel.userLoc == null) {
