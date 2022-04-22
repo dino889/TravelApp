@@ -40,7 +40,9 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
 
     private var markerArr = arrayListOf<MapPoint>()
 
-    private var range = 20.0
+    private var range = 50.0
+
+    private var visible = false // 캠핑장 정보 on / off
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -56,7 +58,7 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
             if(it != null) {
                 runBlocking {
                     mainViewModel.getPlacesByGps(it.latitude, it.longitude, range)
-                    mainViewModel.getCampingList(it.latitude, it.longitude, (range * 1000).toInt())
+                    mainViewModel.getCampingList(it.latitude, it.longitude, (range).toInt())
                     currentLat = it.latitude
                     currentLng = it.longitude
 
@@ -78,7 +80,7 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
     }
 
     private fun initSpinner(){
-        val rangeList = arrayListOf("20km", "10km", "5km", "1km")
+        val rangeList = arrayListOf("50km", "30km", "20km", "10km")
         val adapter = ArrayAdapter(requireContext(),android.R.layout.simple_dropdown_item_1line, rangeList)
         binding.mapFragmentSpinnerRange.adapter = adapter
 
@@ -87,7 +89,7 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
                 removePing()
                 when (position) {
                     0 -> {
-                        range = 20.0
+                        range = 50.0
                         if(currentLat == 35.869326) {
                             showCustomToast("현재 위치를 받아올 수 없습니다.")
                         }
@@ -105,7 +107,7 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
 
                     }
                     1 -> {
-                        range = 10.0
+                        range = 30.0
                         if(currentLat == 35.869326) {
                             showCustomToast("현재 위치를 받아올 수 없습니다.")
                         }
@@ -115,7 +117,7 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
                         setCircleByRange(currentLat, currentLng)
                     }
                     2 -> {
-                        range = 5.0
+                        range = 20.0
                         if(currentLat == 35.869326) {
                             showCustomToast("현재 위치를 받아올 수 없습니다.")
                         }
@@ -125,7 +127,7 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
                         setCircleByRange(currentLat, currentLng)
                     }
                     3 -> {
-                        range = 1.0
+                        range = 10.0
                         if(currentLat == 35.869326) {
                             showCustomToast("현재 위치를 받아올 수 없습니다.")
                         }
@@ -267,7 +269,9 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
      */
     private fun floatingBtnClickEvent() {
         binding.mapFragmentFabGetCamping.setOnClickListener {
+            if(visible) {
 
+            }
         }
     }
 
