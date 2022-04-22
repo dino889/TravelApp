@@ -169,7 +169,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     fun startLocationUpdates() {
-        Log.d(TAG, "startLocationUpdates: ")
         mLocationRequest =  LocationRequest.create().apply {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
@@ -180,16 +179,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             && ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return
         }
-        Log.d(TAG, "startLocationUpdates: 2?")
         // 기기의 위치에 관한 정기 업데이트를 요청하는 메서드 실행
         // 지정한 루퍼 스레드(Looper.myLooper())에서 콜백(mLocationCallback)으로 위치 업데이트를 요청
-        runBlocking {
-            mFusedLocationProviderClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper()!!)
-        }
+        mFusedLocationProviderClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper()!!)
 
     }
-    // 시스템으로 부터 위치 정보를 콜백으로 받음
 
+    // 시스템으로 부터 위치 정보를 콜백으로 받음
     private val mLocationCallback = object : LocationCallback() {
         override fun onLocationResult(locationResult: LocationResult) {
             locationResult.lastLocation
@@ -203,7 +199,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     fun onLocationChanged(location: Location) {
         mLastLocation = location
         mainViewModel.setUserLoc(location, getAddress(location))
-        Log.d(TAG, "onLocationChanged: ${location.latitude}")
+        Log.d(TAG, "onLocationChanged: ${location.latitude} / ${location.longitude}")
         getToday()
         //lat=35.8988, long=128.599
         runBlocking {
@@ -249,7 +245,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             // 3-1. 사용자가 퍼미션 거부를 한 적이 있는 경우에는
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this@MainActivity,
-                    LOCATION.get(0)
+                    LOCATION[0]
                 )
             ) {
                 // 3-2. 요청을 진행하기 전에 사용자가에게 퍼미션이 필요한 이유를 설명해줄 필요가 있습니다.

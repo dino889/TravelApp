@@ -11,6 +11,7 @@ import com.whitebear.travel.src.dto.*
 import com.whitebear.travel.src.dto.airQuality.AirQuality
 import com.whitebear.travel.src.dto.airQuality.Measure
 import com.whitebear.travel.src.dto.camping.Item
+import com.whitebear.travel.src.dto.camping.Items
 import com.whitebear.travel.src.dto.stationResponse.StationResponse
 import com.whitebear.travel.src.dto.tm.TmCoordinatesResponse
 import com.whitebear.travel.src.network.service.AreaService
@@ -642,11 +643,9 @@ class MainViewModel :ViewModel(){
         }
     }
     fun getRoute(id:Int){
-        Log.d(TAG, "getRoute: $id")
         var routes = routes.value!!
         for(item in routes){
             if(item.id == id){
-                Log.d(TAG, "getRoute: $item")
                 setRoute(item)
             }
         }
@@ -661,7 +660,6 @@ class MainViewModel :ViewModel(){
                     if(res.isSuccess){
                         var type = object : TypeToken<MutableList<Place>>() {}.type
                         var route:MutableList<Place> = CommonUtils.parseDto(res.data, type)
-                        Log.d(TAG, "getRoutesInPlaceArr: ${res.data}")
                         setPlaceToRoute(route)
                     }
                 }
@@ -672,26 +670,39 @@ class MainViewModel :ViewModel(){
     /**
      * api - camping 정보
      */
-    private val _campingList = MutableLiveData<MutableList<Item>>()
+    private val _campingList = MutableLiveData<List<Item>>()
 
-    val campingList :  LiveData<MutableList<Item>>
+    val campingList :  LiveData<List<Item>>
         get() = _campingList
 
-    private fun setCampingList(list: MutableList<Item>) = viewModelScope.launch {
+    private fun setCampingList(list: List<Item>) = viewModelScope.launch {
         _campingList.value = list
     }
 
     suspend fun getCampingList(lat: Double, long: Double, radius: Int) {   // mapX - Longitude, mapY - Latitude
         val response = DataService().getCamping(long, lat, radius)
-        Log.d(TAG, "getCampingList: $response")
         viewModelScope.launch {
             if(response.code() == 200 || response.code() == 500) {
                 val res = response.body()
                 if(res != null) {
                     if(res.response.header.resultMsg == "OK") {
+                        val responseCnt = res.response.body.totalCount
+                        if(responseCnt > 0) {
+                            val items = res.response.body.items
+                            if(items != null) {
+                                val type = object : TypeToken<Items>() {}.type
+                                val items: Items = CommonUtils.parseDto(items, type)
+                                setCampingList(items.item!!)
+                            }
+                        }
                         Log.d(TAG, "getCampingList: ${res.response.body.totalCount}")
-//                        val item = res.response.body.items.item.item
-//                        Log.d(TAG, "getCampingList: ${item[item.size - 1]}")
+                        Log.d(TAG, "getCampingList: ${res.response.body.items}")
+
+//                        val itemCnt = res.response.body.totalCount
+//                        if(itemCnt > 0) {
+//                            setCampingList(res.response.body.items.item)
+//                        }
+
                     }
                 }
             } else {
