@@ -93,7 +93,7 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(FragmentLocationB
     }
 
     private fun initSpinner() {
-        val rangeList = arrayListOf("20km", "10km", "5km", "1km")
+        val rangeList = arrayListOf("50km", "30km", "20km", "10km")
         val adapter = ArrayAdapter(requireContext(),android.R.layout.simple_dropdown_item_1line, rangeList)
         binding.locationFragmentSpinnerRange.adapter = adapter
 
@@ -104,7 +104,7 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(FragmentLocationB
                         mainViewModel.userLoc.observe(viewLifecycleOwner, {
                             if(it != null) {
                                 runBlocking {
-                                    mainViewModel.getPlacesByGps(it.latitude, it.longitude, 20.0)
+                                    mainViewModel.getPlacesByGps(it.latitude, it.longitude, 50.0)
                                     mainViewModel.getPlaceLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
                                 }
                             }
@@ -116,7 +116,7 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(FragmentLocationB
                             showCustomToast("현재 위치 정보를 받을 수 없습니다. ")
                         } else {
                             runBlocking {
-                                mainViewModel.getPlacesByGps(currentLat!!, currentLng!!, 10.0)
+                                mainViewModel.getPlacesByGps(currentLat!!, currentLng!!, 30.0)
                                 mainViewModel.getPlaceLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
                             }
                             aroundPlaceAdapter.notifyDataSetChanged()
@@ -127,7 +127,7 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(FragmentLocationB
                             showCustomToast("현재 위치 정보를 받을 수 없습니다. ")
                         } else {
                             runBlocking {
-                                mainViewModel.getPlacesByGps(currentLat!!, currentLng!!, 5.0)
+                                mainViewModel.getPlacesByGps(currentLat!!, currentLng!!, 20.0)
                                 mainViewModel.getPlaceLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
                             }
                             aroundPlaceAdapter.notifyDataSetChanged()
@@ -138,7 +138,7 @@ class LocationFragment : BaseFragment<FragmentLocationBinding>(FragmentLocationB
                             showCustomToast("현재 위치 정보를 받을 수 없습니다. ")
                         } else {
                             runBlocking {
-                                mainViewModel.getPlacesByGps(currentLat!!, currentLng!!, 1.0)
+                                mainViewModel.getPlacesByGps(currentLat!!, currentLng!!, 10.0)
                                 mainViewModel.getPlaceLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
                             }
                             aroundPlaceAdapter.notifyDataSetChanged()
