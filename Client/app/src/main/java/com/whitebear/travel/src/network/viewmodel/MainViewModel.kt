@@ -86,22 +86,26 @@ class MainViewModel :ViewModel(){
     suspend fun getWeather(dataType : String, numOfRows : Int, pageNo : Int,
                            baseDate : Int, baseTime : String, nx : String, ny : String){
 
-        val response = DataService().getWeather(dataType, numOfRows, pageNo, baseDate, baseTime, nx, ny)
-        Log.d(TAG, "getWeather: ${response.code()}")
-        viewModelScope.launch { 
-            if(response.code() == 200){
-                var res = response.body()
-                if(res != null) {
-                    var type = object:TypeToken<Weather>() {}.type
-                    var weatherList = CommonUtils.parseDto<Weather>(res ,type)
-                    if (weatherList != null) {
-                        setWeather(weatherList)
+        try {
+            val response = DataService().getWeather(dataType, numOfRows, pageNo, baseDate, baseTime, nx, ny)
+            viewModelScope.launch { 
+                if(response.code() == 200){
+                    var res = response.body()
+                    if(res != null) {
+                        var type = object:TypeToken<Weather>() {}.type
+                        var weatherList = CommonUtils.parseDto<Weather>(res ,type)
+                        if (weatherList != null) {
+                            setWeather(weatherList)
+                        }
+                    } else {
+                        Log.e(TAG, "getWeather: ${response.message()}", )
                     }
-                } else {
-                    Log.e(TAG, "getWeather: ${response.message()}", )
                 }
+                
             }
             
+        } catch (e: Exception) {
+            Log.e(TAG, "getWeather: ${e.printStackTrace()}", )
         }
     }
     suspend fun getNearbyCenter(lat:Double, lng:Double){
@@ -695,14 +699,6 @@ class MainViewModel :ViewModel(){
                                 setCampingList(items.item!!)
                             }
                         }
-                        Log.d(TAG, "getCampingList: ${res.response.body.totalCount}")
-                        Log.d(TAG, "getCampingList: ${res.response.body.items}")
-
-//                        val itemCnt = res.response.body.totalCount
-//                        if(itemCnt > 0) {
-//                            setCampingList(res.response.body.items.item)
-//                        }
-
                     }
                 }
             } else {

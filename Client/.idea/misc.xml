@@ -47,13 +47,21 @@
         <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/layout/item_route.xml" value="0.4" />
         <entry key="..\:/Users/SSAFY/Desktop/whitebear/Client/app/src/main/res/menu/popup_menu.xml" value="0.1" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.38229166666666664" />
+        <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/drawable/bg_btn.xml" value="0.38229166666666664" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/drawable/button_background.xml" value="0.38229166666666664" />
+        <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/drawable/drawable_button_stoke_right.xml" value="0.38229166666666664" />
+        <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/drawable/drawable_button_stroke_left.xml" value="0.38229166666666664" />
+        <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/drawable/drawable_dialog_backgroud.xml" value="0.38229166666666664" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/drawable/edittext_background.xml" value="0.38229166666666664" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/drawable/ic_launcher_background.xml" value="0.38229166666666664" />
+        <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/drawable/imageview_background.xml" value="0.38229166666666664" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/drawable/search_view_background.xml" value="0.23802083333333332" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/drawable/searchview_background.xml" value="0.38229166666666664" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/activity_login.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/activity_main.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/dialog_nav_type.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/dialog_place_info.xml" value="0.36614583333333334" />
+        <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/dialog_review_write.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/dialog_route_detail.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/fragment_edit_profile.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/fragment_f_a_q.xml" value="0.25" />
@@ -93,6 +101,7 @@
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/item_route.xml" value="0.190625" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/item_routes_place_list.xml" value="0.36614583333333334" />
         <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/itme_faq_category.xml" value="0.75" />
+        <entry key="..\:/Users/woo/Documents/GitHub/outsourcing/TravelApp/Client/app/src/main/res/layout/map_balloon_layout.xml" value="0.36614583333333334" />
       </map>
     </option>
   </component>
