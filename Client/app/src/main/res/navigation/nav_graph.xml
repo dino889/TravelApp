@@ -156,5 +156,10 @@
             android:defaultValue="0"
             app:argType="integer"/>
     </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.whitebear.travel.src.main.home.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" />
 
 </navigation>

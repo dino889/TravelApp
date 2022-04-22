@@ -119,6 +119,9 @@ class HomeFragment: Fragment(){
         binding.fragmentHomeNavBtn.setOnClickListener {
             this@HomeFragment.findNavController().navigate(R.id.navigatorFragment)
         }
+        binding.fragmentHomeSearch.setOnClickListener {
+            this@HomeFragment.findNavController().navigate(R.id.searchFragment)
+        }
     }
 
     private fun initAdapter(){
