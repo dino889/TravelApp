@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.whitebear.travel.config.BaseFragment
-import com.whitebear.travel.databinding.FragmentLocationMapBinding
 import com.whitebear.travel.src.main.MainActivity
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
