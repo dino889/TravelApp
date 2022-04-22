@@ -1,6 +1,8 @@
 package com.whitebear.travel.src.main
 
 import android.Manifest
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Geocoder
@@ -36,6 +38,11 @@ import androidx.core.app.ActivityCompat.startActivityForResult
 import android.content.Intent
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
+import com.whitebear.travel.src.network.api.FCMApi
+import retrofit2.Response
+import kotlin.collections.HashMap
 
 
 private const val TAG = "MainActivity"
@@ -303,4 +310,59 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))
     }
 
+    /**
+     * FCM 토큰 수신 및 채널 생성
+     */
+    private fun initFcm() {
+        // FCM 토큰 수신
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "FCM 토큰 얻기에 실패하였습니다.", task.exception)
+                return@OnCompleteListener
+            }
+            // token log 남기기
+            Log.d(TAG, "token: ${task.result?:"task.result is null"}")
+            uploadToken(task.result!!, ApplicationClass.sharedPreferencesUtil.getUser().id)
+        })
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel(channel_id, "whitebear")
+        }
+    }
+
+    /**
+     * Fcm Notification 수신을 위한 채널 추가
+     */
+    private fun createNotificationChannel(id: String, name: String) {
+        val importance = NotificationManager.IMPORTANCE_DEFAULT // or IMPORTANCE_HIGH
+        val channel = NotificationChannel(id, name, importance)
+
+        val notificationManager: NotificationManager
+                = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        notificationManager.createNotificationChannel(channel)
+    }
+
+    companion object {
+        const val channel_id = "whitebear_channel"
+        fun uploadToken(token:String, userId: Int) {
+            val storeService = ApplicationClass.retrofit.create(FCMApi::class.java)
+
+            var response : Response<HashMap<String, Any>>
+            runBlocking {
+                response = storeService.uploadToken(token, ApplicationClass.sharedPreferencesUtil.getUser().id)
+            }
+            val res = response.body()
+//            if(response.code() == 200) {
+//                if(res != null) {
+//                    if(res.data["isSuccess"] == true && res.message == "토큰 등록 성공") {
+//                        Log.d(TAG, "uploadToken: $token")
+//                    } else {
+//                        Log.d(TAG, "uploadToken: ${res.message}")
+//                    }
+//                }
+//            } else {
+//                Log.e(TAG, "uploadToken: 토큰 정보 등록 중 통신 오류")
+//            }
+        }
+    }
 }
