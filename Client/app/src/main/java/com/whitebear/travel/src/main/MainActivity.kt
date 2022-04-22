@@ -84,6 +84,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         if(checkPermissionForLocation(this)) {
             startLocationUpdates()
         }
+        initFcm()
     }
     private fun setInstance(){
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)

@@ -13,6 +13,7 @@ import com.whitebear.travel.src.main.MainActivity
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.whitebear.travel.R
+import com.whitebear.travel.databinding.FragmentLocationMapBinding
 import com.whitebear.travel.src.dto.Place
 import com.whitebear.travel.src.dto.Responses
 import com.whitebear.travel.src.dto.camping.Camping
