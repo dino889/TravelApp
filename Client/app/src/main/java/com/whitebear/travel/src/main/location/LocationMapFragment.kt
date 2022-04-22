@@ -39,6 +39,10 @@ import kotlinx.coroutines.runBlocking
 import net.daum.mf.map.api.*
 import net.daum.mf.map.api.MapPoint.GeoCoordinate
 import retrofit2.Response
+import com.bumptech.glide.request.RequestOptions
+
+
+
 
 /**
  * @since 04/22/22
@@ -87,8 +91,6 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
             }
         })
 
-//        getCampingList()
-
         initListener()
     }
 
@@ -96,7 +98,6 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
         initKakaoMap()
         initSpinner()
         backBtnClickEvent()
-        // 캠핑장 마커 on / off
         floatingBtnClickEvent()
     }
 
@@ -222,7 +223,7 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
             val marker = MapPOIItem()
             marker.itemName = placeList[i].name
             marker.mapPoint = markerArr[i]
-            marker.markerType = MapPOIItem.MarkerType.BluePin
+            marker.markerType = MapPOIItem.MarkerType.RedPin
             marker.tag = -1
             list.add(marker)
         }
@@ -307,7 +308,7 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
                 val marker = MapPOIItem()
                 marker.itemName = campingList[i].facltNm
                 marker.mapPoint = markerList[i]
-                marker.markerType = MapPOIItem.MarkerType.YellowPin
+                marker.markerType = MapPOIItem.MarkerType.BluePin
                 marker.tag = i
                 campingPOIList.add(marker)
             }
@@ -430,11 +431,7 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
                 val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_place_info,null)
                 dialog.setContentView(dialogView)
                 dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-//                dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-
-                val params = dialog.window?.attributes
-                params?.width = WindowManager.LayoutParams.MATCH_PARENT
-                dialog.window?.attributes = params
+                dialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
                 dialog.show()
 
@@ -451,20 +448,22 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
                     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(item.homepage)))
                 }
 
-                Log.d(TAG, "onCalloutBalloonOfPOIItemTouched: $item.firstImageUrl")
-//                 이미지
-                if(item.firstImageUrl.isEmpty()) {
-                    dialogView.findViewById<ImageView>(R.id.placeInfoDialog_ivPlaceImg).visibility = View.GONE
+                // 이미지
+                val campingImg = dialogView.findViewById<ImageView>(R.id.placeInfoDialog_ivPlaceImg)
+                if(item.firstImageUrl == "null" || item.firstImageUrl == null || item.firstImageUrl.length == 0 ) {
+                    campingImg.scaleType = ImageView.ScaleType.CENTER_INSIDE
+                    Glide.with(dialogView)
+                        .load(R.drawable.ic_tent_color_512px)
+                        .into(campingImg)
+
                 } else {
-                    dialogView.findViewById<ImageView>(R.id.placeInfoDialog_ivPlaceImg).visibility = View.VISIBLE
+//                    campingImg.visibility = View.VISIBLE
+                    campingImg.scaleType = ImageView.ScaleType.FIT_XY
 
                     Glide.with(dialogView)
                         .load(item.firstImageUrl)
-                        .into(dialogView.findViewById<ImageView>(R.id.placeInfoDialog_ivPlaceImg))
+                        .into(campingImg)
                 }
-//                Glide.with(dialogView)
-//                    .load(item.firstImageUrl)
-//                    .into(dialogView.findViewById<ImageView>(R.id.placeInfoDialog_ivPlaceImg))
 
                 dialogView.findViewById<TextView>(R.id.placeInfoDialog_tvPlaceInduty).text = "[${item.induty}]"   // 업종
                 dialogView.findViewById<TextView>(R.id.placeInfoDialog_tvPlaceName).text = item.facltNm   // 장소 이름
@@ -477,18 +476,6 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
                 }
             }
 
-
-//            val builder = AlertDialog.Builder(context)
-//            val itemList = arrayOf("토스트", "마커 삭제", "취소")
-//            builder.setTitle("${poiItem?.itemName}")
-//            builder.setItems(itemList) { dialog, which ->
-//                when(which) {
-//                    0 -> Toast.makeText(context, "토스트", Toast.LENGTH_SHORT).show()  // 토스트
-//                    1 -> mapView?.removePOIItem(poiItem)    // 마커 삭제
-//                    2 -> dialog.dismiss()   // 대화상자 닫기
-//                }
-//            }
-//            builder.show()
         }
 
         override fun onDraggablePOIItemMoved(mapView: MapView?, poiItem: MapPOIItem?, mapPoint: MapPoint?) {
