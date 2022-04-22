@@ -299,42 +299,42 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         }
     }
     
-    private fun initSpinner(){
-        var  spinnerArr = arrayListOf<String>("별점순","리뷰 적은순","리뷰 많은순")
-        val adapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,spinnerArr)
-        binding.fragmentRouteFilterSpinner.adapter = adapter
-
-        binding.fragmentRouteFilterSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                if(position == 0){
-                    runBlocking {
-                        mainViewModel.getRoutes(areaName)
-                    }
-                }
-                if(position == 1){
-                    runBlocking {
-                        mainViewModel.getRoutesToSort(areaName,"review")
-                    }
-                }
-                if(position == 2){
-                    runBlocking {
-                        mainViewModel.getRoutesToSort(areaName,"review_asc")
-                    }
-                }
-
-                initAdapter()
-                routeAdapter.notifyDataSetChanged()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-        }
-    }
+//    private fun initSpinner(){
+//        var  spinnerArr = arrayListOf<String>("별점순","리뷰 적은순","리뷰 많은순")
+//        val adapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,spinnerArr)
+//        binding.fragmentRouteFilterSpinner.adapter = adapter
+//
+//        binding.fragmentRouteFilterSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
+//            override fun onItemSelected(
+//                parent: AdapterView<*>?,
+//                view: View?,
+//                position: Int,
+//                id: Long
+//            ) {
+//                if(position == 0){
+//                    runBlocking {
+//                        mainViewModel.getRoutes(areaName)
+//                    }
+//                }
+//                if(position == 1){
+//                    runBlocking {
+//                        mainViewModel.getRoutesToSort(areaName,"review")
+//                    }
+//                }
+//                if(position == 2){
+//                    runBlocking {
+//                        mainViewModel.getRoutesToSort(areaName,"review_asc")
+//                    }
+//                }
+//
+//                initAdapter()
+//                routeAdapter.notifyDataSetChanged()
+//            }
+//
+//            override fun onNothingSelected(parent: AdapterView<*>?) {
+//            }
+//
+//        }
+//    }
 
 }

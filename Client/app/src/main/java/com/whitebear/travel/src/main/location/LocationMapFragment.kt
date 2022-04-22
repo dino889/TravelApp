@@ -445,7 +445,17 @@ class LocationMapFragment : BaseFragment<FragmentLocationMapBinding>(FragmentLoc
                 }
                 // homepage 클릭하면 웹으로 이동
                 homePage.setOnClickListener {
-                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(item.homepage)))
+                    var webpage = Uri.parse(item.homepage)
+
+                    if (!item.homepage.startsWith("http://") && !item.homepage.startsWith("https://")) {
+                        webpage = Uri.parse("http://${item.homepage}")
+                    }
+
+                    val intent = Intent(Intent.ACTION_VIEW, webpage)
+                    if (intent.resolveActivity(context.packageManager) != null) {
+                        context.startActivity(intent)
+                    }
+//                    context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(item.homepage)))
                 }
 
                 // 이미지
