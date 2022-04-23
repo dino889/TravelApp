@@ -18,4 +18,6 @@ class DataService {
     suspend fun getCovidState(startCreateDt: String, endCreateDt: String) = RetrofitUtil.dataService.getCovidState(startCreateDt, endCreateDt)
 
     suspend fun getCamping(lat: Double, lng: Double, radius: Int) = RetrofitUtil.dataService.getCamping(lat, lng, radius, "json")
+
+    suspend fun getCorona() = RetrofitUtil.dataService.getCorona()
 }

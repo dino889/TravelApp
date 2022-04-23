@@ -5,6 +5,7 @@ import com.tickaroo.tikxml.annotation.Xml
 import com.whitebear.travel.src.dto.airQuality.AirQuality
 import com.whitebear.travel.src.dto.Weather
 import com.whitebear.travel.src.dto.camping.Camping
+import com.whitebear.travel.src.dto.corona.Corona
 import com.whitebear.travel.src.dto.covid.Covid
 import com.whitebear.travel.src.dto.stationResponse.StationResponse
 import com.whitebear.travel.src.dto.tm.TmCoordinatesResponse
@@ -42,4 +43,8 @@ interface DataApi {
 
     @GET("http://api.visitkorea.or.kr/openapi/service/rest/GoCamping/locationBasedList?serviceKey=mp%2Bwyp26riz6pcVoD5kh8hTaDST8RtkblivAF1iro%2FIGvP950xdhKViJgSnBnGGu0kDp5m%2BKUG5L6xC1nI%2BL1w%3D%3D&MobileOS=AND&MobileApp=TravelApplication&numOfRows=100")
     suspend fun getCamping(@Query("mapX") mapX: Double, @Query("mapY") mapY: Double, @Query("radius") radius: Int, @Query("_type") _type: String) : Response<Camping>
+
+    // 코로나 현황 조회 API - 공공데이터 X
+    @GET("https://api.corona-19.kr/korea/country/new/?serviceKey=BhIzSxA3yX7D4E68WmcVuKQRsMdCv1pTj")
+    suspend fun getCorona() : Response<Corona>
 }

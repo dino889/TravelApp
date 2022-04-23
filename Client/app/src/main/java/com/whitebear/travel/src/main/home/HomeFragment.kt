@@ -26,14 +26,16 @@ import com.whitebear.travel.databinding.FragmentHomeBinding
 import com.whitebear.travel.src.dto.Place
 import com.whitebear.travel.src.dto.Route
 import com.whitebear.travel.src.dto.Weather
+import com.whitebear.travel.src.dto.corona.Corona
 import com.whitebear.travel.src.main.MainActivity
 import com.whitebear.travel.src.network.service.DataService
 import com.whitebear.travel.src.network.viewmodel.MainViewModel
 import kotlinx.coroutines.runBlocking
-import java.lang.Exception
+import retrofit2.Response
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.Exception
 
 private const val TAG = "HomeFragment"
 class HomeFragment: Fragment(){
@@ -76,6 +78,8 @@ class HomeFragment: Fragment(){
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
+
+
         runBlocking {
             val user = ApplicationClass.sharedPreferencesUtil.getUser().id
             mainViewModel.getUserInfo(user, true)
@@ -84,6 +88,7 @@ class HomeFragment: Fragment(){
             mainViewModel.getRoutes("")
             mainViewModel.getRoutesLikes(user)
             mainViewModel.getPlaceLikes(user)
+
         }
 
         if (!mainActivity.checkLocationServicesStatus()) {
@@ -107,6 +112,9 @@ class HomeFragment: Fragment(){
                 initMeasure()
             }
         }
+
+        getCorona()
+
         setListener()
 
 //        getCovidState()
@@ -117,7 +125,7 @@ class HomeFragment: Fragment(){
         initButton()
         initBanner()
         initAdapter()
-
+        notiBtnClickEvent()
 //        if(mainViewModel.userLoc.value != null){
 //        }
     }
@@ -332,5 +340,41 @@ class HomeFragment: Fragment(){
         } catch (e : Exception) {
             Log.e(TAG, "getCovidState: ${e.printStackTrace()} ${e.message}", )
         }
+    }
+
+    private fun notiBtnClickEvent() {
+        binding.fragmentHomeNotification.setOnClickListener {
+            this@HomeFragment.findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
+        }
+    }
+
+    /**
+     * 국내 코로나 확진 현황 조회
+     * respone.body().지역 내
+     * totalCase - 전체 확진자 수
+     * newCase - today 확진자 수
+     * death - 사망자 수
+     *
+     */
+    private fun getCorona() {
+        var response : Response<Corona>
+
+        try {
+            runBlocking {
+                response = DataService().getCorona()
+            }
+            if(response.code() == 200) {
+                val res = response.body()
+                if(res != null) {
+
+                    Log.d(TAG, "getCorona: ${res.korea.newCase}")
+                }
+            } else {
+                Log.e(TAG, "getCorona: 서버 통신 조회 오류 ${response.message()}", )
+            }
+        } catch (e : Exception) {
+            Log.e(TAG, "getCorona: 통신 오류 ${e.printStackTrace()}", )
+        }
+
     }
 }

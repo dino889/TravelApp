@@ -22,6 +22,11 @@
                 app:argType="integer"
                 android:defaultValue="0"/>
         </action>
+
+        <action
+            android:id="@+id/action_homeFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment"/>
+
     </fragment>
 
 
@@ -161,5 +166,11 @@
         android:name="com.whitebear.travel.src.main.home.SearchFragment"
         android:label="fragment_search"
         tools:layout="@layout/fragment_search" />
+
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.whitebear.travel.src.main.home.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification"/>
 
 </navigation>
