@@ -88,18 +88,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         
         initNavigation()
         setInstance()
-//        if(mainViewModel.userLoc == null) {
-//            val userLastLoc = ApplicationClass.sharedPreferencesUtil.getUserLoc()
-//            if(userLastLoc != null) {
-//                runBlocking {
-//                    mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${userLastLoc.latitude.toInt()}","${userLastLoc.longitude.toInt()}")
-//                }
-//            }
-//        } else if(mainViewModel.userLoc != null) {
-//            runBlocking {
-//                mainViewModel.getWeather("JSON",10,1,today.toInt(),1400,"${mainViewModel.userLoc!!.latitude.toInt()}","${mainViewModel.userLoc!!.longitude.toInt()}")
-//            }
-//        }
         if(checkPermissionForLocation(this)) {
             startLocationUpdates()
         }
