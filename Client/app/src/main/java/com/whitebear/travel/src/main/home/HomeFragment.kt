@@ -366,8 +366,55 @@ class HomeFragment: Fragment(){
             if(response.code() == 200) {
                 val res = response.body()
                 if(res != null) {
+                    //busan
+                    binding.busanNewCorona.text = "(+${res.busan.newCase})"
+                    binding.busanTotalCorona.text = res.busan.totalCase
+                    //ulsan
+                    binding.ulsanNewCorona.text = "(+${res.ulsan.newCase})"
+                    binding.ulsanTotalCorona.text = res.ulsan.totalCase
+                    //daegu
+                    binding.deaguNewCorona.text = "(+${res.daegu.newCase})"
+                    binding.deaguTotalCorona.text = res.daegu.totalCase
+                    //경남
+                    binding.geongnamNewCorona.text = "(+${res.gyeongnam.newCase})"
+                    binding.geongnamTotalCorona.text = res.gyeongnam.totalCase
+                    //경북
+                    binding.geongbukNewCorona.text = "(+${res.gyeongbuk.newCase})"
+                    binding.geongbukTotalCorona.text = res.gyeongbuk.totalCase
+                    //강원
+                    binding.gangwonNewCorona.text = "(+${res.gangwon.newCase})"
+                    binding.gangwonTotalCorona.text = res.gangwon.totalCase
+                    //경기
+                    binding.geonggiNewCorona.text = "(+${res.gyeonggi.newCase})"
+                    binding.geonggiTotalCorona.text = res.gyeonggi.totalCase
+                    //서울
+                    binding.seoulNewCorona.text = "(+${res.seoul.newCase})"
+                    binding.seoulTotalCorona.text = res.seoul.totalCase
+                    //인천
+                    binding.incheonNewCorona.text = "(+${res.incheon.newCase})"
+                    binding.incheonTotalCorona.text = res.incheon.totalCase
+                    //충북
+                    binding.chungbukNewCorona.text = "(+${res.chungbuk.newCase})"
+                    binding.chungbukTotalCorona.text = res.chungbuk.totalCase
+                    //충남
+                    binding.chungnamNewCorona.text = "(+${res.chungnam.newCase})"
+                    binding.chungnamTotalCorona.text = res.chungnam.totalCase
+                    //전북
+                    binding.junbookNewCorona.text = "(+${res.jeonbuk.newCase})"
+                    binding.junbookTotalCorona.text = res.jeonbuk.totalCase
+                    //전남
+                    binding.junnamNewCorona.text = "(+${res.jeonnam.newCase})"
+                    binding.junnamTotalCorona.text = res.jeonnam.totalCase
+                    //광주
+                    binding.guangjuNewCorona.text = "(+${res.gwangju.newCase})"
+                    binding.guangjuTotalCorona.text = res.gwangju.totalCase
+                    //대전
+                    binding.deajunNewCorona.text = "(+${res.daejeon.newCase})"
+                    binding.deajunTotalCorona.text = "(+${ res.daejeon.totalCase })"
+                    //세종
+                    binding.sejongNewCorona.text = "(+${res.sejong.newCase})"
+                    binding.sejongTotalCorona.text = res.sejong.totalCase
 
-                    Log.d(TAG, "getCorona: ${res.korea.newCase}")
                 }
             } else {
                 Log.e(TAG, "getCorona: 서버 통신 조회 오류 ${response.message()}", )

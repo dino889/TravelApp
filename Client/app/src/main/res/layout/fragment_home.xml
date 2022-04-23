@@ -339,6 +339,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="1,034,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/textView27" />
@@ -350,7 +351,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+3,125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -362,10 +363,11 @@
                                 android:layout_width="wrap_content"
 
                                 android:layout_height="wrap_content"
+                                android:layout_marginEnd="10dp"
                                 android:layout_marginBottom="5dp"
                                 android:background="@drawable/corona_bakcground"
                                 app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
-                                app:layout_constraintEnd_toEndOf="@+id/constraintLayout4">
+                                app:layout_constraintEnd_toEndOf="parent">
 
                                 <TextView
                                     android:id="@+id/ulsan"
@@ -387,6 +389,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="34,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/ulsan" />
@@ -398,7 +401,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -435,6 +438,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="34,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/geongnam" />
@@ -446,7 +450,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -481,6 +485,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="34,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/deagu" />
@@ -492,7 +497,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -529,6 +534,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="34,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/geongbuk" />
@@ -540,7 +546,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -577,6 +583,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="34,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/chungbuk" />
@@ -588,7 +595,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -625,6 +632,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="34,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/gangwon" />
@@ -636,7 +644,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -672,6 +680,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="34,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/geonggi" />
@@ -683,7 +692,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -720,6 +729,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="34,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/seoul" />
@@ -731,7 +741,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -768,6 +778,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="34,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/incheon" />
@@ -779,7 +790,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -815,6 +826,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="34,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/sejong" />
@@ -826,7 +838,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -837,9 +849,11 @@
                                 android:id="@+id/chungnam_layout"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginStart="5dp"
                                 android:layout_marginEnd="50dp"
                                 android:background="@drawable/corona_bakcground"
                                 app:layout_constraintEnd_toEndOf="@+id/sejong_layout"
+                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/sejong_layout">
 
                                 <TextView
@@ -862,6 +876,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="34,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/chungnam" />
@@ -873,7 +888,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -910,6 +925,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="34,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/deajun" />
@@ -921,7 +937,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -959,6 +975,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="34,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/junbook" />
@@ -970,7 +987,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -1006,6 +1023,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="34,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/guangju" />
@@ -1017,7 +1035,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -1028,9 +1046,11 @@
                                 android:id="@+id/junnam_layout"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="32dp"
                                 android:background="@drawable/corona_bakcground"
-                                app:layout_constraintEnd_toStartOf="@+id/guangju_layout"
-                                app:layout_constraintTop_toBottomOf="@+id/guangju_layout">
+                                app:layout_constraintEnd_toStartOf="@+id/constraintLayout6"
+                                app:layout_constraintStart_toEndOf="@+id/guangju_layout"
+                                app:layout_constraintTop_toTopOf="@+id/guangju_layout">
 
                                 <TextView
                                     android:id="@+id/junnam"
@@ -1052,6 +1072,7 @@
                                     android:layout_marginRight="3dp"
                                     android:text="34,123"
                                     android:textColor="@color/black"
+                                    android:textSize="12sp"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/junnam" />
@@ -1063,7 +1084,7 @@
                                     android:layout_marginTop="5dp"
                                     android:text="(+125)"
                                     android:textColor="@color/main"
-                                    android:textSize="12sp"
+                                    android:textSize="10sp"
                                     app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
