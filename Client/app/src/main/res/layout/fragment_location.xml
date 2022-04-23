@@ -98,6 +98,17 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <TextView
+            android:id="@+id/locationFragment_tvEmptyPlaces"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="현재 위치 주변에 관광지가 없습니다.\n검색 범위를 넓혀 보세요(. ❛ ᴗ ❛.)"
+            android:textAlignment="center"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/locationFragment_buttons" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/locationFragment_rv"

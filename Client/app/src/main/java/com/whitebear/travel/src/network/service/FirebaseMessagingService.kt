@@ -40,7 +40,7 @@ class FirebaseMessageService : FirebaseMessagingService() {
                 .setContentText(messageContent)
                 .setStyle(NotificationCompat.BigTextStyle().bigText(messageContent))
                 .setAutoCancel(true)
-                .setColor(Color.argb(0,255, 153, 13))
+                .setColor(Color.argb(0,12, 49, 122))
                 .setContentIntent(mainPendingIntent)
 
             NotificationManagerCompat.from(this).apply {

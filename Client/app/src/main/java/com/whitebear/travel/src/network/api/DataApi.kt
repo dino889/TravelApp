@@ -40,6 +40,6 @@ interface DataApi {
     @GET("http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19InfStateJson?serviceKey=mp%2Bwyp26riz6pcVoD5kh8hTaDST8RtkblivAF1iro%2FIGvP950xdhKViJgSnBnGGu0kDp5m%2BKUG5L6xC1nI%2BL1w%3D%3D")
     suspend fun getCovidState(@Query("startCreateDt") startCreateDt: String, @Query("endCreateDt") endCreateDt: String) : Response<Array<Covid>>
 
-    @GET("http://api.visitkorea.or.kr/openapi/service/rest/GoCamping/locationBasedList?serviceKey=mp%2Bwyp26riz6pcVoD5kh8hTaDST8RtkblivAF1iro%2FIGvP950xdhKViJgSnBnGGu0kDp5m%2BKUG5L6xC1nI%2BL1w%3D%3D&MobileOS=AND&MobileApp=TravelApplication")
+    @GET("http://api.visitkorea.or.kr/openapi/service/rest/GoCamping/locationBasedList?serviceKey=mp%2Bwyp26riz6pcVoD5kh8hTaDST8RtkblivAF1iro%2FIGvP950xdhKViJgSnBnGGu0kDp5m%2BKUG5L6xC1nI%2BL1w%3D%3D&MobileOS=AND&MobileApp=TravelApplication&numOfRows=100")
     suspend fun getCamping(@Query("mapX") mapX: Double, @Query("mapY") mapY: Double, @Query("radius") radius: Int, @Query("_type") _type: String) : Response<Camping>
 }

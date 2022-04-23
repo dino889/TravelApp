@@ -44,6 +44,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.whitebear.travel.src.dto.Noti
 import com.whitebear.travel.src.network.api.FCMApi
+import com.whitebear.travel.src.network.service.UserService
 import com.whitebear.travel.util.NavDB
 import com.whitebear.travel.util.NotiDB
 import retrofit2.Response
@@ -187,7 +188,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     fun startLocationUpdates() {
-        Log.d(TAG, "startLocationUpdates: ")
         mLocationRequest =  LocationRequest.create().apply {
             priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         }
@@ -198,16 +198,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             && ActivityCompat.checkSelfPermission(this,Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return
         }
-        Log.d(TAG, "startLocationUpdates: 2?")
         // 기기의 위치에 관한 정기 업데이트를 요청하는 메서드 실행
         // 지정한 루퍼 스레드(Looper.myLooper())에서 콜백(mLocationCallback)으로 위치 업데이트를 요청
-        runBlocking {
-            mFusedLocationProviderClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper()!!)
-        }
+        mFusedLocationProviderClient!!.requestLocationUpdates(mLocationRequest, mLocationCallback, Looper.myLooper()!!)
 
     }
-    // 시스템으로 부터 위치 정보를 콜백으로 받음
 
+    // 시스템으로 부터 위치 정보를 콜백으로 받음
     private val mLocationCallback = object : LocationCallback() {
         @RequiresApi(Build.VERSION_CODES.O)
         override fun onLocationResult(locationResult: LocationResult) {
@@ -219,11 +216,10 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     // 시스템으로 부터 받은 위치정보를 화면에 갱신해주는 메소드
-    @RequiresApi(Build.VERSION_CODES.O)
     fun onLocationChanged(location: Location) {
         mLastLocation = location
         mainViewModel.setUserLoc(location, getAddress(location))
-        Log.d(TAG, "onLocationChanged: ${location.latitude}")
+        Log.d(TAG, "onLocationChanged: ${location.latitude} / ${location.longitude}")
         getToday()
         //lat=35.8988, long=128.599
         runBlocking {
@@ -240,7 +236,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         return address
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun getToday() : String {
         var current = LocalDateTime.now()
         val formatter = DateTimeFormatter.ofPattern("yyyyMMdd")
@@ -291,7 +286,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
             // 3-1. 사용자가 퍼미션 거부를 한 적이 있는 경우에는
             if (ActivityCompat.shouldShowRequestPermissionRationale(
                     this@MainActivity,
-                    LOCATION.get(0)
+                    LOCATION[0]
                 )
             ) {
                 // 3-2. 요청을 진행하기 전에 사용자가에게 퍼미션이 필요한 이유를 설명해줄 필요가 있습니다.
@@ -376,7 +371,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     /**
      * Fcm Notification 수신을 위한 채널 추가
      */
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel(id: String, name: String) {
         val importance = NotificationManager.IMPORTANCE_DEFAULT // or IMPORTANCE_HIGH
         val channel = NotificationChannel(id, name, importance)
@@ -389,24 +383,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     companion object {
         const val channel_id = "whitebear_channel"
         fun uploadToken(token:String, userId: Int) {
-            val storeService = ApplicationClass.retrofit.create(FCMApi::class.java)
 
             var response : Response<HashMap<String, Any>>
             runBlocking {
-                response = storeService.uploadToken(token, ApplicationClass.sharedPreferencesUtil.getUser().id)
+                response = UserService().updateUserToken(ApplicationClass.sharedPreferencesUtil.getUser().id, token)
             }
-            val res = response.body()
-//            if(response.code() == 200) {
-//                if(res != null) {
-//                    if(res.data["isSuccess"] == true && res.message == "토큰 등록 성공") {
-//                        Log.d(TAG, "uploadToken: $token")
-//                    } else {
-//                        Log.d(TAG, "uploadToken: ${res.message}")
-//                    }
-//                }
-//            } else {
-//                Log.e(TAG, "uploadToken: 토큰 정보 등록 중 통신 오류")
-//            }
+            if(response.code() == 200) {
+                val res = response.body()
+                if(res != null) {
+                    if(res["isSuccess"] == true) {
+                        Log.d(TAG, "uploadToken: $token")
+                    } else {
+                        Log.d(TAG, "uploadToken: ${res["message"]}")
+                    }
+                }
+            } else {
+                Log.e(TAG, "uploadToken: 토큰 정보 등록 중 통신 오류")
+            }
         }
     }
 }

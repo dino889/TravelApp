@@ -6,7 +6,7 @@ data class Weather(
 
     data class Response(
         val header: Header,
-        val body: Body
+        val body: Body?
     )
 
     data class Header(
