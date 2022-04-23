@@ -81,12 +81,12 @@ class PlaceFragment : BaseFragment<FragmentPlaceBinding>(FragmentPlaceBinding::b
                 }
                 if(position == 1){
                     runBlocking {
-                        mainViewModel.getPlacesToSort(areaName,"review")
+                        mainViewModel.getPlacesToSort(areaName,"review_asc")
                     }
                 }
                 if(position == 2){
                     runBlocking {
-                        mainViewModel.getPlacesToSort(areaName,"review_asc")
+                        mainViewModel.getPlacesToSort(areaName,"review")
                     }
                 }
 

@@ -245,8 +245,10 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
             //type : 1
             if(!markerArr.isEmpty()){
                 goNavi(markerArr, 1)
+                dialog.dismiss()
             }else{
                 showCustomToast("네비게이터에 추가할 장소가 없습니다.")
+                dialog.dismiss()
             }
 
         }
@@ -254,8 +256,10 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
             //type : 2
             if(!markerArr.isEmpty()){
                 goNavi(markerArr, 2)
+                dialog.dismiss()
             }else{
                 showCustomToast("네비게이터에 추가할 장소가 없습니다.")
+                dialog.dismiss()
             }
         }
 

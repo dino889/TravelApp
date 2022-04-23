@@ -276,6 +276,802 @@
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/textView5" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <TextView
+                        android:id="@+id/textView29"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="전국 코로나 현황"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/imageView11"
+                                android:layout_width="wrap_content"
+                                android:layout_height="500dp"
+                                android:scaleType="centerCrop"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="1.0"
+                                app:srcCompat="@drawable/coronamap" />
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/constraintLayout4"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="30dp"
+                                android:layout_marginBottom="120dp"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent">
+
+                                <TextView
+                                    android:id="@+id/textView27"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="부산"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/busan_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="1,034,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/textView27" />
+
+                                <TextView
+                                    android:id="@+id/busan_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+3,125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/busan_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/constraintLayout5"
+                                android:layout_width="wrap_content"
+
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="5dp"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintBottom_toTopOf="@+id/constraintLayout4"
+                                app:layout_constraintEnd_toEndOf="@+id/constraintLayout4">
+
+                                <TextView
+                                    android:id="@+id/ulsan"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="울산"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/ulsan_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="34,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/ulsan" />
+
+                                <TextView
+                                    android:id="@+id/ulsan_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/ulsan_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/constraintLayout6"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="30dp"
+                                android:layout_marginBottom="20dp"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintBottom_toBottomOf="@+id/constraintLayout4"
+                                app:layout_constraintEnd_toStartOf="@+id/constraintLayout5">
+
+                                <TextView
+                                    android:id="@+id/geongnam"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="경남"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/geongnam_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="34,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/geongnam" />
+
+                                <TextView
+                                    android:id="@+id/geongnam_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/geongnam_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/constraintLayout7"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintBottom_toTopOf="@+id/constraintLayout6"
+                                app:layout_constraintEnd_toStartOf="@+id/constraintLayout5">
+
+                                <TextView
+                                    android:id="@+id/deagu"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="대구"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/deagu_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="34,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/deagu" />
+
+                                <TextView
+                                    android:id="@+id/deagu_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/deagu_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/geongbuk_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="50dp"
+                                android:layout_marginBottom="8dp"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintBottom_toTopOf="@+id/constraintLayout7"
+                                app:layout_constraintEnd_toEndOf="@+id/constraintLayout5">
+
+                                <TextView
+                                    android:id="@+id/geongbuk"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="경북"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/geongbuk_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="34,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/geongbuk" />
+
+                                <TextView
+                                    android:id="@+id/geongbuk_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/geongbuk_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/chungbuk_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="20dp"
+                                android:layout_marginBottom="10dp"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintBottom_toBottomOf="@+id/geongbuk_layout"
+                                app:layout_constraintEnd_toStartOf="@+id/geongbuk_layout">
+
+                                <TextView
+                                    android:id="@+id/chungbuk"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="충북"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/chungbuk_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="34,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/chungbuk" />
+
+                                <TextView
+                                    android:id="@+id/chungbuk_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/chungbuk_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/gangwon_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="40dp"
+                                android:layout_marginBottom="20dp"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintBottom_toTopOf="@+id/geongbuk_layout"
+                                app:layout_constraintStart_toEndOf="@+id/chungbuk_layout">
+
+                                <TextView
+                                    android:id="@+id/gangwon"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="강원"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/gangwon_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="34,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/gangwon" />
+
+                                <TextView
+                                    android:id="@+id/gangwon_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/gangwon_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/geonggi_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="10dp"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintEnd_toStartOf="@+id/gangwon_layout"
+                                app:layout_constraintTop_toTopOf="@+id/imageView11">
+
+                                <TextView
+                                    android:id="@+id/geonggi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="경기"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/geonggi_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="34,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/geonggi" />
+
+                                <TextView
+                                    android:id="@+id/geonggi_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/geonggi_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/seoul_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="5dp"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintBottom_toTopOf="@+id/chungbuk_layout"
+                                app:layout_constraintEnd_toStartOf="@+id/gangwon_layout"
+                                app:layout_constraintTop_toBottomOf="@+id/geonggi_layout">
+
+                                <TextView
+                                    android:id="@+id/seoul"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="서울"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/seoul_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="34,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/seoul" />
+
+                                <TextView
+                                    android:id="@+id/seoul_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/seoul_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/incheon_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginBottom="20dp"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintBottom_toBottomOf="@+id/seoul_layout"
+                                app:layout_constraintEnd_toStartOf="@+id/seoul_layout">
+
+                                <TextView
+                                    android:id="@+id/incheon"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="인천"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/incheon_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="34,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/incheon" />
+
+                                <TextView
+                                    android:id="@+id/incheon_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/incheon_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/sejong_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="10dp"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintEnd_toStartOf="@+id/chungbuk_layout"
+                                app:layout_constraintTop_toTopOf="@+id/chungbuk_layout">
+
+                                <TextView
+                                    android:id="@+id/sejong"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="세종"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/sejong_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="34,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/sejong" />
+
+                                <TextView
+                                    android:id="@+id/sejong_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/sejong_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/chungnam_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="50dp"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintEnd_toEndOf="@+id/sejong_layout"
+                                app:layout_constraintTop_toBottomOf="@+id/sejong_layout">
+
+                                <TextView
+                                    android:id="@+id/chungnam"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="충남"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/chungnam_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="34,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/chungnam" />
+
+                                <TextView
+                                    android:id="@+id/chungnam_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/chungnam_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/deajun_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginEnd="3dp"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintEnd_toStartOf="@+id/constraintLayout7"
+                                app:layout_constraintTop_toBottomOf="@+id/chungbuk_layout">
+
+                                <TextView
+                                    android:id="@+id/deajun"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="대전"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/deajun_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="34,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/deajun" />
+
+                                <TextView
+                                    android:id="@+id/deajun_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/deajun_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/junbook_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="1dp"
+                                android:layout_marginTop="20dp"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintEnd_toStartOf="@+id/deajun_layout"
+                                app:layout_constraintStart_toEndOf="@+id/chungnam_layout"
+                                app:layout_constraintTop_toBottomOf="@+id/sejong_layout">
+
+                                <TextView
+                                    android:id="@+id/junbook"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="전북"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/junbook_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="34,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/junbook" />
+
+                                <TextView
+                                    android:id="@+id/junbook_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/junbook_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/guangju_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="50dp"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintEnd_toStartOf="@+id/constraintLayout6"
+                                app:layout_constraintTop_toBottomOf="@+id/junbook_layout">
+
+                                <TextView
+                                    android:id="@+id/guangju"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="광주"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/guangju_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="34,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/guangju" />
+
+                                <TextView
+                                    android:id="@+id/guangju_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/guangju_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/junnam_layout"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/corona_bakcground"
+                                app:layout_constraintEnd_toStartOf="@+id/guangju_layout"
+                                app:layout_constraintTop_toBottomOf="@+id/guangju_layout">
+
+                                <TextView
+                                    android:id="@+id/junnam"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="전남"
+                                    android:textColor="@color/black"
+                                    android:textSize="12sp"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <TextView
+                                    android:id="@+id/junnam_total_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="3dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginRight="3dp"
+                                    android:text="34,123"
+                                    android:textColor="@color/black"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/junnam" />
+
+                                <TextView
+                                    android:id="@+id/junnam_new_corona"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="5dp"
+                                    android:text="(+125)"
+                                    android:textColor="@color/main"
+                                    android:textSize="12sp"
+                                    app:layout_constraintBottom_toBottomOf="parent"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/junnam_total_corona" />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </FrameLayout>
                 </LinearLayout>
             </ScrollView>
 

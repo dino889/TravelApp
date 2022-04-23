@@ -57,7 +57,7 @@ class PlaceTypeAdapter : RecyclerView.Adapter<PlaceTypeAdapter.PlaceViewHolder>(
     }
 
     override fun getItemCount(): Int {
-        return filteredList.size+1
+        return filteredList.size
     }
     interface ItemClickListener {
         fun onClick(view: View, position: Int, placeId:Int, heartFlag : Boolean)
