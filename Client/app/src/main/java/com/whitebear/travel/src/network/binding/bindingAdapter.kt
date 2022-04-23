@@ -217,10 +217,22 @@ fun bindPlaceDistance(textView: TextView, dist: Double) {
     textView.text = "${String.format("%.2f", dist)} km"
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @BindingAdapter("textViewDate")
 fun bindTextViewDate(textView: TextView, date:String) {
     var modStr = date.replace("T"," ")
     var result = modStr.substring(0,19)
     textView.text = result
+}
+
+@BindingAdapter("notiTypeImg")
+fun bindNotiTypeImg(imgView: ImageView, type: String) {
+    if(type == "info") {
+        Glide.with(imgView.context)
+            .load(R.drawable.ic_noti_info)
+            .into(imgView)
+    } else {
+        Glide.with(imgView.context)
+            .load(R.drawable.ic_noti_event)
+            .into(imgView)
+    }
 }
