@@ -95,12 +95,16 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
         var mapViewContainer = binding.fragmentNavigatorKakaoMap as ViewGroup
         mapViewContainer.addView(mapView)
         var userId = ApplicationClass.sharedPreferencesUtil.getUser().id
-        val job = CoroutineScope(Dispatchers.IO).launch {
-            placeList = navDao.getNav(userId) as MutableList<Navigator>
-        }
+//        val job = CoroutineScope(Dispatchers.IO).launch {
+//            placeList = navDao.getNav(userId) as MutableList<Navigator>
+//        }
+//        runBlocking {
+//            job.join()
+//        }
         runBlocking {
-            job.join()
+            mainViewModel.getBucketPlace(userId,requireContext())
         }
+        placeList = mainViewModel.bucketPlace.value!!
         if(placeList.isEmpty()){
             mainViewModel.userLoc.observe(viewLifecycleOwner) { user -> // 유저 현재 위치만 마커에 표시
                 if (user != null) {
@@ -149,7 +153,10 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
 //        for(item in placeList){
 //            places.add(Place(item.placeAddr,item.placeId,item.placeImg,item.placeLat,item.placeLng,item.placeName,item.placeContent))
 //        }
-        navAdapter.list = placeList
+        mainViewModel.bucketPlace.observe(viewLifecycleOwner){
+            navAdapter.list = it
+        }
+
 //        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
 //            navAdapter.list = it
 //        }
@@ -169,10 +176,13 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
                     job.join()
                 }
                 showCustomToast("삭제되었습니다.")
-                val job2 = CoroutineScope(Dispatchers.IO).launch {
-                    navDao.getNav(ApplicationClass.sharedPreferencesUtil.getUser().id)
+                runBlocking {
+                    mainViewModel.getBucketPlace(ApplicationClass.sharedPreferencesUtil.getUser().id, requireContext())
                 }
-                runBlocking { job2.join() }
+//                val job2 = CoroutineScope(Dispatchers.IO).launch {
+//                    navDao.getNav(ApplicationClass.sharedPreferencesUtil.getUser().id)
+//                }
+//                runBlocking { job2.join() }
 //                mainViewModel.removePlaceShopList(placeId)
                 removePing()
                 addPing()

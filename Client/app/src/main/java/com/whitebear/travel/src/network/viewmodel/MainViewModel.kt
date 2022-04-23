@@ -1,5 +1,6 @@
 package com.whitebear.travel.src.network.viewmodel
 
+import android.content.Context
 import android.location.Location
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -19,6 +20,9 @@ import com.whitebear.travel.src.network.service.UserService
 import com.whitebear.travel.src.network.service.DataService
 import com.whitebear.travel.src.network.service.*
 import com.whitebear.travel.util.CommonUtils
+import com.whitebear.travel.util.NavDB
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.lang.reflect.Type
@@ -219,6 +223,7 @@ class MainViewModel :ViewModel(){
     private val _place = MutableLiveData<Place>()
     private val _placeReviews = MutableLiveData<MutableList<PlaceReview>>()
     private val _placeLikes = MutableLiveData<MutableList<Place>>()
+    private val _bucketPlace = MutableLiveData<MutableList<Navigator>>()
 
     val places : LiveData<MutableList<Place>>
         get() = _places
@@ -228,6 +233,8 @@ class MainViewModel :ViewModel(){
         get() = _placeReviews
     val placeLikes : LiveData<MutableList<Place>>
         get() = _placeLikes
+    val bucketPlace : LiveData<MutableList<Navigator>>
+        get() = _bucketPlace
 
     private fun setPlace(places:MutableList<Place>) = viewModelScope.launch { 
         _places.value = places
@@ -240,6 +247,22 @@ class MainViewModel :ViewModel(){
     }
     private fun setPlaceLikes(places:MutableList<Place>) = viewModelScope.launch {
         _placeLikes.value = places
+    }
+    private fun setBucketPlace(nav:MutableList<Navigator>) = viewModelScope.launch {
+        _bucketPlace.value = nav
+    }
+
+    fun getBucketPlace(userId:Int, context: Context) {
+        var navDB = NavDB.getInstance(context)
+        var navDao = navDB?.navDao()!!
+        var navList = mutableListOf<Navigator>()
+        val job = CoroutineScope(Dispatchers.IO).launch {
+            navList = navDao.getNav(userId) as MutableList<Navigator>
+        }
+        viewModelScope.launch {
+            job.join()
+        }
+        setBucketPlace(navList)
     }
     suspend fun getPlaces(areaName:String){
         val response = PlaceService().getPlaceByArea(areaName)
