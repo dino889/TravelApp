@@ -263,8 +263,9 @@ class MainViewModel :ViewModel(){
         var navList = mutableListOf<Navigator>()
         val job = CoroutineScope(Dispatchers.IO).launch {
             navList = navDao.getNav(userId) as MutableList<Navigator>
+            Log.d(TAG, "getBucketPlace: $navList")
         }
-        viewModelScope.launch {
+        runBlocking {
             job.join()
         }
         setBucketPlace(navList)

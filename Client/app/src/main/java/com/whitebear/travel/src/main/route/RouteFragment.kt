@@ -77,6 +77,7 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             }
             mainViewModel.getRoutes(areaName)
             mainViewModel.getRoutesLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
+            mainViewModel.getBucketPlace(ApplicationClass.sharedPreferencesUtil.getUser().id, requireContext())
         }
         navDao = mainActivity.navDB?.navDao()!!
         setListener()
@@ -159,9 +160,6 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             dialog.onContentChanged()
         })
 
-//        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_route_detail,null)
-//        dialog.setContentView(dialogView)
-
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         val params = dialog.window?.attributes
         params?.width = WindowManager.LayoutParams.MATCH_PARENT
@@ -217,15 +215,9 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
         
         binding.fragmentRouteDetailAddBucket.setOnClickListener {
             var places = mainViewModel.placesToRoutes.value!!
-            var placeList = mutableListOf<Navigator>()
             var userId = ApplicationClass.sharedPreferencesUtil.getUser().id
-            val job1 = CoroutineScope(Dispatchers.IO).launch {
-                placeList = navDao.getNav(userId) as MutableList<Navigator>
-            }
-            runBlocking {
-                job1.join()
-            }
-            if(placeList.size == 0){
+
+            if(mainViewModel.bucketPlace.value!!.size == 0){
                 for(item in places){
                     val job = CoroutineScope(Dispatchers.IO).launch {
                         navDao.insertNav(Navigator(0,userId, item.id,item.name,item.lat,item.long,item.address,item.summary,item.imgURL))
@@ -235,10 +227,10 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
                     }
                     showCustomToast("추가되었습니다.")
                 }
-            }else if(placeList.size > 0 && placeList.size < 4){
+            }else if(mainViewModel.bucketPlace.value!!.size in 1..3){
                 var size1 = places.size
-                var size2 = placeList.size
-                var resultSize = size1 - size2
+                var size2 = mainViewModel.bucketPlace.value!!.size
+                var resultSize = size1 - size2 - 1
                 for(item in 0..resultSize){
                     val job = CoroutineScope(Dispatchers.IO).launch {
                         navDao.insertNav(Navigator(0,userId, places[item].id,places[item].name,places[item].lat,places[item].long,places[item].address,places[item].summary,places[item].imgURL))
@@ -252,19 +244,6 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
                 showCustomToast("더이상 추가하실 수 없습니다.")
             }
 
-
-
-
-
-//
-//            if(mainViewModel.liveNavBucketList.value!!.size > 4){
-//                showCustomToast("더이상 추가하실 수 없습니다.")
-//            }else{
-//                for(item in places){
-//                    mainViewModel.insertPlaceShopList(item)
-//                }
-//                showCustomToast("추가되었습니다.")
-//            }
         }
     }
 
@@ -298,43 +277,4 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             }
         }
     }
-    
-//    private fun initSpinner(){
-//        var  spinnerArr = arrayListOf<String>("별점순","리뷰 적은순","리뷰 많은순")
-//        val adapter = ArrayAdapter(requireContext(),R.layout.support_simple_spinner_dropdown_item,spinnerArr)
-//        binding.fragmentRouteFilterSpinner.adapter = adapter
-//
-//        binding.fragmentRouteFilterSpinner.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
-//            override fun onItemSelected(
-//                parent: AdapterView<*>?,
-//                view: View?,
-//                position: Int,
-//                id: Long
-//            ) {
-//                if(position == 0){
-//                    runBlocking {
-//                        mainViewModel.getRoutes(areaName)
-//                    }
-//                }
-//                if(position == 1){
-//                    runBlocking {
-//                        mainViewModel.getRoutesToSort(areaName,"review")
-//                    }
-//                }
-//                if(position == 2){
-//                    runBlocking {
-//                        mainViewModel.getRoutesToSort(areaName,"review_asc")
-//                    }
-//                }
-//
-//                initAdapter()
-//                routeAdapter.notifyDataSetChanged()
-//            }
-//
-//            override fun onNothingSelected(parent: AdapterView<*>?) {
-//            }
-//
-//        }
-//    }
-
 }
