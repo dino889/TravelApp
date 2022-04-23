@@ -64,6 +64,10 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        var userId = ApplicationClass.sharedPreferencesUtil.getUser().id
+        runBlocking {
+            mainViewModel.getBucketPlace(userId,requireContext())
+        }
         mainActivity.hideBottomNav(true)
         binding.viewModel = mainViewModel
         navDao = mainActivity.navDB?.navDao()!!
@@ -94,13 +98,8 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
 
         var mapViewContainer = binding.fragmentNavigatorKakaoMap as ViewGroup
         mapViewContainer.addView(mapView)
-        var userId = ApplicationClass.sharedPreferencesUtil.getUser().id
-        val job = CoroutineScope(Dispatchers.IO).launch {
-            placeList = navDao.getNav(userId) as MutableList<Navigator>
-        }
-        runBlocking {
-            job.join()
-        }
+
+        placeList = mainViewModel.bucketPlace.value!!
         if(placeList.isEmpty()){
             mainViewModel.userLoc.observe(viewLifecycleOwner) { user -> // 유저 현재 위치만 마커에 표시
                 if (user != null) {
@@ -120,39 +119,15 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
             addPing()
         }
 
-//        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
-//            if (it == null || it.isEmpty()) {
-//                mainViewModel.userLoc.observe(viewLifecycleOwner) { user -> // 유저 현재 위치만 마커에 표시
-//                    if (user != null) {
-//                        var mapPoint = MapPoint.mapPointWithGeoCoord(user.latitude, user.longitude)
-//                        mapView.setMapCenterPoint(mapPoint, true)
-//                        mapView.setZoomLevel(6, true)
-//                    } else {
-//                        showCustomToast("현재 위치를 찾을 수 없습니다.")
-//                        Log.e(TAG, "initMapView: $it",)
-//                    }
-//                }
-//            } else {
-//                var first = it[0]
-//                var mapPoint = MapPoint.mapPointWithGeoCoord(first.lat, first.long)
-//                mapView.setMapCenterPoint(mapPoint, true)
-//                mapView.setZoomLevel(6, true)
-//                initAdapter()
-//                addPing()
-//            }
-//        }
     }
 
     private fun initAdapter(){
         navAdapter = NavPlaceAdapter()
-//        var places = mutableListOf<Place>()
-//        for(item in placeList){
-//            places.add(Place(item.placeAddr,item.placeId,item.placeImg,item.placeLat,item.placeLng,item.placeName,item.placeContent))
-//        }
-        navAdapter.list = placeList
-//        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
-//            navAdapter.list = it
-//        }
+
+        mainViewModel.bucketPlace.observe(viewLifecycleOwner){
+            navAdapter.list = it
+        }
+
         binding.fragmentNavigatorPlaceRv.apply {
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -167,13 +142,10 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
                 }
                 runBlocking {
                     job.join()
+                    mainViewModel.getBucketPlace(ApplicationClass.sharedPreferencesUtil.getUser().id, requireContext())
                 }
+                navAdapter.notifyDataSetChanged()
                 showCustomToast("삭제되었습니다.")
-                val job2 = CoroutineScope(Dispatchers.IO).launch {
-                    navDao.getNav(ApplicationClass.sharedPreferencesUtil.getUser().id)
-                }
-                runBlocking { job2.join() }
-//                mainViewModel.removePlaceShopList(placeId)
                 removePing()
                 addPing()
             }
@@ -181,15 +153,14 @@ class NavigatorFragment : BaseFragment<FragmentNavigatorBinding>(FragmentNavigat
     }
     private fun addPing(){
         markerArr = arrayListOf()
-        val it = placeList
-//        mainViewModel.liveNavBucketList.observe(viewLifecycleOwner) {
-            for (item in 0..it.size - 1) {
-                val mapPoint = MapPoint.mapPointWithGeoCoord(it[item].placeLat, it[item].placeLng)
-                markerArr.add(mapPoint)
-            }
-            setPing(markerArr)
-            addPolyLine(markerArr)
-//        }
+
+        val it = mainViewModel.bucketPlace.value!!
+        for (item in 0..it.size - 1) {
+            val mapPoint = MapPoint.mapPointWithGeoCoord(it[item].placeLat, it[item].placeLng)
+            markerArr.add(mapPoint)
+        }
+        setPing(markerArr)
+        addPolyLine(markerArr)
     }
 
     private fun setPing(markerArr : ArrayList<MapPoint>) {

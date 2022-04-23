@@ -49,6 +49,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
 
         runBlocking {
             mainViewModel.getPlace(placeId)
+            mainViewModel.getBucketPlace(ApplicationClass.sharedPreferencesUtil.getUser().id, requireContext())
         }
         navDao = mainActivity.navDB?.navDao()!!
 
@@ -74,16 +75,7 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
         }
         binding.fragmentPlaceDetailAddBucket.setOnClickListener {
             var place = mainViewModel.place.value!!
-            var size = 0
-            var placeList = mutableListOf<Place>()
-            val job1 = CoroutineScope(Dispatchers.IO).launch {
-                placeList = navDao.getNav(ApplicationClass.sharedPreferencesUtil.getUser().id) as MutableList<Place>
-            }
-            runBlocking {
-                job1.join()
-            }
-
-            if(placeList.size < 4){
+            if(mainViewModel.bucketPlace.value!!.size < 4){
                 val job = CoroutineScope(Dispatchers.IO).launch {
                     navDao.insertNav(Navigator(0,ApplicationClass.sharedPreferencesUtil.getUser().id,place.id,place.name,place.lat,place.long,place.address,place.summary,place.imgURL))
                 }
@@ -95,16 +87,6 @@ class PlaceDetailFragment : BaseFragment<FragmentPlaceDetailBinding>(FragmentPla
                 showCustomToast("더이상 추가하실 수 없습니다.")
             }
 
-
-
-//            if(mainViewModel.liveNavBucketList.value!!.size < 4){
-//                var place = mainViewModel.place.value!!
-//                mainViewModel.insertPlaceShopList(place)
-//                showCustomToast("추가되었습니다.")
-//                binding.fragmentPlaceDetailLottie.playAnimation()
-//            }else{
-//                showCustomToast("더이상 추가하실 수 없습니다.")
-//            }
         }
         binding.fragmentPlaceDetailHeart.setOnClickListener {
             var placeLike = PlaceLike(
