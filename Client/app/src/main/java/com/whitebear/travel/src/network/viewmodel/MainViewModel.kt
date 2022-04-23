@@ -694,4 +694,36 @@ class MainViewModel :ViewModel(){
     }
 
 
+    /**
+     * 사용자 알림 조회
+     */
+    private val _notificationList = MutableLiveData<MutableList<Notification>>()
+
+    val notificationList :  LiveData<MutableList<Notification>>
+        get() = _notificationList
+
+    private fun setNotiList(list: MutableList<Notification>) = viewModelScope.launch {
+        _notificationList.value = list
+    }
+
+    suspend fun getNotification(userId: Int) {
+        val response = NotificationService().selectNotiByUser(userId)
+        viewModelScope.launch {
+            if(response.code() == 200) {
+                val res = response.body()
+                if(res != null) {
+                    if(res["isSuccess"] == true && res["data"] != null) {
+                        val type = object : TypeToken<MutableList<Notification>>() {}.type
+                        val items: MutableList<Notification> = CommonUtils.parseDto(res["data"]!!, type)
+                        setNotiList(items)
+                    }
+                }
+            } else {
+                Log.e(TAG, "getPlacesByGps: ${response.message()}", )
+            }
+
+        }
+    }
+
+
 }

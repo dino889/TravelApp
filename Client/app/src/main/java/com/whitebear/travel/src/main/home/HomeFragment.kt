@@ -117,7 +117,7 @@ class HomeFragment: Fragment(){
         initButton()
         initBanner()
         initAdapter()
-
+        notiBtnClickEvent()
 //        if(mainViewModel.userLoc.value != null){
 //        }
     }
@@ -331,6 +331,12 @@ class HomeFragment: Fragment(){
             }
         } catch (e : Exception) {
             Log.e(TAG, "getCovidState: ${e.printStackTrace()} ${e.message}", )
+        }
+    }
+
+    private fun notiBtnClickEvent() {
+        binding.fragmentHomeNotification.setOnClickListener {
+            this@HomeFragment.findNavController().navigate(R.id.action_homeFragment_to_notificationFragment)
         }
     }
 }
