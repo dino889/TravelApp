@@ -40,7 +40,7 @@ class PlaceInfoFragment : BaseFragment<FragmentPlaceInfoBinding>(FragmentPlaceIn
     fun setListener(){
         initKakaoMap()
     }
-    fun initKakaoMap(){
+    private fun initKakaoMap(){
         mapView = MapView(requireContext())
         if(mapView.parent != null){
             (mapView.parent as ViewGroup).removeView(mapView)
@@ -70,9 +70,12 @@ class PlaceInfoFragment : BaseFragment<FragmentPlaceInfoBinding>(FragmentPlaceIn
             }
     }
 
+    override fun onStart() {
+        super.onStart()
+    }
     override fun onResume() {
         super.onResume()
-        if(binding.fragmentPlaceInfoPlaceMapView.contains(mapView)){
+        if(binding.fragmentPlaceInfoPlaceMapView.contains(mapView)!!){
             try{
                 initKakaoMap()
             }catch (e:RuntimeException){
