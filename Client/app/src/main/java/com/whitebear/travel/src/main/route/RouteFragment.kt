@@ -277,4 +277,14 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        mainActivity.hideBottomNav(false)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainActivity.hideBottomNav(false)
+    }
 }
