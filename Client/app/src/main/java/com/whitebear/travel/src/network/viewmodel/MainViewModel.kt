@@ -657,8 +657,10 @@ class MainViewModel :ViewModel(){
     }
     fun getRoute(id:Int){
         var routes = routes.value!!
+        Log.d(TAG, "getRoute: $routes")
         for(item in routes){
             if(item.id == id){
+                Log.d(TAG, "getRoute: $id")
                 setRoute(item)
             }
         }

@@ -75,6 +75,7 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
             if(areaName.equals("") || areaName == null || areaName.equals("null")){
                 areaName = "대구"
             }
+            Log.d(TAG, "onViewCreated: $areaName")
             mainViewModel.getRoutes(areaName)
             mainViewModel.getRoutesLikes(ApplicationClass.sharedPreferencesUtil.getUser().id)
             mainViewModel.getBucketPlace(ApplicationClass.sharedPreferencesUtil.getUser().id, requireContext())
