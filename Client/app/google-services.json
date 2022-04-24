@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "163972402913-knockh03qmpnmpbag9jv72jrsevaagmj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.whitebear.travel",
+            "certificate_hash": "1c6330d2daba8517975f62e63b9aed8ddd0a671a"
+          }
+        },
+        {
           "client_id": "163972402913-q0hqjgta0s6v9v716ndt4fqbq63ea5v6.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

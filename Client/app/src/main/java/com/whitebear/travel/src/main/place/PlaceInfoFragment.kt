@@ -86,6 +86,7 @@ class PlaceInfoFragment : BaseFragment<FragmentPlaceInfoBinding>(FragmentPlaceIn
 
     override fun onPause() {
         super.onPause()
+//        binding.fragmentPlaceInfoPlaceMapView.removeView(mapView)
     }
 
     override fun onStop() {
