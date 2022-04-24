@@ -45,11 +45,9 @@ class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind
         super.onViewCreated(view, savedInstanceState)
         binding.viewModel = mainViewModel
 
-        Log.d(TAG, "onViewCreated: $areaName")
         if(areaName.length < 4){
             areaName = areaName.toString().substring(0,2)
         }
-        Log.d(TAG, "onViewCreated: $areaName")
         runBlocking {
             mainViewModel.getCategorys()
             mainViewModel.getAreaOne(areaId)
@@ -71,10 +69,12 @@ class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind
     }
     private fun initAdapter(){
         placeAdapter = PlaceTypeAdapter()
+        placeAdapter.rv = binding.fragmentAreaRv
+        placeAdapter.tv = binding.areaFragmentTvVisible
+
         placeAdapter.list = mainViewModel.places.value!!
         placeAdapter.filter.filter("")
         mainViewModel.places.observe(viewLifecycleOwner) {
-            Log.d(TAG, "initAdapter: $it")
             placeAdapter.list = it
         }
         mainViewModel.placeLikes.observe(viewLifecycleOwner) {
@@ -88,13 +88,13 @@ class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind
         }
         placeAdapter.setOnItemClickListener(object : PlaceTypeAdapter.ItemClickListener {
             override fun onClick(view: View, position: Int, placeId: Int, heartFlag: Boolean) {
-                var place = bundleOf("placeId" to placeId, "heartFlag" to heartFlag)
+                val place = bundleOf("placeId" to placeId, "heartFlag" to heartFlag)
                 this@AreaFragment.findNavController().navigate(R.id.placeDetailFragment, place)
             }
         })
     }
     private fun initTabLayout(){
-        var categorys = mainViewModel.categorys.value!!
+        val categorys = mainViewModel.categorys.value!!
         for(item in 0..categorys.size-1){
             binding.fragmentAreaCatetabLayout.addTab(binding.fragmentAreaCatetabLayout.newTab().setText(categorys[item]))
         }
@@ -106,9 +106,9 @@ class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind
                 }
                 if(tab?.position!! > 0){
                     placeAdapter.filter.filter(tab?.text.toString())
+
                 }
 
-//                initAdapter()
                 placeAdapter.notifyDataSetChanged()
             }
 
@@ -120,12 +120,5 @@ class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind
 
         })
     }
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            AreaFragment().apply {
-                arguments = Bundle().apply {
-                }
-            }
-    }
+
 }
