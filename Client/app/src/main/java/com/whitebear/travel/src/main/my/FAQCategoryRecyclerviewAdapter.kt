@@ -3,9 +3,7 @@ package com.whitebear.travel.src.main.my
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.whitebear.travel.R
 import com.whitebear.travel.databinding.ItemFaqCategoryBinding
 
 class FAQCategoryRecyclerviewAdapter : RecyclerView.Adapter<FAQCategoryRecyclerviewAdapter.FAQCategoryViewHolder>() {
@@ -20,7 +18,7 @@ class FAQCategoryRecyclerviewAdapter : RecyclerView.Adapter<FAQCategoryRecyclerv
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FAQCategoryViewHolder {
-        return FAQCategoryViewHolder(DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_faq_category, parent, false))
+        return FAQCategoryViewHolder(ItemFaqCategoryBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
 
     override fun onBindViewHolder(holder: FAQCategoryViewHolder, position: Int) {

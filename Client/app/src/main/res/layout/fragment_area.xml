@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.whitebear.travel.src.network.viewmodel.MainViewModel" />
+    </data>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".src.main.home.AreaFragment">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/frameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:id="@+id/fragment_area_Img"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/banner"
+                    app:imageUrlPlace="@{viewModel.area.imgURL}" />
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/imageview_background">
+
+                    <TextView
+                        android:id="@+id/fragment_area_Name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.area.name}"
+                        android:textColor="#FFFFFF"
+                        android:textSize="50sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/fragment_area_back"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@android:color/transparent"
+                        android:scaleType="centerInside"
+                        android:src="@drawable/leftwhite"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </FrameLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/fragment_area_catetabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/frameLayout"
+                app:tabMode="scrollable">
+                <com.google.android.material.tabs.TabItem
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="전체"/>
+            </com.google.android.material.tabs.TabLayout>
+
+            <TextView
+                android:id="@+id/areaFragment_tvVisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="카테고리에 해당하는 장소 목록이 없습니다."
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_area_catetabLayout" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/fragment_area_Rv"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_area_catetabLayout"
+                app:placeTypeListData="@{viewModel.places}"
+                tools:listitem="@layout/item_place" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+</layout>

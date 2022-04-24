@@ -29,6 +29,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind,R.lay
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.user = mainViewModel.loginUserInfo.value
         initTabAdapter()
         editProfileBtnClickEvent()
         settingBtnClickEvent()
@@ -38,8 +39,8 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind,R.lay
         val viewPagerAdapter = MyTabPageAdapter(this)
         val tabList = listOf("최근 조회", "찜하기")
 
-        viewPagerAdapter.addFragment(LikePlaceRouteFragment())
         viewPagerAdapter.addFragment(RecentlyKeywordFragment())
+        viewPagerAdapter.addFragment(LikePlaceFragment())
 
         binding.myPageFragmentVp.adapter = viewPagerAdapter
         TabLayoutMediator(binding.myPageFragmentTabLayout, binding.myPageFragmentVp) { tab, position ->
@@ -52,7 +53,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind,R.lay
      */
     private fun editProfileBtnClickEvent() {
         binding.myPageFragmentTvEditProfile.setOnClickListener {
-            this@MyFragment.findNavController().navigate(R.id.action_myFragment_to_editProfileFragment)
+            this@MyFragment.findNavController().navigate(R.id.editProfileFragment)
         }
     }
 
@@ -61,7 +62,7 @@ class MyFragment : BaseFragment<FragmentMyBinding>(FragmentMyBinding::bind,R.lay
      */
     private fun settingBtnClickEvent() {
         binding.myPageFragmentBtnSetting.setOnClickListener {
-            this@MyFragment.findNavController().navigate(R.id.action_myFragment_to_settingFragment)
+            this@MyFragment.findNavController().navigate(R.id.settingFragment)
         }
     }
 

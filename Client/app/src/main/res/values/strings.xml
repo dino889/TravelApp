@@ -2,4 +2,11 @@
     <string name="app_name">TravelApplication</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="google_login_key">163972402913-29ic43lc8ejab9qtvq4s2idkot8mo5mt.apps.googleusercontent.com</string>
+    <string name="naver_client_id">_nLBBGpOlmuFSlmjXg9z</string>
+    <string name="naver_client_secret">gwE4hMYUI0</string>
+    <string name="naver_client_name">TravelApp</string>
+    <string name="kakao_nativeapp_key">e91617dd0930365598a61747d57403d0</string>
 </resources>

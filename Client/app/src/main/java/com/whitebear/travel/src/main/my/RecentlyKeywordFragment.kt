@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.whitebear.travel.R
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentRecentlyKeywordBinding
+import com.whitebear.travel.src.dto.Keyword
 import com.whitebear.travel.src.main.MainActivity
 
 class RecentlyKeywordFragment : BaseFragment<FragmentRecentlyKeywordBinding>(FragmentRecentlyKeywordBinding::bind, R.layout.fragment_recently_keyword) {
@@ -31,12 +32,16 @@ class RecentlyKeywordFragment : BaseFragment<FragmentRecentlyKeywordBinding>(Fra
 
     private fun initRecyclerviewAdapter() {
         recentlyKeywordAdapter = RecentlyKeywordAdapter()
-//        recentlyKeywordAdapter.list = it
-        recentlyKeywordAdapter.setItemClickListener(object : RecentlyKeywordAdapter.ItemClickListener {
-            override fun onClick(view: View, position: Int) {
-
+        mainViewModel.liveKeywords.observe(viewLifecycleOwner) {
+            if(!it.isEmpty()){
+                recentlyKeywordAdapter.list = it.toList() as MutableList<Keyword>
+            }else{
+                var arr = mutableListOf<Keyword>()
+                recentlyKeywordAdapter.list = arr
             }
-        })
+
+        }
+
         binding.myPostFragmentRv.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = recentlyKeywordAdapter

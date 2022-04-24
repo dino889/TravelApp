@@ -7,14 +7,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.whitebear.travel.R
 import com.whitebear.travel.databinding.ItemRecentlyKeywordBinding
+import com.whitebear.travel.src.dto.Keyword
 
 class RecentlyKeywordAdapter(): RecyclerView.Adapter<RecentlyKeywordAdapter.MyPostViewHolder>() {
-    var list = mutableListOf<Int>()
+    var list = mutableListOf<Keyword>()
 
     inner class MyPostViewHolder(private val binding: ItemRecentlyKeywordBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind() {
-
+        fun bind(keyword: Keyword) {
+            binding.keyword = keyword
             binding.executePendingBindings()
         }
     }
@@ -25,10 +26,7 @@ class RecentlyKeywordAdapter(): RecyclerView.Adapter<RecentlyKeywordAdapter.MyPo
 
     override fun onBindViewHolder(holder: RecentlyKeywordAdapter.MyPostViewHolder, position: Int) {
         holder.apply {
-//            bind()
-//            .setOnClickListener {
-//                itemClickListener.onClick(it, position)
-//            }
+            bind(list[position])
         }
     }
 
