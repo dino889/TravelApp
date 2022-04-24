@@ -38,8 +38,6 @@ import androidx.core.app.ActivityCompat.startActivityForResult
 import android.content.Intent
 import android.provider.Settings
 import androidx.appcompat.app.AlertDialog
-import androidx.room.Room
-import androidx.room.RoomDatabase
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.whitebear.travel.src.dto.Noti
@@ -80,7 +78,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         var notiDao = notiDB?.fcmDao()
         val r = java.lang.Runnable {
             if(notiDao?.getFcmCheck(ApplicationClass.sharedPreferencesUtil.getUser().id) == null){
-                notiDao?.insertChecked(Noti(ApplicationClass.sharedPreferencesUtil.getUser().id,false,false))
+                notiDao?.insertChecked(Noti(ApplicationClass.sharedPreferencesUtil.getUser().id,true,true))
             }
         }
         val thread = Thread(r)
