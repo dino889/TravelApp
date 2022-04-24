@@ -225,8 +225,8 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
                     runBlocking {
                         job.join()
                     }
-                    showCustomToast("추가되었습니다.")
                 }
+                showCustomToast("추가되었습니다.")
             }else if(mainViewModel.bucketPlace.value!!.size in 1..3){
                 var size1 = places.size
                 var size2 = mainViewModel.bucketPlace.value!!.size
