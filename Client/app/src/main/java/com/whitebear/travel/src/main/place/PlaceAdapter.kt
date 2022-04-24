@@ -72,10 +72,8 @@ class PlaceAdapter : RecyclerView.Adapter<PlaceAdapter.PlaceViewHolder>() ,Filte
                 }else{
                     val filteringList = ArrayList<Place>()
                     for( item in list ){
-                        if(item.address.contains(charString)) filteringList.add(item)
-                        if(item.description.contains(charString)) filteringList.add(item)
-                        if(item.name.contains(charString)) filteringList.add(item)
-                        if(item.summary.contains(charString)) filteringList.add(item)
+                        if(item.address.contains(charString) || item.description.contains(charString) || item.name.contains(charString) || item.summary.contains(charString))
+                            filteringList.add(item)
                     }
                     filteringList
                 }
