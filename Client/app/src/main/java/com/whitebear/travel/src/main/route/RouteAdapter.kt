@@ -75,8 +75,8 @@ class RouteAdapter(val mainViewModel: MainViewModel) : RecyclerView.Adapter<Rout
                 }else{
                     val filteringList = ArrayList<Route>()
                     for(item in list){
-                        if(item.description.contains(charString)) filteringList.add(item)
-                        if(item.name.contains(charString)) filteringList.add(item)
+                        if(item.description.contains(charString) || item.name.contains(charString)) filteringList.add(item)
+//                        if(item.name.contains(charString)) filteringList.add(item)
                     }
                     filteringList
                 }
