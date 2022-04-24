@@ -238,8 +238,8 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
                     runBlocking {
                         job.join()
                     }
-                    showCustomToast("추가되었습니다.")
                 }
+                showCustomToast("추가되었습니다.")
             }else{
                 showCustomToast("더이상 추가하실 수 없습니다.")
             }
@@ -276,5 +276,15 @@ class RouteFragment : BaseFragment<FragmentRouteBinding>(FragmentRouteBinding::b
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        mainActivity.hideBottomNav(false)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainActivity.hideBottomNav(false)
     }
 }
