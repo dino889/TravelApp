@@ -79,12 +79,24 @@
                     android:text="전체"/>
             </com.google.android.material.tabs.TabLayout>
 
+            <TextView
+                android:id="@+id/areaFragment_tvVisible"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="카테고리에 해당하는 장소 목록이 없습니다."
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/fragment_area_catetabLayout" />
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/fragment_area_Rv"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/fragment_area_catetabLayout"
                 app:placeTypeListData="@{viewModel.places}"
                 tools:listitem="@layout/item_place" />

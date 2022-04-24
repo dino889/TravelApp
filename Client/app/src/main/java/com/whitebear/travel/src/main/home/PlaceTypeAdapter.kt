@@ -20,6 +20,10 @@ class PlaceTypeAdapter : RecyclerView.Adapter<PlaceTypeAdapter.PlaceViewHolder>(
     var list = mutableListOf<Place>()
     var likeList = mutableListOf<Place>()
     var filteredList = list
+
+    lateinit var rv:RecyclerView
+    lateinit var tv:TextView
+
     inner class PlaceViewHolder(private val binding: ItemPlaceBinding) : RecyclerView.ViewHolder(binding.root){
         fun bind(place: Place){
             for(i in likeList){
@@ -77,7 +81,8 @@ class PlaceTypeAdapter : RecyclerView.Adapter<PlaceTypeAdapter.PlaceViewHolder>(
                 }else{
                     val filteringList = ArrayList<Place>()
                     for( item in list ){
-                        if(item.type.contains(charString)) filteringList.add(item)
+                        if(item.type.contains(charString))
+                            filteringList.add(item)
                     }
                     filteringList
                 }
@@ -87,8 +92,17 @@ class PlaceTypeAdapter : RecyclerView.Adapter<PlaceTypeAdapter.PlaceViewHolder>(
             }
 
             override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+
                 filteredList = results?.values as MutableList<Place>
+                if (filteredList.isEmpty() || filteredList.size == 0) {
+                    tv.visibility = View.VISIBLE
+                    rv.visibility = View.INVISIBLE
+                } else {
+                    tv.visibility = View.INVISIBLE
+                    rv.visibility = View.VISIBLE
+                }
                 notifyDataSetChanged()
+
             }
 
         }
