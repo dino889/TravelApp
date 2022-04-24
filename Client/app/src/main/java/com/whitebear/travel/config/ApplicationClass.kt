@@ -47,7 +47,7 @@ class ApplicationClass : Application() {
         val okHttpClient = OkHttpClient.Builder()
 //            .addInterceptor(AddCookiesInterceptor())
 //            .addInterceptor(ReceivedCookiesInterceptor())
-            .addInterceptor(interceptor)
+//            .addInterceptor(interceptor)
 //            .addNetworkInterceptor(XAccessTokenInterceptor()) // JWT 자동 헤더 전송
             .connectTimeout(50, TimeUnit.SECONDS)
             .build()
