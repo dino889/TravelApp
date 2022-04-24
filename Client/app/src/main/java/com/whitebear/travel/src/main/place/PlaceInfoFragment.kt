@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.contains
 import com.whitebear.travel.R
 import com.whitebear.travel.config.BaseFragment
 import com.whitebear.travel.databinding.FragmentPlaceInfoBinding
@@ -13,10 +14,12 @@ import kotlinx.coroutines.runBlocking
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
+import java.lang.RuntimeException
 
 private const val TAG = "PlaceInfoFragment"
 class PlaceInfoFragment : BaseFragment<FragmentPlaceInfoBinding>(FragmentPlaceInfoBinding::bind,R.layout.fragment_place_info) {
     var placeId = 0
+    private lateinit var mapView:MapView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -38,7 +41,7 @@ class PlaceInfoFragment : BaseFragment<FragmentPlaceInfoBinding>(FragmentPlaceIn
         initKakaoMap()
     }
     fun initKakaoMap(){
-        var mapView = MapView(requireContext())
+        mapView = MapView(requireContext())
         if(mapView.parent != null){
             (mapView.parent as ViewGroup).removeView(mapView)
         }
@@ -66,4 +69,31 @@ class PlaceInfoFragment : BaseFragment<FragmentPlaceInfoBinding>(FragmentPlaceIn
                 }
             }
     }
+
+    override fun onResume() {
+        super.onResume()
+        if(binding.fragmentPlaceInfoPlaceMapView.contains(mapView)){
+            try{
+                initKakaoMap()
+            }catch (e:RuntimeException){
+                Log.d(TAG, "onResume: ${e.printStackTrace()}")
+            }
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.fragmentPlaceInfoPlaceMapView.removeView(mapView)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        mapView.onSurfaceDestroyed()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mapView.onSurfaceDestroyed()
+    }
+
 }

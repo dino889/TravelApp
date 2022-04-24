@@ -128,4 +128,9 @@ class AreaFragment : BaseFragment<FragmentAreaBinding>(FragmentAreaBinding::bind
                 }
             }
     }
+
+    override fun onResume() {
+        super.onResume()
+        mainActivity.hideBottomNav(true)
+    }
 }
