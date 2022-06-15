@@ -22,7 +22,7 @@ import java.util.concurrent.TimeUnit
 private const val TAG = "ApplicationClass"
 class ApplicationClass : Application() {
     companion object{
-        const val SERVER_URL = "http://115.85.180.240:7878/"   // local 서버 실행 시
+        const val SERVER_URL = "http://118.67.134.250:7878/"
         //AWS servoer
 
         const val IMGS_URL = "${SERVER_URL}imgs/"
@@ -47,7 +47,7 @@ class ApplicationClass : Application() {
         val okHttpClient = OkHttpClient.Builder()
 //            .addInterceptor(AddCookiesInterceptor())
 //            .addInterceptor(ReceivedCookiesInterceptor())
-//            .addInterceptor(interceptor)
+            .addInterceptor(interceptor)
 //            .addNetworkInterceptor(XAccessTokenInterceptor()) // JWT 자동 헤더 전송
             .connectTimeout(50, TimeUnit.SECONDS)
             .build()
