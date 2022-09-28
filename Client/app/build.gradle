@@ -6,6 +6,17 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        debug {
+            storeFile file('C:\\Users\\woo\\.android\\debug.keystore')
+        }
+        release {
+            storeFile file('C:\\Users\\woo\\AndroidKey\\whitebear.jks')
+            storePassword 'chxkogbL8qq'
+            keyAlias 'whitebear'
+            keyPassword 'chxkogbL8qq'
+        }
+    }
     compileSdkVersion 30
     buildToolsVersion "30.0.3"
 
@@ -17,11 +28,13 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig signingConfigs.release
     }
 
     buildTypes {
         release {
             minifyEnabled false
+            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
